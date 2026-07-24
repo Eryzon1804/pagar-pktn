@@ -35,17 +35,20 @@
     /* Area Konten Utama */
     .main-content { flex: 1; display: flex; flex-direction: column; overflow-y: auto; background: #f8fafc; }
     .top-navbar { background: #ffffff; padding: 12px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; }
+    .navbar-right { display: flex; align-items: center; gap: 12px; }
     
     .content-body { padding: 25px; max-width: 800px; margin: 0 auto; width: 100%; box-sizing: border-box; }
     .card { background: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; }
-    .card-header { padding: 15px 20px; font-weight: bold; border-bottom: 1px solid #e2e8f0; background: #f8fafc; border-top-left-radius: 8px; border-top-right-radius: 8px; }
+    .card-header { padding: 15px 20px; font-weight: bold; border-bottom: 1px solid #e2e8f0; background: #f8fafc; border-top-left-radius: 8px; border-top-right-radius: 8px; display: flex; align-items: center; gap: 8px; }
     .card-body { padding: 20px; }
     .section-title { font-size: 15px; color: #2563eb; border-bottom: 2px solid #eff6ff; padding-bottom: 5px; margin-top: 25px; margin-bottom: 15px; }
     .form-group { margin-bottom: 15px; }
     .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #475569; }
     .form-control { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; box-sizing: border-box; }
     .form-control:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
-    .btn-submit { background: #2563eb; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+    
+    /* Tombol Submit Utama */
+    .btn-submit { background: #2563eb; color: white; border: none; padding: 14px; width: 100%; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 25px; box-shadow: 0 4px 6px -1px rgba(37,99,235,0.2); }
     .btn-submit:hover { background: #1d4ed8; }
     
     .page-section { display: none; }
@@ -57,6 +60,17 @@
     .btn-remove-petugas:hover { background: #fecaca; }
     .btn-add-petugas { background: #f0fdf4; color: #16a34a; border: 1px dashed #16a34a; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; width: 100%; margin-top: 5px; }
     .btn-add-petugas:hover { background: #dcfce7; }
+
+    /* Kartu Statistik Rekap */
+    .stat-container { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+    .stat-box-main { background: #f0f6ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 15px; text-align: center; }
+    .stat-box-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .stat-box-legal { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 15px; text-align: center; }
+    .stat-box-temuan { background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 15px; text-align: center; }
+    .stat-label { font-size: 12px; color: #64748b; font-weight: 600; margin-bottom: 5px; }
+    .stat-value-main { font-size: 22px; font-weight: bold; color: #0284c7; }
+    .stat-value-legal { font-size: 22px; font-weight: bold; color: #16a34a; }
+    .stat-value-temuan { font-size: 22px; font-weight: bold; color: #dc2626; }
 
     .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1000; }
     .custom-modal-box { background: white; padding: 25px; border-radius: 12px; max-width: 350px; width: 90%; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
@@ -87,7 +101,6 @@
       </div>
     </div>
     <div class="sidebar-footer">
-      <span id="networkStatus" style="font-weight: bold;"></span>
       <span>👤 Tim Pengawas</span>
     </div>
   </div>
@@ -96,7 +109,12 @@
   <div class="main-content">
     <div class="top-navbar">
       <span id="pageTitle" style="font-weight: bold; font-size: 16px; color: #1e293b;">Form Pengawasan Barang SNI</span>
-      <button type="button" onclick="cekDataOffline()" style="background: #e2e8f0; color: #334155; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: bold;" id="badgeOfflineCount">📦 Data Offline: 0</button>
+      
+      <!-- STATUS JARINGAN & INFO DI KANAN ATAS -->
+      <div class="navbar-right">
+        <span id="networkStatus" style="font-size: 13px; font-weight: bold; padding: 4px 8px; border-radius: 4px; background: #f1f5f9;"></span>
+        <button type="button" onclick="cekDataOffline()" style="background: #e2e8f0; color: #334155; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: bold;" id="badgeOfflineCount">📦 Data Offline: 0</button>
+      </div>
     </div>
 
     <div class="content-body">
@@ -232,8 +250,10 @@
                 <input type="file" id="fileGaransi" class="form-control" accept="image/*" capture="environment">
               </div>
 
+              <!-- TOMBOL PENGIRIMAN DATA -->
               <button type="button" onclick="uploadData()" id="btnSubmit" class="btn-submit">🚀 Kirim Data & Upload Foto ke Drive</button>
               <div id="status" style="display: none; text-align: center; margin-top: 10px; font-weight: bold; color: #0284c7;">Sedang memproses data...</div>
+            
             </form>
           </div>
         </div>
@@ -253,11 +273,29 @@
       <!-- HALAMAN 3: REKAP & SINKRONISASI -->
       <div id="rekapPage" class="page-section">
         <div class="card">
-          <div class="card-header">📊 Rekap & Sinkronisasi Offline</div>
+          <div class="card-header">📊 Rekapitulasi Statistik Pengawasan</div>
           <div class="card-body">
-            <p style="font-size: 13px; color: #64748b;">Kelola dan kirimkan data tertunda ke server pusat Google Sheets.</p>
-            <div id="rekapContentContainer" style="margin-top: 15px; margin-bottom: 20px;">Memuat data...</div>
-            <button class="modal-btn" onclick="syncOfflineData()" id="btnSyncPage" style="background: #16a34a;">Kirim Semua Data Offline Sekarang</button>
+            
+            <!-- Kotak Statistik -->
+            <div class="stat-container">
+              <div class="stat-box-main">
+                <div class="stat-label">Total Pengawasan Tersimpan</div>
+                <div class="stat-value-main" id="statTotal">0</div>
+              </div>
+              <div class="stat-box-row">
+                <div class="stat-box-legal">
+                  <div class="stat-label">Legal / Sesuai</div>
+                  <div class="stat-value-legal" id="statLegal">0</div>
+                </div>
+                <div class="stat-box-temuan">
+                  <div class="stat-label">Temuan / Pelanggaran</div>
+                  <div class="stat-value-temuan" id="statTemuan">0</div>
+                </div>
+              </div>
+            </div>
+
+            <p style="font-size: 13px; color: #64748b; margin-top: 20px;" id="rekapContentContainer">Memuat data...</p>
+            <button class="modal-btn" onclick="syncOfflineData()" id="btnSyncPage" style="background: #16a34a; margin-top: 15px;">Kirim Semua Data Offline Sekarang</button>
           </div>
         </div>
       </div>
@@ -324,7 +362,7 @@
       const titles = {
         'formPage': 'Form Pengawasan Barang SNI',
         'riwayatPage': 'Riwayat Input Pengawasan',
-        'rekapPage': 'Rekap & Sinkronisasi Data',
+        'rekapPage': 'Rekapitulasi Statistik Pengawasan',
         'pengaturanPage': 'Pengaturan Sistem'
       };
       document.getElementById('pageTitle').textContent = titles[pageId];
@@ -333,7 +371,6 @@
       if(pageId === 'rekapPage') loadRekapData();
     }
 
-    // Fungsi Tambah / Hapus Petugas Dinamis
     function tambahPetugas() {
       const container = document.getElementById('petugasContainer');
       const div = document.createElement('div');
@@ -361,11 +398,13 @@
       if (navigator.onLine) {
         netStatus.textContent = "🟢 Online";
         netStatus.style.color = "#166534";
+        netStatus.style.background = "#dcfce7";
         if(settingNet) settingNet.value = "Terhubung ke Internet (Online)";
         if(btnSubmit) btnSubmit.textContent = "🚀 Kirim Data & Upload Foto ke Drive";
       } else {
         netStatus.textContent = "🔴 Offline";
         netStatus.style.color = "#991b1b";
+        netStatus.style.background = "#fee2e2";
         if(settingNet) settingNet.value = "Tidak Ada Internet (Mode Offline)";
         if(btnSubmit) btnSubmit.textContent = "💾 Simpan ke Memori HP (Offline)";
       }
@@ -434,7 +473,6 @@
       const btn = document.getElementById('btnSubmit');
       const status = document.getElementById('status');
       
-      // Ambil kumpulan nama petugas dari input dinamis
       const petugasInputs = document.querySelectorAll('.input-petugas');
       let daftarPetugas = [];
       petugasInputs.forEach(input => {
@@ -451,7 +489,6 @@
 
       try {
         const payload = {
-          // Gabungkan nama petugas menjadi satu string terpisah koma atau kompilasi (misal: "Budi, Andi")
           namaPetugas: daftarPetugas.join(', '),
           namaUsaha: document.getElementById('namaUsaha').value,
           namaPemilik: document.getElementById('namaPemilik').value,
@@ -494,7 +531,6 @@
 
         if(res.success) {
           document.getElementById('inspectionForm').reset();
-          // Reset kembali baris petugas menjadi sisa 1 input kosong
           document.getElementById('petugasContainer').innerHTML = `
             <div class="petugas-row">
               <input type="text" class="form-control input-petugas" placeholder="Nama lengkap petugas beserta gelar..." required>
@@ -533,7 +569,7 @@
       document.getElementById('gpsStatus').textContent = "";
       
       updateOfflineBadge();
-      showModal("Disimpan di HP (Offline)", "Tidak ada sinyal internet. Data & nama petugas berhasil diamankan di memori lokal HP.", true);
+      showModal("Disimpan di HP (Offline)", "Tidak ada sinyal internet. Data berhasil diamankan di memori lokal HP.", true);
       document.getElementById('btnSubmit').disabled = false;
       document.getElementById('status').style.display = 'none';
     }
@@ -560,8 +596,25 @@
 
     function loadRekapData() {
       let dataOffline = JSON.parse(localStorage.getItem('pagar_pktn_offline') || '[]');
+      
+      let total = dataOffline.length;
+      let legal = 0;
+      let temuan = 0;
+
+      dataOffline.forEach(item => {
+        if(item.statusSni && item.statusSni.toLowerCase().includes('terdaftar')) {
+          legal++;
+        } else {
+          temuan++;
+        }
+      });
+
+      document.getElementById('statTotal').textContent = total;
+      document.getElementById('statLegal').textContent = legal;
+      document.getElementById('statTemuan').textContent = temuan;
+
       let container = document.getElementById('rekapContentContainer');
-      container.innerHTML = `Total data pengawasan yang belum tersinkronisasi: <b>${dataOffline.length} data</b>`;
+      container.innerHTML = `Total data pengawasan yang belum tersinkronisasi: <b>${total} data</b>`;
     }
 
     function cekDataOffline() {
@@ -596,7 +649,7 @@
             syncOfflineData();
           } else {
             closeOfflineModal();
-            showModal("Sinkronisasi Selesai", "Semua data beserta nama petugas berhasil terkirim!", true);
+            showModal("Sinkronisasi Selesai", "Semua data berhasil terkirim!", true);
             loadRekapData();
           }
         } else {
@@ -619,4 +672,3 @@
   </script>
 </body>
 </html>
-    
