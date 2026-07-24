@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>PAGAR PKTN - Form Pengawasan Barang SNI</title>
   
-  <!-- Konfigurasi PWA & Service Worker agar bisa dibuka Offline -->
+  <!-- Konfigurasi PWA & Service Worker -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#2563eb">
   <script>
@@ -15,17 +15,28 @@
     }
   </script>
 
-  <!-- Style CSS bawaan aplikasi -->
   <style>
-    /* Masukkan style CSS Anda di sini jika disatukan, atau tetap panggil external jika terpisah */
-    body { font-family: Arial, sans-serif; background-color: #f8fafc; margin: 0; padding: 0; color: #334155; }
-    .top-navbar { background: #ffffff; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; }
-    .brand-area { display: flex; align-items: center; gap: 10px; }
-    .app-logo { font-size: 24px; }
+    body { font-family: Arial, sans-serif; background-color: #f8fafc; margin: 0; padding: 0; color: #334155; display: flex; height: 100vh; overflow: hidden; }
+    
+    /* Layout Sidebar Kiri */
+    .sidebar { width: 260px; background: #ffffff; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; justify-content: space-between; }
+    .sidebar-header { padding: 20px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; gap: 10px; }
+    .app-logo { font-size: 28px; }
     .app-title-group { display: flex; flex-direction: column; }
     .app-name { font-weight: bold; font-size: 16px; color: #1e293b; }
-    .app-subtitle { font-size: 12px; color: #64748b; }
-    .main-container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
+    .app-subtitle { font-size: 11px; color: #64748b; }
+    
+    .sidebar-menu { padding: 15px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+    .menu-item { display: flex; align-items: center; gap: 10px; padding: 10px 15px; border-radius: 6px; color: #475569; text-decoration: none; font-size: 14px; font-weight: 600; cursor: pointer; border: none; background: transparent; width: 100%; text-align: left; }
+    .menu-item:hover, .menu-item.active { background: #eff6ff; color: #2563eb; }
+    
+    .sidebar-footer { padding: 15px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b; display: flex; flex-direction: column; gap: 5px; }
+
+    /* Area Konten Utama */
+    .main-content { flex: 1; display: flex; flex-direction: column; overflow-y: auto; background: #f8fafc; }
+    .top-navbar { background: #ffffff; padding: 12px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; }
+    
+    .content-body { padding: 25px; max-width: 800px; margin: 0 auto; width: 100%; box-sizing: border-box; }
     .card { background: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; }
     .card-header { padding: 15px 20px; font-weight: bold; border-bottom: 1px solid #e2e8f0; background: #f8fafc; border-top-left-radius: 8px; border-top-right-radius: 8px; }
     .card-body { padding: 20px; }
@@ -36,6 +47,17 @@
     .form-control:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
     .btn-submit { background: #2563eb; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 20px; }
     .btn-submit:hover { background: #1d4ed8; }
+    
+    .page-section { display: none; }
+    .page-section.active { display: block; }
+
+    /* Dinamis Petugas */
+    .petugas-row { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; }
+    .btn-remove-petugas { background: #fee2e2; color: #dc2626; border: none; padding: 10px 14px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    .btn-remove-petugas:hover { background: #fecaca; }
+    .btn-add-petugas { background: #f0fdf4; color: #16a34a; border: 1px dashed #16a34a; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; width: 100%; margin-top: 5px; }
+    .btn-add-petugas:hover { background: #dcfce7; }
+
     .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1000; }
     .custom-modal-box { background: white; padding: 25px; border-radius: 12px; max-width: 350px; width: 90%; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
     .modal-icon { font-size: 40px; margin-bottom: 10px; }
@@ -46,170 +68,229 @@
   </style>
 </head>
 <body>
-  <div class="top-navbar">
-    <div class="brand-area">
-      <div class="app-logo">🛡️</div>
-      <div class="app-title-group">
-        <span class="app-name">PAGAR PKTN</span>
-        <span class="app-subtitle">Pengawasan Barang SNI</span>
+
+  <!-- SIDEBAR MENU DI KIRI -->
+  <div class="sidebar">
+    <div>
+      <div class="sidebar-header">
+        <div class="app-logo">🛡️</div>
+        <div class="app-title-group">
+          <span class="app-name">PAGAR PKTN</span>
+          <span class="app-subtitle">Pengawasan SNI</span>
+        </div>
+      </div>
+      <div class="sidebar-menu">
+        <button class="menu-item active" onclick="switchPage('formPage', this)">📋 Form Pengawasan</button>
+        <button class="menu-item" onclick="switchPage('riwayatPage', this)">📜 Riwayat Input</button>
+        <button class="menu-item" onclick="switchPage('rekapPage', this)">📊 Rekap & Sinkronisasi</button>
+        <button class="menu-item" onclick="switchPage('pengaturanPage', this)">⚙️ Pengaturan</button>
       </div>
     </div>
-    <div class="user-profile-header">
-      <span id="networkStatus" style="font-size: 11px; font-weight: bold; padding: 4px 8px; border-radius: 12px; margin-right: 8px;"></span>
-      <span style="font-size: 13px; font-weight: 600; color: #475569; background: #f1f5f9; padding: 6px 12px; border-radius: 20px;">👤 Petugas</span>
+    <div class="sidebar-footer">
+      <span id="networkStatus" style="font-weight: bold;"></span>
+      <span>👤 Tim Pengawas</span>
     </div>
   </div>
 
-  <div class="main-container">
-    <div class="form-wrapper">
-      <div class="card">
-        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
-          <span>📋 Form Pengawasan Barang SNI</span>
-          <button type="button" onclick="cekDataOffline()" style="background: #e2e8f0; color: #334155; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: bold;" id="badgeOfflineCount">📦 Data Offline: 0</button>
-        </div>
-        <div class="card-body">
-          <form id="inspectionForm">
-            
-            <h3 class="section-title">🏢 A. Profil Pelaku Usaha</h3>
-            <div class="form-group">
-              <label>Nama Usaha / Toko / Perusahaan</label>
-              <input type="text" id="namaUsaha" required class="form-control" placeholder="Contoh: PT Sumber Makmur / Toko Berkah">
-            </div>
-            <div class="form-group">
-              <label>Nama Pemilik / Penanggung Jawab</label>
-              <input type="text" id="namaPemilik" required class="form-control" placeholder="Masukkan nama lengkap pemilik">
-            </div>
-            
-            <div class="form-group">
-              <label style="display: flex; justify-content: space-between; align-items: center;">
-                <span>Alamat Usaha (Titik Koordinat GPS)</span>
-                <button type="button" onclick="getLocation()" style="background: #0284c7; color: #fff; border: none; padding: 4px 10px; border-radius: 4px; font-size: 12px; cursor: pointer; font-weight: 600;">📍 Ambil GPS</button>
-              </label>
-              <input type="text" id="koordinat" placeholder="Contoh: -6.1754, 106.8272" required class="form-control">
-              <small id="gpsStatus" style="color: #64748b; font-size: 11px; margin-top: 3px; display: block;"></small>
-            </div>
+  <!-- KONTEN UTAMA DI KANAN -->
+  <div class="main-content">
+    <div class="top-navbar">
+      <span id="pageTitle" style="font-weight: bold; font-size: 16px; color: #1e293b;">Form Pengawasan Barang SNI</span>
+      <button type="button" onclick="cekDataOffline()" style="background: #e2e8f0; color: #334155; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: bold;" id="badgeOfflineCount">📦 Data Offline: 0</button>
+    </div>
 
-            <h3 class="section-title">📦 B. Detail Barang & Legalitas SNI</h3>
-            <div class="form-group">
-              <label>Jenis Barang</label>
-              <input type="text" id="jenisBarang" required class="form-control" placeholder="Misal: Helm, Kabel, Air Mineral">
-            </div>
-            
-            <div class="form-group">
-              <label>Merk Barang</label>
-              <input type="text" id="merkBarang" required class="form-control" placeholder="Masukkan merk produk">
-            </div>
-
-            <div class="form-group">
-              <label>Negara Pembuat / Asal Barang</label>
-              <input type="text" id="negaraPembuat" name="negaraPembuat" list="listNegara" class="form-control" placeholder="Ketik atau pilih negara..." required oninput="cekNegara(this.value)">
-              <datalist id="listNegara">
-                <option value="Indonesia"><option value="China"><option value="Jepang"><option value="Korea Selatan"><option value="Malaysia"><option value="Thailand"><option value="Vietnam"><option value="Singapura"><option value="Amerika Serikat"><option value="Jerman"><option value="Lainnya">
-              </datalist>
-            </div>
-
-            <div id="formProdusen" class="form-group" style="display: none; background: #f0fdf4; padding: 15px; border-radius: 6px; border-left: 4px solid #22c55e;">
-              <label style="color: #166534; font-weight: bold; margin-bottom: 8px; display:block;">Data Produsen Lokal (Indonesia):</label>
-              <input type="text" id="namaProdusen" class="form-control mb-2" placeholder="Nama Perusahaan / Produsen">
-              <textarea id="alamatProdusen" class="form-control" placeholder="Alamat Lengkap Produsen" rows="2"></textarea>
-            </div>
-
-            <div id="formImportir" class="form-group" style="display: none; background: #fff7ed; padding: 15px; border-radius: 6px; border-left: 4px solid #f97316;">
-              <label style="color: #9a3412; font-weight: bold; margin-bottom: 8px; display:block;">Data Importir (Barang Impor):</label>
-              <input type="text" id="namaImportir" class="form-control mb-2" placeholder="Nama Perusahaan Importir">
-              <textarea id="alamatImportir" class="form-control" placeholder="Alamat Lengkap Importir" rows="2"></textarea>
-            </div>
-
-            <div class="form-group">
-              <label>Nomor NPB (Nomor Pendaftaran Barang)</label>
-              <input type="text" id="noNpb" class="form-control" placeholder="Masukkan Nomor NPB jika ada">
-            </div>
-
-            <div style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 12px 16px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-              <div>
-                <div style="font-weight: bold; color: #1e40af; font-size: 14px;">Validasi Data SNI</div>
-                <div style="color: #64748b; font-size: 12px;">Periksa status registrasi barang via database BSN.</div>
+    <div class="content-body">
+      
+      <!-- HALAMAN 1: FORM PENGAWASAN -->
+      <div id="formPage" class="page-section active">
+        <div class="card">
+          <div class="card-header">Formulir Pengawasan Lapangan</div>
+          <div class="card-body">
+            <form id="inspectionForm">
+              
+              <h3 class="section-title" style="margin-top: 0;">👥 1. Tim Petugas Pengawas</h3>
+              <div class="form-group">
+                <label>Nama Petugas Pengawas Lapangan</label>
+                <div id="petugasContainer">
+                  <div class="petugas-row">
+                    <input type="text" class="form-control input-petugas" placeholder="Nama lengkap petugas beserta gelar..." required>
+                  </div>
+                </div>
+                <button type="button" class="btn-add-petugas" onclick="tambahPetugas()">+ Tambah Petugas Lain</button>
               </div>
-              <a href="https://bangbeni.bsn.go.id" target="_blank" style="background: #2563eb; color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; text-decoration: none; font-weight: 600; white-space: nowrap;">Buka Bang Beni ↗</a>
-            </div>
 
-            <div class="form-group">
-              <label>Kriteria Status Validasi SNI (Hasil Pengecekan)</label>
-              <select id="statusSni" required class="form-control">
-                <option value="" disabled selected>-- Pilih Status Hasil Pengecekan --</option>
-                <option value="Terdaftar / Sesuai">✅ Terdaftar & Sesuai (Legal)</option>
-                <option value="Tidak Terdaftar / Tidak Sesuai">❌ Tidak Terdaftar / Tidak Sesuai (Temuan)</option>
-                <option value="Nomor SNI Tidak Valid / Palsu">⚠️ Nomor SNI Tidak Valid / Diragukan</option>
-              </select>
-            </div>
+              <h3 class="section-title">🏢 2. Profil Pelaku Usaha</h3>
+              <div class="form-group">
+                <label>Nama Usaha / Toko / Perusahaan</label>
+                <input type="text" id="namaUsaha" required class="form-control" placeholder="Contoh: PT Sumber Makmur / Toko Berkah">
+              </div>
+              <div class="form-group">
+                <label>Nama Pemilik / Penanggung Jawab</label>
+                <input type="text" id="namaPemilik" required class="form-control" placeholder="Masukkan nama lengkap pemilik">
+              </div>
+              
+              <div class="form-group">
+                <label style="display: flex; justify-content: space-between; align-items: center;">
+                  <span>Alamat Usaha (Titik Koordinat GPS)</span>
+                  <button type="button" onclick="getLocation()" style="background: #0284c7; color: #fff; border: none; padding: 4px 10px; border-radius: 4px; font-size: 12px; cursor: pointer; font-weight: 600;">📍 Ambil GPS</button>
+                </label>
+                <input type="text" id="koordinat" placeholder="Contoh: -6.1754, 106.8272" required class="form-control">
+                <small id="gpsStatus" style="color: #64748b; font-size: 11px; margin-top: 3px; display: block;"></small>
+              </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-              <div class="form-group"><label>No. SNI di Barang</label><input type="text" id="noSniBarang" class="form-control" placeholder="SNI XXXX:YYYY"></div>
-              <div class="form-group"><label>No. SNI di Kemasan</label><input type="text" id="noSniKemasan" class="form-control" placeholder="SNI XXXX:YYYY"></div>
-            </div>
+              <h3 class="section-title">📦 3. Detail Barang & Legalitas SNI</h3>
+              <div class="form-group">
+                <label>Jenis Barang</label>
+                <input type="text" id="jenisBarang" required class="form-control" placeholder="Misal: Helm, Kabel, Air Mineral">
+              </div>
+              
+              <div class="form-group">
+                <label>Merk Barang</label>
+                <input type="text" id="merkBarang" required class="form-control" placeholder="Masukkan merk produk">
+              </div>
 
-            <div class="form-group">
-              <label>Dokumentasi / Foto Spesifikasi & No. SNI pada Produk</label>
-              <input type="file" id="fileNoSni" class="form-control" accept="image/*" capture="environment">
-            </div>
-            <div class="form-group">
-              <label>Dokumentasi / Foto No. SNI di Kemasan</label>
-              <input type="file" id="fileKemasan" class="form-control" accept="image/*" capture="environment">
-            </div>
+              <div class="form-group">
+                <label>Negara Pembuat / Asal Barang</label>
+                <input type="text" id="negaraPembuat" name="negaraPembuat" list="listNegara" class="form-control" placeholder="Ketik atau pilih negara..." required oninput="cekNegara(this.value)">
+                <datalist id="listNegara">
+                  <option value="Indonesia"><option value="China"><option value="Jepang"><option value="Korea Selatan"><option value="Malaysia"><option value="Thailand"><option value="Vietnam"><option value="Singapura"><option value="Amerika Serikat"><option value="Jerman"><option value="Lainnya">
+                </datalist>
+              </div>
 
-            <h3 class="section-title">🛡️ C. Kelengkapan Petunjuk & Purna Jual</h3>
-            
-            <div class="form-group"><label>Cara Penggunaan Sesuai Produk</label><select id="caraPenggunaan" class="form-control"><option value="Ada">Ada</option><option value="Tidak">Tidak Ada</option></select></div>
-            <div class="form-group"><label>Petunjuk Pemeliharaan</label><select id="petunjukPemeliharaan" class="form-control"><option value="Ada">Ada</option><option value="Tidak">Tidak Ada</option></select></div>
-            <div class="form-group"><label>Nomor Tanda Pendaftaran Petunjuk Penggunaan</label><input type="text" id="noPendaftaranPetunjuk" class="form-control" placeholder="Nomor tanda pendaftaran..."></div>
-            <div class="form-group"><label>Dokumentasi / Foto Petunjuk Penggunaan & Pemeliharaan</label><input type="file" id="fileKlausul" class="form-control" accept="image/*" capture="environment"></div>
+              <div id="formProdusen" class="form-group" style="display: none; background: #f0fdf4; padding: 15px; border-radius: 6px; border-left: 4px solid #22c55e;">
+                <label style="color: #166534; font-weight: bold; margin-bottom: 8px; display:block;">Data Produsen Lokal (Indonesia):</label>
+                <input type="text" id="namaProdusen" class="form-control mb-2" placeholder="Nama Perusahaan / Produsen">
+                <textarea id="alamatProdusen" class="form-control" placeholder="Alamat Lengkap Produsen" rows="2"></textarea>
+              </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-              <div class="form-group"><label>Klausul Baku</label><select id="klausulBaku" class="form-control"><option value="Sesuai Ketentuan">Sesuai Ketentuan</option><option value="Tidak Sesuai">Tidak Sesuai</option><option value="Tidak Ada">Tidak Ada</option></select></div>
-              <div class="form-group"><label>Kartu Garansi</label><select id="statusGaransi" class="form-control" onchange="cekGaransi(this.value)"><option value="Ada (B. Indonesia)">Ada (B. Indonesia)</option><option value="Ada (B. Asing)">Ada (B. Asing)</option><option value="Tidak Ada">Tidak Ada</option></select></div>
-            </div>
+              <div id="formImportir" class="form-group" style="display: none; background: #fff7ed; padding: 15px; border-radius: 6px; border-left: 4px solid #f97316;">
+                <label style="color: #9a3412; font-weight: bold; margin-bottom: 8px; display:block;">Data Importir (Barang Impor):</label>
+                <input type="text" id="namaImportir" class="form-control mb-2" placeholder="Nama Perusahaan Importir">
+                <textarea id="alamatImportir" class="form-control" placeholder="Alamat Lengkap Importir" rows="2"></textarea>
+              </div>
 
-            <div id="formDetailGaransi" style="display: none; border: 1px solid #cbd5e1; padding: 15px; border-radius: 8px; margin-bottom: 15px; background: #fafafa;">
-              <h4 style="font-size: 13px; font-weight: bold; margin-bottom: 10px; color: #1e3a8a;">Detail Jaminan Purna Jual & Garansi</h4>
-              <div class="form-group"><label>Nama & Alamat Lengkap Pusat Layanan Purna Jual</label><textarea id="alamatPurnaJual" class="form-control" placeholder="Masukkan nama dan alamat service center..." rows="2"></textarea></div>
-              <div class="form-group"><label>Ketersediaan Service Center (Minimal di 6 Kota Besar)</label><input type="text" id="infoServiceCenter" class="form-control" placeholder="Daftar kota besar..."></div>
-              <div class="form-group"><label>Masa Jaminan Garansi</label><input type="text" id="masaGaransi" class="form-control" placeholder="Contoh: 1 Tahun"></div>
-              <div class="form-group"><label>Cakupan / Daftar Kerusakan yang Dijamin</label><textarea id="cakupanGaransi" class="form-control" placeholder="Jelaskan komponen..." rows="2"></textarea></div>
-              <div class="form-group"><label>Nomor Telepon Saluran Komunikasi Konsumen</label><input type="text" id="kontakKonsumen" class="form-control" placeholder="Nomor HP/Call Center"></div>
-              <div class="form-group"><label>Nomor Tanda Pendaftaran Kartu Jaminan</label><input type="text" id="noPendaftaranGaransi" class="form-control" placeholder="Nomor tanda pendaftaran..."></div>
-            </div>
+              <div class="form-group">
+                <label>Nomor NPB (Nomor Pendaftaran Barang)</label>
+                <input type="text" id="noNpb" class="form-control" placeholder="Masukkan Nomor NPB jika ada">
+              </div>
 
-            <div class="form-group">
-              <label>Dokumentasi / Foto Kartu Garansi</label>
-              <input type="file" id="fileGaransi" class="form-control" accept="image/*" capture="environment">
-            </div>
+              <div style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 12px 16px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <div>
+                  <div style="font-weight: bold; color: #1e40af; font-size: 14px;">Validasi Data SNI</div>
+                  <div style="color: #64748b; font-size: 12px;">Periksa status registrasi barang via database BSN.</div>
+                </div>
+                <a href="https://bangbeni.bsn.go.id" target="_blank" style="background: #2563eb; color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; text-decoration: none; font-weight: 600; white-space: nowrap;">Buka Bang Beni ↗</a>
+              </div>
 
-            <button type="button" onclick="uploadData()" id="btnSubmit" class="btn-submit">🚀 Kirim Data & Upload Foto ke Drive</button>
-            <div id="status" style="display: none; text-align: center; margin-top: 10px; font-weight: bold; color: #0284c7;">Sedang memproses data...</div>
-          </form>
+              <div class="form-group">
+                <label>Kriteria Status Validasi SNI (Hasil Pengecekan)</label>
+                <select id="statusSni" required class="form-control">
+                  <option value="" disabled selected>-- Pilih Status Hasil Pengecekan --</option>
+                  <option value="Terdaftar / Sesuai">✅ Terdaftar & Sesuai (Legal)</option>
+                  <option value="Tidak Terdaftar / Tidak Sesuai">❌ Tidak Terdaftar / Tidak Sesuai (Temuan)</option>
+                  <option value="Nomor SNI Tidak Valid / Palsu">⚠️ Nomor SNI Tidak Valid / Diragukan</option>
+                </select>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="form-group"><label>No. SNI di Barang</label><input type="text" id="noSniBarang" class="form-control" placeholder="SNI XXXX:YYYY"></div>
+                <div class="form-group"><label>No. SNI di Kemasan</label><input type="text" id="noSniKemasan" class="form-control" placeholder="SNI XXXX:YYYY"></div>
+              </div>
+
+              <div class="form-group">
+                <label>Dokumentasi / Foto Spesifikasi & No. SNI pada Produk</label>
+                <input type="file" id="fileNoSni" class="form-control" accept="image/*" capture="environment">
+              </div>
+              <div class="form-group">
+                <label>Dokumentasi / Foto No. SNI di Kemasan</label>
+                <input type="file" id="fileKemasan" class="form-control" accept="image/*" capture="environment">
+              </div>
+
+              <h3 class="section-title">🛡️ 4. Kelengkapan Petunjuk & Purna Jual</h3>
+              <div class="form-group"><label>Cara Penggunaan Sesuai Produk</label><select id="caraPenggunaan" class="form-control"><option value="Ada">Ada</option><option value="Tidak">Tidak Ada</option></select></div>
+              <div class="form-group"><label>Petunjuk Pemeliharaan</label><select id="petunjukPemeliharaan" class="form-control"><option value="Ada">Ada</option><option value="Tidak">Tidak Ada</option></select></div>
+              <div class="form-group"><label>Nomor Tanda Pendaftaran Petunjuk Penggunaan</label><input type="text" id="noPendaftaranPetunjuk" class="form-control" placeholder="Nomor tanda pendaftaran..."></div>
+              <div class="form-group"><label>Dokumentasi / Foto Petunjuk Penggunaan</label><input type="file" id="fileKlausul" class="form-control" accept="image/*" capture="environment"></div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="form-group"><label>Klausul Baku</label><select id="klausulBaku" class="form-control"><option value="Sesuai Ketentuan">Sesuai Ketentuan</option><option value="Tidak Sesuai">Tidak Sesuai</option><option value="Tidak Ada">Tidak Ada</option></select></div>
+                <div class="form-group"><label>Kartu Garansi</label><select id="statusGaransi" class="form-control" onchange="cekGaransi(this.value)"><option value="Ada (B. Indonesia)">Ada (B. Indonesia)</option><option value="Ada (B. Asing)">Ada (B. Asing)</option><option value="Tidak Ada">Tidak Ada</option></select></div>
+              </div>
+
+              <div id="formDetailGaransi" style="display: none; border: 1px solid #cbd5e1; padding: 15px; border-radius: 8px; margin-bottom: 15px; background: #fafafa;">
+                <h4 style="font-size: 13px; font-weight: bold; margin-bottom: 10px; color: #1e3a8a;">Detail Jaminan Purna Jual & Garansi</h4>
+                <div class="form-group"><label>Alamat Pusat Layanan Purna Jual</label><textarea id="alamatPurnaJual" class="form-control" placeholder="Masukkan service center..." rows="2"></textarea></div>
+                <div class="form-group"><label>Ketersediaan Service Center (Min. 6 Kota)</label><input type="text" id="infoServiceCenter" class="form-control" placeholder="Daftar kota..."></div>
+                <div class="form-group"><label>Masa Jaminan Garansi</label><input type="text" id="masaGaransi" class="form-control" placeholder="Contoh: 1 Tahun"></div>
+                <div class="form-group"><label>Cakupan Kerusakan</label><textarea id="cakupanGaransi" class="form-control" placeholder="Jelaskan komponen..." rows="2"></textarea></div>
+                <div class="form-group"><label>Kontak Konsumen</label><input type="text" id="kontakKonsumen" class="form-control" placeholder="Nomor HP/Call Center"></div>
+                <div class="form-group"><label>No. Tanda Pendaftaran Kartu Jaminan</label><input type="text" id="noPendaftaranGaransi" class="form-control" placeholder="Nomor tanda pendaftaran..."></div>
+              </div>
+
+              <div class="form-group">
+                <label>Dokumentasi / Foto Kartu Garansi</label>
+                <input type="file" id="fileGaransi" class="form-control" accept="image/*" capture="environment">
+              </div>
+
+              <button type="button" onclick="uploadData()" id="btnSubmit" class="btn-submit">🚀 Kirim Data & Upload Foto ke Drive</button>
+              <div id="status" style="display: none; text-align: center; margin-top: 10px; font-weight: bold; color: #0284c7;">Sedang memproses data...</div>
+            </form>
+          </div>
         </div>
       </div>
+
+      <!-- HALAMAN 2: RIWAYAT INPUT -->
+      <div id="riwayatPage" class="page-section">
+        <div class="card">
+          <div class="card-header">📜 Riwayat Data Tersimpan di HP</div>
+          <div class="card-body">
+            <p style="font-size: 13px; color: #64748b;">Daftar pengawasan yang tersimpan di memori perangkat:</p>
+            <div id="riwayatListContainer" style="margin-top: 15px;">Belum ada riwayat data tersimpan.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HALAMAN 3: REKAP & SINKRONISASI -->
+      <div id="rekapPage" class="page-section">
+        <div class="card">
+          <div class="card-header">📊 Rekap & Sinkronisasi Offline</div>
+          <div class="card-body">
+            <p style="font-size: 13px; color: #64748b;">Kelola dan kirimkan data tertunda ke server pusat Google Sheets.</p>
+            <div id="rekapContentContainer" style="margin-top: 15px; margin-bottom: 20px;">Memuat data...</div>
+            <button class="modal-btn" onclick="syncOfflineData()" id="btnSyncPage" style="background: #16a34a;">Kirim Semua Data Offline Sekarang</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- HALAMAN 4: PENGATURAN -->
+      <div id="pengaturanPage" class="page-section">
+        <div class="card">
+          <div class="card-header">⚙️ Pengaturan Aplikasi</div>
+          <div class="card-body">
+            <div class="form-group">
+              <label>Status Jaringan Koneksi</label>
+              <input type="text" id="settingNetwork" readonly class="form-control" style="background: #f1f5f9;">
+            </div>
+            <div class="form-group">
+              <label>Penyimpanan Lokal (Cache)</label>
+              <button type="button" onclick="clearLocalStorage()" style="background: #dc2626; color: white; border: none; padding: 8px 14px; border-radius: 6px; font-size: 13px; cursor: pointer; font-weight: bold;">Hapus Semua Data Offline Tersimpan</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <!-- Modal Informasi & Sinkronisasi Offline -->
+  <!-- Modal Pop-up -->
   <div id="offlineModal" class="custom-modal-overlay" style="display: none;">
     <div class="custom-modal-box" style="max-width: 400px; text-align: left;">
       <div class="modal-title" style="font-size: 16px; margin-bottom: 10px;">📦 Data Pengawasan Offline</div>
       <div class="modal-message" id="offlineModalMsg" style="font-size: 13px; margin-bottom: 15px; max-height: 200px; overflow-y: auto;">Belum ada data tersimpan.</div>
       <div style="display: flex; gap: 10px;">
-        <button class="modal-btn" onclick="syncOfflineData()" id="btnSync" style="background: #16a34a; flex: 1;">Kirim Data Offline Sekarang</button>
+        <button class="modal-btn" onclick="syncOfflineData()" id="btnSync" style="background: #16a34a; flex: 1;">Kirim Data</button>
         <button class="modal-btn" onclick="closeOfflineModal()" style="background: #64748b; flex: 1;">Tutup</button>
       </div>
-    </div>
-  </div>
-
-  <div id="welcomeModal" class="custom-modal-overlay">
-    <div class="custom-modal-box">
-      <div class="modal-icon">👋</div>
-      <div class="modal-title">Selamat Datang di PAGAR PKTN</div>
-      <div class="modal-message">Form dapat digunakan di lapangan walau tanpa sinyal. Data akan tersimpan otomatis dan bisa dikirim saat ada internet.</div>
-      <button class="modal-btn" onclick="closeWelcomeModal()">Mulai Mengisi Form</button>
     </div>
   </div>
 
@@ -223,8 +304,7 @@
   </div>
 
   <script>
-    // ⚠️ GANTI URL DI BAWAH INI DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA (setelah dideploy sebagai doPost)
-    const API_URL = "MASUKKAN_WEB_APP_URL_GOOGLE_APPS_SCRIPT_ANDA";
+    const API_URL = "https://script.google.com/macros/s/AKfycbw4n62486kuLOxa9uMWb3DIjOG3Gi0JaWrlz2pE3g-JshlhNoeiy5m3mYNUXRs-vFjK/exec";
 
     window.addEventListener('load', function() {
       updateNetworkStatus();
@@ -234,23 +314,63 @@
     window.addEventListener('online', updateNetworkStatus);
     window.addEventListener('offline', updateNetworkStatus);
 
-    function updateNetworkStatus() {
-      const netStatus = document.getElementById('networkStatus');
-      const btnSubmit = document.getElementById('btnSubmit');
-      if (navigator.onLine) {
-        netStatus.textContent = "🟢 Online";
-        netStatus.style.background = "#dcfce7";
-        netStatus.style.color = "#166534";
-        btnSubmit.textContent = "🚀 Kirim Data & Upload Foto ke Drive";
+    function switchPage(pageId, element) {
+      document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+      document.querySelectorAll('.sidebar-menu .menu-item').forEach(btn => btn.classList.remove('active'));
+      
+      document.getElementById(pageId).classList.add('active');
+      element.classList.add('active');
+
+      const titles = {
+        'formPage': 'Form Pengawasan Barang SNI',
+        'riwayatPage': 'Riwayat Input Pengawasan',
+        'rekapPage': 'Rekap & Sinkronisasi Data',
+        'pengaturanPage': 'Pengaturan Sistem'
+      };
+      document.getElementById('pageTitle').textContent = titles[pageId];
+
+      if(pageId === 'riwayatPage') loadRiwayatData();
+      if(pageId === 'rekapPage') loadRekapData();
+    }
+
+    // Fungsi Tambah / Hapus Petugas Dinamis
+    function tambahPetugas() {
+      const container = document.getElementById('petugasContainer');
+      const div = document.createElement('div');
+      div.className = 'petugas-row';
+      div.innerHTML = `
+        <input type="text" class="form-control input-petugas" placeholder="Nama lengkap petugas beserta gelar..." required>
+        <button type="button" class="btn-remove-petugas" onclick="hapusPetugas(this)">✕</button>
+      `;
+      container.appendChild(div);
+    }
+
+    function hapusPetugas(button) {
+      const rows = document.querySelectorAll('.petugas-row');
+      if(rows.length > 1) {
+        button.parentElement.remove();
       } else {
-        netStatus.textContent = "🔴 Offline (Mode Simpan Lokal)";
-        netStatus.style.background = "#fee2e2";
-        netStatus.style.color = "#991b1b";
-        btnSubmit.textContent = "💾 Simpan ke Memori HP (Offline)";
+        alert("Minimal harus ada 1 petugas pengawas.");
       }
     }
 
-    function closeWelcomeModal() { document.getElementById('welcomeModal').style.display = 'none'; }
+    function updateNetworkStatus() {
+      const netStatus = document.getElementById('networkStatus');
+      const settingNet = document.getElementById('settingNetwork');
+      const btnSubmit = document.getElementById('btnSubmit');
+      if (navigator.onLine) {
+        netStatus.textContent = "🟢 Online";
+        netStatus.style.color = "#166534";
+        if(settingNet) settingNet.value = "Terhubung ke Internet (Online)";
+        if(btnSubmit) btnSubmit.textContent = "🚀 Kirim Data & Upload Foto ke Drive";
+      } else {
+        netStatus.textContent = "🔴 Offline";
+        netStatus.style.color = "#991b1b";
+        if(settingNet) settingNet.value = "Tidak Ada Internet (Mode Offline)";
+        if(btnSubmit) btnSubmit.textContent = "💾 Simpan ke Memori HP (Offline)";
+      }
+    }
+
     function showModal(title, message, isSuccess = true) {
       document.getElementById('modalTitle').textContent = title;
       document.getElementById('modalMessage').textContent = message;
@@ -313,11 +433,26 @@
     async function uploadData() {
       const btn = document.getElementById('btnSubmit');
       const status = document.getElementById('status');
+      
+      // Ambil kumpulan nama petugas dari input dinamis
+      const petugasInputs = document.querySelectorAll('.input-petugas');
+      let daftarPetugas = [];
+      petugasInputs.forEach(input => {
+        if(input.value.trim() !== '') daftarPetugas.push(input.value.trim());
+      });
+
+      if(daftarPetugas.length === 0) {
+        alert("Mohon isi setidaknya 1 nama petugas pengawas.");
+        return;
+      }
+
       btn.disabled = true;
       status.style.display = 'block';
 
       try {
         const payload = {
+          // Gabungkan nama petugas menjadi satu string terpisah koma atau kompilasi (misal: "Budi, Andi")
+          namaPetugas: daftarPetugas.join(', '),
           namaUsaha: document.getElementById('namaUsaha').value,
           namaPemilik: document.getElementById('namaPemilik').value,
           koordinat: document.getElementById('koordinat').value,
@@ -349,21 +484,22 @@
           fileGaransi: await getFileData(document.getElementById('fileGaransi'))
         };
 
-        // JIKA HP OFFLINE
         if (!navigator.onLine) {
           simpanKeLocalStorage(payload);
           return;
         }
 
-        // JIKA ONLINE, KIRIM MENGGUNAKAN FETCH KE GOOGLE APPS SCRIPT
-        let response = await fetch(API_URL, {
-          method: 'POST',
-          body: JSON.stringify(payload)
-        });
+        let response = await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) });
         let res = await response.json();
 
         if(res.success) {
           document.getElementById('inspectionForm').reset();
+          // Reset kembali baris petugas menjadi sisa 1 input kosong
+          document.getElementById('petugasContainer').innerHTML = `
+            <div class="petugas-row">
+              <input type="text" class="form-control input-petugas" placeholder="Nama lengkap petugas beserta gelar..." required>
+            </div>
+          `;
           document.getElementById('formProdusen').style.display = 'none';
           document.getElementById('formImportir').style.display = 'none';
           document.getElementById('formDetailGaransi').style.display = 'none';
@@ -376,7 +512,6 @@
         status.style.display = 'none';
 
       } catch (e) {
-        // Jika gagal koneksi mendadak, cadangkan ke offline storage
         simpanKeLocalStorage(payload);
       }
     }
@@ -387,13 +522,18 @@
       localStorage.setItem('pagar_pktn_offline', JSON.stringify(dataOffline));
       
       document.getElementById('inspectionForm').reset();
+      document.getElementById('petugasContainer').innerHTML = `
+        <div class="petugas-row">
+          <input type="text" class="form-control input-petugas" placeholder="Nama lengkap petugas beserta gelar..." required>
+        </div>
+      `;
       document.getElementById('formProdusen').style.display = 'none';
       document.getElementById('formImportir').style.display = 'none';
       document.getElementById('formDetailGaransi').style.display = 'none';
       document.getElementById('gpsStatus').textContent = "";
       
       updateOfflineBadge();
-      showModal("Disimpan di HP (Offline)", "Tidak ada sinyal internet. Data berhasil diamankan di memori lokal HP Anda. Silakan sinkronkan nanti saat ada internet.", true);
+      showModal("Disimpan di HP (Offline)", "Tidak ada sinyal internet. Data & nama petugas berhasil diamankan di memori lokal HP.", true);
       document.getElementById('btnSubmit').disabled = false;
       document.getElementById('status').style.display = 'none';
     }
@@ -403,77 +543,80 @@
       document.getElementById('badgeOfflineCount').textContent = "📦 Data Offline: " + dataOffline.length;
     }
 
+    function loadRiwayatData() {
+      let dataOffline = JSON.parse(localStorage.getItem('pagar_pktn_offline') || '[]');
+      let container = document.getElementById('riwayatListContainer');
+      if (dataOffline.length === 0) {
+        container.innerHTML = "Belum ada riwayat data tersimpan.";
+        return;
+      }
+      let html = "<ul style='padding-left: 20px; line-height: 1.6;'>";
+      dataOffline.forEach((item) => {
+        html += `<li><b>${item.namaUsaha || 'Tanpa Nama'}</b> (${item.jenisBarang || '-'})<br><small style='color:#64748b;'>Petugas: ${item.namaPetugas || '-'}</small></li>`;
+      });
+      html += "</ul>";
+      container.innerHTML = html;
+    }
+
+    function loadRekapData() {
+      let dataOffline = JSON.parse(localStorage.getItem('pagar_pktn_offline') || '[]');
+      let container = document.getElementById('rekapContentContainer');
+      container.innerHTML = `Total data pengawasan yang belum tersinkronisasi: <b>${dataOffline.length} data</b>`;
+    }
+
     function cekDataOffline() {
       let dataOffline = JSON.parse(localStorage.getItem('pagar_pktn_offline') || '[]');
       let msgDiv = document.getElementById('offlineModalMsg');
       if (dataOffline.length === 0) {
-        msgDiv.innerHTML = "Belum ada data yang tersimpan secara offline di HP ini.";
+        msgDiv.innerHTML = "Belum ada data tersimpan offline.";
         document.getElementById('btnSync').style.display = 'none';
       } else {
-        let html = "<b>Daftar Usaha Tertunda:</b><ul style='padding-left: 15px; margin-top: 5px;'>";
-        dataOffline.forEach((item, idx) => {
-          html += `<li><b>${item.namaUsaha || 'Tanpa Nama'}</b> (${item.jenisBarang || '-'})</li>`;
-        });
-        html += "</ul>";
-        msgDiv.innerHTML = html;
+        msgDiv.innerHTML = `Terdapat <b>${dataOffline.length} data</b> tertunda di memori HP.`;
         document.getElementById('btnSync').style.display = 'block';
       }
       document.getElementById('offlineModal').style.display = 'flex';
     }
 
-    function closeOfflineModal() {
-      document.getElementById('offlineModal').style.display = 'none';
-    }
+    function closeOfflineModal() { document.getElementById('offlineModal').style.display = 'none'; }
 
     async function syncOfflineData() {
       let dataOffline = JSON.parse(localStorage.getItem('pagar_pktn_offline') || '[]');
-      if (dataOffline.length === 0) return;
-
-      if (!navigator.onLine) {
-        alert("Masih belum ada koneksi internet. Pastikan Anda memiliki sinyal untuk mengirim data.");
-        return;
-      }
-
-      const btnSync = document.getElementById('btnSync');
-      btnSync.disabled = true;
-      btnSync.textContent = "Sedang Mengirim...";
+      if (dataOffline.length === 0) { alert("Tidak ada data untuk disinkronkan."); return; }
+      if (!navigator.onLine) { alert("Tidak ada koneksi internet."); return; }
 
       let currentPayload = dataOffline[0];
-
       try {
-        let response = await fetch(API_URL, {
-          method: 'POST',
-          body: JSON.stringify(currentPayload)
-        });
+        let response = await fetch(API_URL, { method: 'POST', body: JSON.stringify(currentPayload) });
         let res = await response.json();
-
         if(res.success) {
           dataOffline.shift();
           localStorage.setItem('pagar_pktn_offline', JSON.stringify(dataOffline));
           updateOfflineBadge();
-          
-          if (dataOffline.length > 0) {
-            btnSync.disabled = false;
-            syncOfflineData(); // Lanjut kirim sisa data berikutnya
+          if(dataOffline.length > 0) {
+            syncOfflineData();
           } else {
             closeOfflineModal();
-            showModal("Sinkronisasi Selesai", "Semua data pengawasan offline berhasil terkirim ke server!", true);
-            btnSync.disabled = false;
-            btnSync.textContent = "Kirim Data Offline Sekarang";
+            showModal("Sinkronisasi Selesai", "Semua data beserta nama petugas berhasil terkirim!", true);
+            loadRekapData();
           }
         } else {
-          alert("Gagal sinkronisasi: " + res.message);
-          btnSync.disabled = false;
-          btnSync.textContent = "Kirim Data Offline Sekarang";
+          alert("Gagal: " + res.message);
         }
       } catch (err) {
-        alert("Gagal terhubung ke server. Coba beberapa saat lagi.");
-        btnSync.disabled = false;
-        btnSync.textContent = "Kirim Data Offline Sekarang";
+        alert("Gagal terhubung ke server.");
+      }
+    }
+
+    function clearLocalStorage() {
+      if(confirm("Yakin ingin menghapus seluruh data offline yang tersimpan?")) {
+        localStorage.removeItem('pagar_pktn_offline');
+        updateOfflineBadge();
+        loadRiwayatData();
+        loadRekapData();
+        alert("Data offline berhasil dibersihkan.");
       }
     }
   </script>
 </body>
 </html>
-
     
