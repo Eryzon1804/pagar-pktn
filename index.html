@@ -327,24 +327,24 @@
         <div class="section-icon"><i data-lucide="badge-check"></i></div>
         <div>
          <h3 class="font-bold text-base">4. Kriteria Status Validasi SNI</h3>
-         <p class="text-xs text-slate-500">Validasi nomor SNI via Link Bang Beni v2 (Online) atau Simpan Belum Terverifikasi (Offline).</p>
+         <p class="text-xs text-slate-500">Validasi nomor SNI via Link Bang Beni (Online) atau Simpan Belum Terverifikasi (Offline).</p>
         </div>
        </div>
        <div class="space-y-4">
         <div id="online-bangbeni-box" class="p-3.5 bg-blue-50/60 border border-blue-100 rounded-xl flex items-center justify-between gap-3">
          <div>
           <h4 class="font-bold text-xs text-blue-900">Validasi Pengecekan SNI</h4>
-          <p class="text-[11px] text-blue-700 mt-0.5">Cek keaslian nomor SNI melalui portal resmi Bang Beni v2.</p>
+          <p class="text-[11px] text-blue-700 mt-0.5">Cek keaslian nomor SNI melalui portal resmi Bang Beni.</p>
          </div>
-         <!-- TAUTAN DIPERBARUI KE BANG BENI V2 -->
-         <a href="https://bangbeni2.bsn.go.id" target="_blank" class="primary-btn px-3.5 py-2 text-xs shrink-0">
-          <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Buka Bang Beni v2
+         <!-- TAUTAN DIPERBARUI KE BANG BENI VERSI PERTAMA -->
+         <a href="https://bangbeni.bsn.go.id" target="_blank" class="primary-btn px-3.5 py-2 text-xs shrink-0">
+          <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Buka Bang Beni
          </a>
         </div>
 
         <div id="offline-warning-box" class="hidden p-3.5 bg-amber-50 border border-amber-200 rounded-xl">
          <p class="text-xs font-bold text-amber-900">⚠️ Perangkat Sedang Offline</p>
-         <p class="text-[11px] text-amber-700 mt-0.5">Pengecekan ke portal tidak dapat dilakukan. Status otomatis tersimpan sebagai <strong>Belum Terverifikasi</strong> dan dapat divalidasi nanti saat online.</p>
+         <p class="text-[11px] text-amber-700 mt-0.5">Pengecekan ke Bang Beni tidak dapat dilakukan. Status otomatis tersimpan sebagai <strong>Belum Terverifikasi</strong> dan dapat divalidasi nanti saat online.</p>
         </div>
 
         <div id="sni-selector-wrapper">
@@ -362,7 +362,7 @@
         
         <div id="bangbeni-checkbox-wrap" class="flex items-center gap-2 pt-1">
          <input type="checkbox" id="check-bangbeni-confirm" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 cursor-pointer">
-         <label for="check-bangbeni-confirm" class="text-xs font-bold text-slate-700 cursor-pointer">Saya telah memeriksa nomor SNI melalui tautan Bang Beni v2.</label>
+         <label for="check-bangbeni-confirm" class="text-xs font-bold text-slate-700 cursor-pointer">Saya telah memeriksa nomor SNI melalui tautan Bang Beni.</label>
         </div>
        </div>
       </article>
@@ -561,7 +561,7 @@
 
       <div class="section-card p-5 bg-white space-y-2">
        <h3 class="font-extrabold text-amber-600 flex items-center gap-2"><i data-lucide="cloud-off" class="w-4 h-4"></i> 3. Mode Offline &amp; Fitur Reminder Notifikasi HP</h3>
-       <p class="text-slate-600 text-xs leading-relaxed">Saat berada di area tanpa sinyal (*offline*), data tetap dapat diisi dan tersimpan secara lokal di memori HP dengan status <em>Belum Terverifikasi</em>. Fitur **Reminder Notifikasi HP** akan aktif otomatis dan mengirimkan pemberitahuan ke layar perangkat Anda begitu koneksi internet pulih, mengingatkan Anda untuk segera melakukan validasi SNI ke Bang Beni v2 dan menyinkronkan data ke server pusat.</p>
+       <p class="text-slate-600 text-xs leading-relaxed">Saat berada di area tanpa sinyal (*offline*), data tetap dapat diisi dan tersimpan secara lokal di memori HP dengan status <em>Belum Terverifikasi</em>. Fitur **Reminder Notifikasi HP** akan aktif otomatis dan mengirimkan pemberitahuan ke layar perangkat Anda begitu koneksi internet pulih, mengingatkan Anda untuk segera melakukan validasi SNI ke Bang Beni dan menyinkronkan data ke server pusat.</p>
       </div>
 
       <div class="section-card p-5 bg-white space-y-2">
@@ -960,7 +960,7 @@
     document.getElementById('check-bangbeni-confirm').addEventListener('change', function() {
       const hint = document.getElementById('validation-hint');
       if (this.checked) {
-        hint.textContent = "(Tervalidasi Bang Beni v2)";
+        hint.textContent = "(Tervalidasi Bang Beni)";
         hint.className = "text-[11px] font-bold text-emerald-600";
       } else {
         hint.textContent = "(Perlu konfirmasi/validasi)";
@@ -1311,11 +1311,11 @@
           </div>
 
           <div class="p-4 bg-blue-50/60 border border-blue-200 rounded-xl space-y-3">
-            <h5 class="font-bold text-xs text-blue-900 uppercase tracking-wider">Verifikasi SNI (Bang Beni v2)</h5>
-            <p class="text-xs text-blue-700">Jika Anda sekarang sudah online, silakan cek nomor SNI di atas melalui Bang Beni v2, lalu perbarui status validasinya:</p>
+            <h5 class="font-bold text-xs text-blue-900 uppercase tracking-wider">Verifikasi SNI (Bang Beni)</h5>
+            <p class="text-xs text-blue-700">Jika Anda sekarang sudah online, silakan cek nomor SNI di atas melalui Bang Beni, lalu perbarui status validasinya:</p>
             
-            <a href="https://bangbeni2.bsn.go.id" target="_blank" class="primary-btn px-3 py-2 text-xs inline-flex font-semibold">
-              <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Buka Bang Beni v2
+            <a href="https://bangbeni.bsn.go.id" target="_blank" class="primary-btn px-3 py-2 text-xs inline-flex font-semibold">
+              <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Buka Portal Bang Beni
             </a>
 
             <div class="pt-2">
