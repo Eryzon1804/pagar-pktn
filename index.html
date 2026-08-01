@@ -15,8 +15,19 @@
       --muted: #5f6368;
       --line: #dadce0;
       --surface: #ffffff;
+      --bg: #f8f9fa;
       --success: #0f9d58;
       --danger: #d93025;
+    }
+
+    [data-theme="dark"] {
+      --blue: #4285f4;
+      --blue-dark: #8ab4f8;
+      --ink: #e8eaed;
+      --muted: #9aa0a6;
+      --line: #3c4043;
+      --surface: #292a2d;
+      --bg: #202124;
     }
 
     * { box-sizing: border-box; }
@@ -24,7 +35,8 @@
     body {
       margin: 0; width: 100%; min-height: 100%;
       font-family: "DM Sans", sans-serif;
-      color: var(--ink); background-color: #f8f9fa;
+      color: var(--ink); background-color: var(--bg);
+      transition: background-color .3s, color .3s;
     }
 
     button, input, select, textarea { font: inherit; }
@@ -33,15 +45,15 @@
     .mobile-frame { width: 100%; max-width: 720px; margin: 0 auto; }
     .app-header {
       position: sticky; top: 0; z-index: 30;
-      border-bottom: 1px solid rgba(218,220,224,.85);
+      border-bottom: 1px solid var(--line);
       backdrop-filter: blur(18px);
-      box-shadow: 0 1px 3px rgba(60,64,67,.08);
-      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 1px 3px rgba(0,0,0,.08);
+      background: var(--surface);
     }
     .brand-mark {
       width: 40px; height: 40px; border-radius: 12px;
       display: grid; place-items: center; color: white;
-      background: #1a73e8;
+      background: var(--blue);
       box-shadow: 0 4px 12px rgba(26,115,232,.3);
     }
     .network-pill {
@@ -61,25 +73,25 @@
 
     .section-card {
       border: 1px solid var(--line);
-      border-radius: 16px; background: white;
-      box-shadow: 0 1px 3px rgba(60,64,67,.05);
+      border-radius: 16px; background: var(--surface);
+      box-shadow: 0 1px 3px rgba(0,0,0,.05);
       overflow: hidden; margin-bottom: 16px;
     }
     .section-heading {
       display: flex; align-items: center; gap: 12px;
       padding-bottom: 16px; margin-bottom: 18px;
-      border-bottom: 1px solid #f1f3f4;
+      border-bottom: 1px solid var(--line);
     }
     .section-icon {
       flex: 0 0 auto; width: 38px; height: 38px;
       display: grid; place-items: center; border-radius: 10px;
-      color: var(--blue); background: #e8f0fe;
+      color: var(--blue); background: rgba(26,115,232,.1);
     }
-    .field-label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: #3c4043; }
+    .field-label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: var(--ink); }
     .field-control {
       width: 100%; min-height: 48px; padding: 12px 14px;
       border: 1px solid var(--line); border-radius: 8px;
-      color: var(--ink); background: #fff; outline: none;
+      color: var(--ink); background: var(--surface); outline: none;
       transition: border-color .2s, box-shadow .2s;
     }
     .field-control:focus {
@@ -88,53 +100,71 @@
     }
     textarea.field-control { min-height: 92px; resize: vertical; }
     .upload-box {
-      min-height: 116px; border: 1.5px dashed #8ab4f8;
-      border-radius: 12px; background: #f8f9fa;
+      min-height: 116px; border: 1.5px dashed var(--blue);
+      border-radius: 12px; background: var(--bg);
       display: flex; flex-direction: column; align-items: center;
       justify-content: center; gap: 7px; text-align: center;
       padding: 15px; cursor: pointer; transition: .2s; position: relative;
     }
-    .upload-box:hover { border-color: var(--blue); background: #f1f3f4; }
+    .upload-box:hover { background: var(--surface); }
     .upload-box input { position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0; }
     .primary-btn, .secondary-btn, .danger-btn {
       display: inline-flex; align-items: center; justify-content: center;
       gap: 9px; border: 0; border-radius: 8px; font-weight: 600; cursor: pointer;
       transition: transform .15s, background-color .15s, box-shadow .15s;
     }
-    .primary-btn { color: white; background: var(--blue); box-shadow: 0 1px 3px rgba(60,64,67,.15); }
-    .primary-btn:hover { background: var(--blue-dark); box-shadow: 0 2px 6px rgba(60,64,67,.2); }
-    .secondary-btn { color: #1a73e8; background: #e8f0fe; border: 1px solid transparent; }
-    .secondary-btn:hover { background: #d2e3fc; }
-    .danger-btn { color: #d93025; background: #fce8e6; border: 1px solid transparent; }
+    .primary-btn { color: white; background: var(--blue); box-shadow: 0 1px 3px rgba(0,0,0,.15); }
+    .primary-btn:hover { opacity: .9; }
+    .secondary-btn { color: var(--blue); background: rgba(26,115,232,.1); border: 1px solid transparent; }
+    .secondary-btn:hover { background: rgba(26,115,232,.2); }
+    .danger-btn { color: #d93025; background: rgba(217,48,37,.1); border: 1px solid transparent; }
     button:disabled { opacity: .55; cursor: not-allowed; transform: none !important; }
     :focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 
+    /* FLOATING ACTION BUTTON (FAB) */
+    .fab-btn {
+      position: fixed; right: 20px; bottom: 84px; z-index: 50;
+      width: 56px; height: 56px; border-radius: 50%;
+      background: var(--blue); color: white;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 16px rgba(26,115,232,.4);
+      border: 0; cursor: pointer; transition: transform .2s;
+    }
+    .fab-btn:hover { transform: scale(1.08); }
+
+    /* BOTTOM NAV 5 MENU UTAMA */
     .bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0; z-index: 40;
       border-top: 1px solid var(--line);
-      background: rgba(255,255,255,.95); backdrop-filter: blur(20px);
-      padding: 8px 8px max(8px, env(safe-area-inset-bottom));
-      box-shadow: 0 -4px 16px rgba(60,64,67,.06);
+      background: var(--surface); backdrop-filter: blur(20px);
+      padding: 6px 8px max(6px, env(safe-area-inset-bottom));
+      box-shadow: 0 -4px 16px rgba(0,0,0,.06);
     }
-    .nav-inner { max-width: 720px; margin: auto; display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; }
+    .nav-inner { max-width: 720px; margin: auto; display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; }
     .nav-btn {
-      min-height: 56px; border: 0; border-radius: 10px; background: transparent;
+      min-height: 52px; border: 0; border-radius: 10px; background: transparent;
       color: var(--muted); display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 4px;
-      font-size: 10px; font-weight: 600; cursor: pointer;
+      align-items: center; justify-content: center; gap: 3px;
+      font-size: 10px; font-weight: 600; cursor: pointer; padding: 4px;
     }
-    .nav-btn.active { color: var(--blue); background: #e8f0fe; }
+    .nav-btn.active { color: var(--blue); background: rgba(26,115,232,.1); }
     .nav-btn svg { width: 20px; height: 20px; }
 
-    .stat-card { border: 1px solid var(--line); border-radius: 14px; padding: 16px; background: white; }
+    /* STATUS COLOR CODING BORDERS PADA KARTU RIWAYAT */
     .history-card {
-      border: 1px solid var(--line); border-radius: 14px;
-      background: white; padding: 16px; box-shadow: 0 1px 3px rgba(60,64,67,.04);
+      border: 1px solid var(--line); border-left-width: 6px;
+      border-radius: 14px; background: var(--surface);
+      padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.04);
     }
+    .history-card.legal { border-left-color: var(--success); }
+    .history-card.temuan { border-left-color: var(--danger); }
+    .history-card.pending-status { border-left-color: #fbbc05; }
+
+    .stat-card { border: 1px solid var(--line); border-radius: 14px; padding: 16px; background: var(--surface); }
     .badge { display: inline-flex; align-items: center; gap: 5px; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 700; }
     .badge.sent { color: #0d652d; background: #e6f4ea; }
     .badge.pending { color: #b06000; background: #fef7e0; }
-    .empty-state { border: 1px dashed var(--line); border-radius: 16px; padding: 34px 18px; text-align: center; background: rgba(255,255,255,.8); }
+    .empty-state { border: 1px dashed var(--line); border-radius: 16px; padding: 34px 18px; text-align: center; background: var(--surface); }
 
     .toast-container {
       position: fixed; left: 50%; bottom: 98px; z-index: 70;
@@ -150,33 +180,39 @@
       backdrop-filter: blur(12px); color: #ffffff;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.1);
     }
-    .toast-card.success { background: rgba(13, 101, 45, 0.95); border-color: rgba(52, 211, 153, 0.3); }
-    .toast-card.error { background: rgba(185, 28, 28, 0.95); border-color: rgba(248, 113, 113, 0.3); }
-    .toast-card.info { background: rgba(26, 115, 232, 0.95); border-color: rgba(147, 197, 253, 0.3); }
+    .toast-card.success { background: rgba(13, 101, 45, 0.95); }
+    .toast-card.error { background: rgba(185, 28, 28, 0.95); }
+    .toast-card.info { background: rgba(26, 115, 232, 0.95); }
     .toast-icon { flex-shrink: 0; width: 22px; height: 22px; margin-top: 1px; }
     .toast-content { flex: 1; font-size: 13px; line-height: 1.4; font-weight: 500; }
     .toast-title { font-weight: 700; font-size: 14px; margin-bottom: 2px; }
 
-    .google-modal-backdrop {
+    .google-modal-backdrop, .drawer-backdrop {
       position: fixed; inset: 0; z-index: 80; padding: 16px;
-      background: rgba(32,33,36,0.6); backdrop-filter: blur(4px);
+      background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
       display: none; align-items: center; justify-content: center;
     }
-    .google-modal-backdrop.open { display: flex; }
+    .google-modal-backdrop.open, .drawer-backdrop.open { display: flex; }
     .google-card {
-      width: min(100%, 448px); background: #ffffff;
+      width: min(100%, 448px); background: var(--surface);
       border-radius: 28px; padding: 36px; box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-      border: 1px solid #f1f3f4; max-height: 90vh; overflow-y: auto;
+      border: 1px solid var(--line); max-height: 90vh; overflow-y: auto;
     }
-    
+    .drawer-panel {
+      position: fixed; right: 0; top: 0; bottom: 0; width: 280px; background: var(--surface);
+      z-index: 90; box-shadow: -4px 0 24px rgba(0,0,0,0.2); transform: translateX(100%);
+      transition: transform .3s cubic-bezier(0.16, 1, 0.3, 1); padding: 24px; display: flex; flex-direction: column; gap: 16px;
+    }
+    .drawer-panel.open { transform: translateX(0); }
+
     .modal-backdrop {
       position: fixed; inset: 0; z-index: 60; padding: 20px;
-      background: rgba(32,33,36,.6); backdrop-filter: blur(4px);
+      background: rgba(0,0,0,.6); backdrop-filter: blur(4px);
       display: none; align-items: center; justify-content: center;
     }
     .modal-backdrop.open { display: flex; }
-    .modal-panel { width: min(100%, 520px); max-height: 84%; overflow: auto; border-radius: 20px; background: white; box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
-    .progress-track { height: 8px; overflow: hidden; border-radius: 999px; background: #f1f3f4; }
+    .modal-panel { width: min(100%, 520px); max-height: 84%; overflow: auto; border-radius: 20px; background: var(--surface); box-shadow: 0 8px 24px rgba(0,0,0,0.15); border: 1px solid var(--line); }
+    .progress-track { height: 8px; overflow: hidden; border-radius: 999px; background: var(--line); }
     .progress-fill { height: 100%; border-radius: inherit; transition: width .4s ease; }
     .decor-stripe {
       height: 4px;
@@ -187,6 +223,7 @@
       .app-shell { padding-bottom: 104px; }
       .page-content { padding-left: 24px; padding-right: 24px; }
       .section-card { padding: 24px !important; }
+      .fab-btn { right: calc(50% - 340px); }
     }
   </style>
  </head>
@@ -205,10 +242,16 @@
       </div>
      </div>
      <div class="flex items-center gap-2 shrink-0">
+      <button id="btn-theme-toggle" type="button" class="secondary-btn w-9 h-9 p-0 flex items-center justify-center rounded-full" title="Alihkan Tema Terang/Gelap" aria-label="Alihkan Tema">
+       <i data-lucide="moon" class="w-4 h-4"></i>
+      </button>
       <div id="network-status" class="network-pill online" role="status" aria-live="polite">
        <span class="status-dot"></span><span id="network-label">Online</span>
       </div>
-      <button id="btn-logout" type="button" class="secondary-btn w-9 h-9 p-0 flex items-center justify-center text-rose-600 bg-rose-50 hover:bg-rose-100" title="Keluar Sesi" aria-label="Keluar Sesi"> 
+      <button id="btn-open-menu" type="button" class="secondary-btn w-9 h-9 p-0 flex items-center justify-center rounded-full" title="Menu Lainnya" aria-label="Menu Lainnya">
+       <i data-lucide="menu" class="w-4 h-4"></i>
+      </button>
+      <button id="btn-logout" type="button" class="secondary-btn w-9 h-9 p-0 flex items-center justify-center text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-full" title="Keluar Sesi" aria-label="Keluar Sesi"> 
        <i data-lucide="log-out" class="w-4 h-4"></i> 
       </button>
      </div>
@@ -216,6 +259,8 @@
    </header>
    
    <main class="mobile-frame page-content px-4 py-5">
+    
+    <!-- 1. HALAMAN FORMULIR -->
     <section id="page-form" class="page active" aria-labelledby="form-page-title">
      <div class="mb-5">
       <p class="font-bold uppercase tracking-wider text-[11px] text-blue-600">Formulir Pengawasan Lapangan</p>
@@ -224,8 +269,6 @@
      </div>
      
      <form id="inspection-form" class="space-y-4" novalidate>
-      
-      <!-- 1. TIM PENGAWAS -->
       <article class="section-card p-5">
        <div class="section-heading">
         <div class="section-icon"><i data-lucide="users"></i></div>
@@ -251,7 +294,6 @@
        </div>
       </article>
 
-      <!-- 2. IDENTITAS PELAKU USAHA -->
       <article class="section-card p-5">
        <div class="section-heading">
         <div class="section-icon"><i data-lucide="store"></i></div>
@@ -284,13 +326,13 @@
        </div>
       </article>
 
-      <!-- 3. INFORMASI PRODUK -->
+      <!-- INFORMASI PRODUK -->
       <article class="section-card p-5">
        <div class="section-heading">
         <div class="section-icon"><i data-lucide="package-search"></i></div>
         <div>
          <h3 class="font-bold text-base">3. Informasi Produk &amp; Nomor Registrasi</h3>
-         <p class="text-xs text-slate-500">Rincian barang, merek, negara asal, NPB, serta nomor SNI.</p>
+         <p class="text-xs text-slate-500">Rincian barang, merek, negara asal, produsen/importir, serta nomor SNI.</p>
         </div>
        </div>
        <div class="grid sm:grid-cols-2 gap-4">
@@ -303,9 +345,47 @@
          <input class="field-control" id="brand" name="brand" required placeholder="Merek barang">
         </div>
         <div>
-         <label class="field-label" for="country">Negara Asal</label> 
-         <input class="field-control" id="country" name="country" placeholder="Indonesia / Impor">
+         <label class="field-label" for="country">Negara Asal *</label> 
+         <select class="field-control" id="country" name="country" required>
+          <option value="Indonesia">Indonesia</option>
+          <option value="China">China</option>
+          <option value="Japan">Japan</option>
+          <option value="Korea Selatan">Korea Selatan</option>
+          <option value="Malaysia">Malaysia</option>
+          <option value="Thailand">Thailand</option>
+          <option value="Vietnam">Vietnam</option>
+          <option value="Lainnya (Impor)">Lainnya (Impor)</option>
+         </select>
         </div>
+
+        <div id="producer-section" class="sm:col-span-2 grid sm:grid-cols-2 gap-4 p-4 bg-slate-50/50 rounded-xl border border-slate-200">
+         <div class="sm:col-span-2">
+          <p class="text-xs font-bold text-blue-600 uppercase tracking-wider">Informasi Produsen Lokal</p>
+         </div>
+         <div>
+          <label class="field-label" for="producer-name">Nama Produsen *</label>
+          <input class="field-control" id="producer-name" name="producer_name" placeholder="Nama perusahaan produsen">
+         </div>
+         <div>
+          <label class="field-label" for="producer-address">Alamat Produsen *</label>
+          <input class="field-control" id="producer-address" name="producer_address" placeholder="Alamat pabrik / produsen">
+         </div>
+        </div>
+
+        <div id="importer-section" class="hidden sm:col-span-2 grid sm:grid-cols-2 gap-4 p-4 bg-slate-50/50 rounded-xl border border-slate-200">
+         <div class="sm:col-span-2">
+          <p class="text-xs font-bold text-blue-600 uppercase tracking-wider">Informasi Importir / Perwakilan</p>
+         </div>
+         <div>
+          <label class="field-label" for="importer-name">Nama Importir *</label>
+          <input class="field-control" id="importer-name" name="importer_name" placeholder="Nama perusahaan importir">
+         </div>
+         <div>
+          <label class="field-label" for="importer-address">Alamat Importir *</label>
+          <input class="field-control" id="importer-address" name="importer_address" placeholder="Alamat kantor importir">
+         </div>
+        </div>
+
         <div class="sm:col-span-2">
          <label class="field-label" id="label-npb" for="npb-number">Nomor NPB (Nomor Pendaftaran Barang)</label> 
          <input class="field-control" id="npb-number" name="npb_number" placeholder="Masukkan Nomor NPB jika ada">
@@ -321,7 +401,6 @@
        </div>
       </article>
 
-      <!-- 4. KRITERIA STATUS VALIDASI SNI -->
       <article class="section-card p-5">
        <div class="section-heading">
         <div class="section-icon"><i data-lucide="badge-check"></i></div>
@@ -336,7 +415,6 @@
           <h4 class="font-bold text-xs text-blue-900">Validasi Pengecekan SNI</h4>
           <p class="text-[11px] text-blue-700 mt-0.5">Cek keaslian nomor SNI melalui portal resmi Bang Beni.</p>
          </div>
-         <!-- TAUTAN DIPERBARUI KE BANG BENI VERSI PERTAMA -->
          <a href="https://bangbeni.bsn.go.id" target="_blank" class="primary-btn px-3.5 py-2 text-xs shrink-0">
           <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Buka Bang Beni
          </a>
@@ -344,7 +422,7 @@
 
         <div id="offline-warning-box" class="hidden p-3.5 bg-amber-50 border border-amber-200 rounded-xl">
          <p class="text-xs font-bold text-amber-900">⚠️ Perangkat Sedang Offline</p>
-         <p class="text-[11px] text-amber-700 mt-0.5">Pengecekan ke Bang Beni tidak dapat dilakukan. Status otomatis tersimpan sebagai <strong>Belum Terverifikasi</strong> dan dapat divalidasi nanti saat online.</p>
+         <p class="text-[11px] text-amber-700 mt-0.5">Pengecekan ke Bang Beni tidak dapat dilakukan. Status otomatis tersimpan sebagai <strong>Belum Terverifikasi</strong>.</p>
         </div>
 
         <div id="sni-selector-wrapper">
@@ -367,7 +445,6 @@
        </div>
       </article>
 
-      <!-- 5. KELENGKAPAN & DOKUMEN PENDUKUNG -->
       <article class="section-card p-5">
        <div class="section-heading">
         <div class="section-icon"><i data-lucide="clipboard-check"></i></div>
@@ -396,7 +473,6 @@
        </div>
       </article>
 
-      <!-- 6. DOKUMENTASI FOTO -->
       <article class="section-card p-5">
        <div class="section-heading">
         <div class="section-icon"><i data-lucide="camera"></i></div>
@@ -445,14 +521,13 @@
 
       <div id="form-error" class="hidden rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-semibold text-rose-700" role="alert"></div>
       
-      <!-- Tombol Kirim Data -->
       <button id="submit-btn" class="primary-btn w-full px-5 py-4 text-base font-bold shadow-md" type="submit"> 
        <i data-lucide="rocket" class="w-5 h-5"></i> <span id="submit-btn-text">Kirim Data</span> 
       </button>
      </form>
     </section>
 
-    <!-- Halaman Riwayat -->
+    <!-- 2. HALAMAN RIWAYAT -->
     <section id="page-history" class="page" aria-labelledby="history-page-title">
      <div class="mb-5 flex items-center justify-between gap-4">
       <div>
@@ -475,7 +550,7 @@
      <div id="history-list" class="space-y-3"></div>
     </section>
 
-    <!-- Halaman Statistik -->
+    <!-- 3. HALAMAN STATISTIK -->
     <section id="page-analytics" class="page" aria-labelledby="analytics-page-title">
      <div class="mb-5">
       <p class="text-xs font-bold uppercase tracking-wider text-blue-600">Statistik &amp; Tren</p>
@@ -502,7 +577,7 @@
      </div>
     </section>
 
-    <!-- Halaman Sinkron -->
+    <!-- 4. HALAMAN SINKRON -->
     <section id="page-sync" class="page" aria-labelledby="sync-page-title">
      <div class="mb-5">
       <p class="text-xs font-bold uppercase tracking-wider text-blue-600">Manajemen Data</p>
@@ -535,56 +610,217 @@
      </div>
     </section>
 
-    <!-- Halaman Panduan SOP Komprehensif -->
+    <!-- 5. HALAMAN PANDUAN SOP UTUH (DIGABUNGKAN SECARA KOMPREHENSIF) -->
     <section id="page-guide" class="page" aria-labelledby="guide-page-title">
      <div class="mb-5">
       <p class="text-xs font-bold uppercase tracking-wider text-blue-600">Panduan SOP</p>
-      <h2 id="guide-page-title" class="text-xl font-extrabold mt-0.5 tracking-tight">Petunjuk Teknis Pengawasan PAGAR PKTN</h2>
-      <p class="text-xs text-slate-500 mt-0.5">Standar operasional prosedur pengawasan barang beredar &amp; SNI di lapangan.</p>
+      <h2 id="guide-page-title" class="text-xl font-extrabold mt-0.5 tracking-tight">Petunjuk Teknis Lengkap PAGAR PKTN</h2>
+      <p class="text-xs text-slate-500 mt-0.5">Panduan operasional seluruh proses, menu, fitur, dan tata cara pengawasan lapangan.</p>
      </div>
      
      <div class="space-y-4 text-sm">
       <div class="section-card p-5 bg-white space-y-2">
-       <h3 class="font-extrabold text-blue-600 flex items-center gap-2"><i data-lucide="user-plus" class="w-4 h-4"></i> 1. Pendaftaran Akun, Login &amp; Fitur "Ingat Saya"</h3>
-       <p class="text-slate-600 text-xs leading-relaxed">Pengguna baru wajib mendaftar menggunakan alamat <strong>Gmail</strong> dan membuat password sendiri. Akun akan berstatus <em>Pending</em> hingga disetujui oleh Admin pusat melalui Panel Admin. Aktifkan centang <strong>Ingat Saya</strong> saat login agar sesi tetap tersimpan dan Anda tidak perlu mengetik ulang kredensial di kunjungan berikutnya.</p>
+       <h3 class="font-extrabold text-blue-600 flex items-center gap-2"><i data-lucide="user-plus" class="w-4 h-4"></i> 1. Otentikasi, Akun &amp; Sesi Petugas</h3>
+       <p class="text-slate-600 text-xs leading-relaxed">Pengguna wajib masuk menggunakan akun Gmail resmi. Akun baru berstatus <em>Pending</em> sampai disetujui Admin pusat. Centang opsi <strong>Ingat Saya</strong> agar sesi login tetap tersimpan di perangkat. Informasi kartu identitas akun dapat dilihat melalui menu <strong>Profil</strong>.</p>
       </div>
 
       <div class="section-card p-5 bg-white space-y-2">
-       <h3 class="font-extrabold text-blue-600 flex items-center gap-2"><i data-lucide="file-text" class="w-4 h-4"></i> 2. Tata Cara Pengisian Formulir Secara Rinci</h3>
+       <h3 class="font-extrabold text-blue-600 flex items-center gap-2"><i data-lucide="file-text" class="w-4 h-4"></i> 2. Pengisian Formulir &amp; Fitur Dinamis Lapangan</h3>
        <ul class="list-disc pl-5 text-xs text-slate-600 space-y-1">
-        <li><strong>Tim Pengawas:</strong> Masukkan instansi/unit kerja dan nama petugas. Gunakan tombol <em>Tambah Petugas</em> jika pengawasan dilakukan secara tim.</li>
-        <li><strong>Identitas Toko &amp; GPS:</strong> Masukkan nama toko dan pemilik. Nomor Telepon/WhatsApp divalidasi ketat menggunakan format HP Indonesia (misal: <code>08123456789</code>). Jika salah format, laporan tertolak otomatis. Ketuk <em>Ambil GPS</em> untuk merekam koordinat akurat.</li>
-        <li><strong>Informasi Produk &amp; Validasi SNI:</strong> Rinci komoditas, merek, NPB, dan nomor SNI. Jika status dipilih <em>"Terdaftar dan Sesuai (Legal)"</em>, kolom NPB dan No. SNI Produk berubah menjadi <strong>Wajib Diisi</strong>.</li>
-        <li><strong>Dokumentasi Foto:</strong> Unggah 5 kategori foto wajib langsung dari kamera HP Anda (Spesifikasi, No. SNI Barang, No. SNI Kemasan, Petunjuk Penggunaan, dan Kartu Garansi).</li>
+        <li><strong>Tim &amp; Toko:</strong> Masukkan instansi, nama petugas (dapat ditambah via tombol *Tambah Petugas*), identitas toko, dan nomor WhatsApp.</li>
+        <li><strong>Pengambilan GPS:</strong> Tombol <em>Ambil GPS</em> berfungsi membaca koordinat lintang/bujur secara akurat **bahkan dalam keadaan offline tanpa sinyal internet**.</li>
+        <li><strong>Negara Asal &amp; Produsen/Importir Dinamis:</strong> Jika memilih <em>Indonesia</em>, sistem otomatis menampilkan kolom <strong>Nama &amp; Alamat Produsen</strong>. Jika memilih negara lain, sistem otomatis menampilkan kolom <strong>Nama &amp; Alamat Importir</strong>.</li>
+        <li><strong>Validasi SNI &amp; Bang Beni:</strong> Lakukan pengecekan keaslian nomor SNI melalui portal resmi **Bang Beni** (`https://bangbeni.bsn.go.id`).</li>
+        <li><strong>Foto Lapangan:</strong> Unggah 5 kategori foto wajib langsung dari kamera perangkat HP.</li>
        </ul>
       </div>
 
       <div class="section-card p-5 bg-white space-y-2">
-       <h3 class="font-extrabold text-amber-600 flex items-center gap-2"><i data-lucide="cloud-off" class="w-4 h-4"></i> 3. Mode Offline &amp; Fitur Reminder Notifikasi HP</h3>
-       <p class="text-slate-600 text-xs leading-relaxed">Saat berada di area tanpa sinyal (*offline*), data tetap dapat diisi dan tersimpan secara lokal di memori HP dengan status <em>Belum Terverifikasi</em>. Fitur **Reminder Notifikasi HP** akan aktif otomatis dan mengirimkan pemberitahuan ke layar perangkat Anda begitu koneksi internet pulih, mengingatkan Anda untuk segera melakukan validasi SNI ke Bang Beni dan menyinkronkan data ke server pusat.</p>
+       <h3 class="font-extrabold text-amber-600 flex items-center gap-2"><i data-lucide="cloud-off" class="w-4 h-4"></i> 3. Mode Offline &amp; Reminder Notifikasi</h3>
+       <p class="text-slate-600 text-xs leading-relaxed">Saat di area tanpa sinyal, data dan foto tetap tersimpan aman di memori lokal HP dengan status <em>Belum Terverifikasi</em>. Notifikasi pengingat (*push notification*) akan muncul di HP begitu koneksi internet pulih.</p>
       </div>
 
       <div class="section-card p-5 bg-white space-y-2">
-       <h3 class="font-extrabold text-blue-600 flex items-center gap-2"><i data-lucide="history" class="w-4 h-4"></i> 4. Fitur Unik di Setiap Menu (Riwayat, Statistik, &amp; Sinkron)</h3>
+       <h3 class="font-extrabold text-blue-600 flex items-center gap-2"><i data-lucide="smartphone" class="w-4 h-4"></i> 4. Navigasi Cepat, FAB &amp; Mode Gelap (*Dark Mode*)</h3>
        <ul class="list-disc pl-5 text-xs text-slate-600 space-y-1">
-        <li><strong>Menu Riwayat:</strong> Memantau status pengiriman laporan, mengekspor seluruh data ke file CSV, mengetuk laporan untuk membuka menu <em>Detail &amp; Cek</em> guna memperbarui status validasi saat online, serta mengunduh rekap laporan lengkap dalam format **Microsoft Word (.docx)**.</li>
-        <li><strong>Menu Statistik:</strong> Menyajikan grafik visual dan diagram persentase tingkat kepatuhan SNI (Legal vs Temuan vs Tidak Sesuai).</li>
-        <li><strong>Menu Sinkron:</strong> Memungkinkan sinkronisasi antrean manual saat kembali online dan mengunduh cadangan data lokal dalam format JSON.</li>
+        <li><strong>Tombol Mengambang (FAB):</strong> Ketuk tombol bulat plus (`+`) di pojok kanan bawah dari halaman mana pun untuk langsung membuka formulir laporan baru secara instan tanpa harus kembali ke menu utama.</li>
+        <li><strong>Menu Laci (Drawer Menu):</strong> Ketuk ikon garis tiga di pojok kanan atas untuk mengakses menu pendukung (*Statistik, Sinkron, SOP, UU/SNI, dan Atur*), menjaga tampilan bawah tetap bersih.</li>
+        <li><strong>Mode Gelap (Dark Mode):</strong> Gunakan tombol ikon bulan/matahari di header atas untuk mengaktifkan tema gelap guna mengurangi silau saat memeriksa toko di bawah terik matahari atau saat inspeksi malam hari.</li>
        </ul>
+      </div>
+
+      <div class="section-card p-5 bg-white space-y-2">
+       <h3 class="font-extrabold text-emerald-600 flex items-center gap-2"><i data-lucide="palette" class="w-4 h-4"></i> 5. Panduan Membaca Indikator Warna Status</h3>
+       <p class="text-slate-600 text-xs leading-relaxed mb-1">Garis tepi tebal pada kartu laporan di menu Riwayat dan Pencarian menunjukkan status dengan cepat:</p>
+       <ul class="list-disc pl-5 text-xs text-slate-600 space-y-1">
+        <li><strong class="text-emerald-600">Garis Hijau (Legal):</strong> Produk terdaftar, sesuai, dan memenuhi standar SNI.</li>
+        <li><strong class="text-rose-600">Garis Merah (Temuan):</strong> Produk merupakan temuan pelanggaran / tidak terdaftar.</li>
+        <li><strong class="text-amber-600">Garis Kuning (Pending):</strong> Produk belum diverifikasi atau spesifikasinya tidak sesuai (butuh pengecekan saat online).</li>
+       </ul>
+      </div>
+
+      <div class="section-card p-5 bg-white space-y-2">
+       <h3 class="font-extrabold text-blue-600 flex items-center gap-2"><i data-lucide="layout-grid" class="w-4 h-4"></i> 6. Panduan 10 Menu Utama Aplikasi</h3>
+       <ul class="list-disc pl-5 text-xs text-slate-600 space-y-1">
+        <li><strong>Form:</strong> Mengisi dan mengirim laporan pengawasan baru.</li>
+        <li><strong>Riwayat:</strong> Memantau status pengiriman, menghapus data, mengekspor CSV, membuka Detail untuk verifikasi ulang, serta mengunduh rekap laporan dalam format **Microsoft Word (.docx)**.</li>
+        <li><strong>Statistik:</strong> Grafik visual tingkat kepatuhan SNI (Legal vs Temuan).</li>
+        <li><strong>Sinkron:</strong> Mengirim antrean data offline saat kembali online dan mencadangkan data ke file JSON.</li>
+        <li><strong>SOP:</strong> Petunjuk teknis operasional aplikasi (halaman ini).</li>
+        <li><strong>UU/SNI:</strong> Direktori dasar hukum resmi (UU Perlindungan Konsumen, UU Standardisasi, dan Permendag).</li>
+        <li><strong>Profil:</strong> Menampilkan informasi kartu identitas petugas yang sedang aktif.</li>
+        <li><strong>Cari:</strong> Pencarian cepat laporan berdasarkan nama toko, merek, atau komoditas.</li>
+        <li><strong>Peta:</strong> Daftar titik koordinat toko yang dilengkapi tombol navigasi langsung ke **Google Maps**.</li>
+        <li><strong>Atur:</strong> Pusat bantuan (*helpdesk* IT Kementerian Perdagangan) dan info aplikasi.</li>
+       </ul>
+      </div>
+     </div>
+    </section>
+
+    <!-- 6. DIREKTORI REGULASI / UU SNI -->
+    <section id="page-regulasi" class="page" aria-labelledby="regulasi-page-title">
+     <div class="mb-5">
+      <p class="text-xs font-bold uppercase tracking-wider text-blue-600">Dasar Hukum</p>
+      <h2 id="regulasi-page-title" class="text-xl font-extrabold mt-0.5 tracking-tight">Direktori Regulasi &amp; UU SNI</h2>
+      <p class="text-xs text-slate-500 mt-0.5">Referensi hukum resmi terkait pengawasan barang beredar dan Standar Nasional Indonesia.</p>
+     </div>
+     <div class="space-y-3">
+      <div class="section-card p-4 bg-white space-y-2">
+       <span class="badge sent">Undang-Undang</span>
+       <h3 class="font-bold text-sm text-slate-800">UU No. 8 Tahun 1999 tentang Perlindungan Konsumen</h3>
+       <p class="text-xs text-slate-600 leading-relaxed">Mengatur hak dan kewajiban konsumen serta larangan bagi pelaku usaha terkait standar mutu barang yang diperdagangkan.</p>
+      </div>
+      <div class="section-card p-4 bg-white space-y-2">
+       <span class="badge sent">Undang-Undang</span>
+       <h3 class="font-bold text-sm text-slate-800">UU No. 20 Tahun 2014 tentang Standardisasi dan Penilaian Kesesuaian</h3>
+       <p class="text-xs text-slate-600 leading-relaxed">Landasan hukum utama pelaksanaan penerapan Standar Nasional Indonesia (SNI) wajib serta akreditasi lembaga penilai kesesuaian.</p>
+      </div>
+      <div class="section-card p-4 bg-white space-y-2">
+       <span class="badge sent">Peraturan Menteri</span>
+       <h3 class="font-bold text-sm text-slate-800">Permendag Terkait Pengawasan Barang Beredar</h3>
+       <p class="text-xs text-slate-600 leading-relaxed">Ketentuan teknis pengawasan, tata cara penarikan barang dari peredaran, serta sanksi administratif bagi pelaku usaha.</p>
+      </div>
+     </div>
+    </section>
+
+    <!-- 7. MENU PROFIL SAYA -->
+    <section id="page-profile" class="page" aria-labelledby="profile-page-title">
+     <div class="mb-5">
+      <p class="text-xs font-bold uppercase tracking-wider text-blue-600">Akun Petugas</p>
+      <h2 id="profile-page-title" class="text-xl font-extrabold mt-0.5 tracking-tight">Profil Petugas Lapangan</h2>
+     </div>
+     <div class="section-card p-6 bg-white space-y-4">
+      <div class="flex items-center gap-4 border-b pb-4">
+       <div class="w-14 h-14 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xl">
+        <i data-lucide="user" class="w-8 h-8"></i>
+       </div>
+       <div>
+        <h3 id="profile-name" class="font-bold text-lg text-slate-800">-</h3>
+        <p id="profile-role" class="text-xs text-blue-600 font-semibold uppercase tracking-wider mt-0.5">-</p>
+       </div>
+      </div>
+      <div class="space-y-3 text-xs text-slate-600">
+       <div class="flex justify-between border-b pb-2">
+        <span class="font-semibold text-slate-500">NIP / ID Petugas:</span>
+        <span id="profile-nip" class="font-bold text-slate-800">-</span>
+       </div>
+       <div class="flex justify-between border-b pb-2">
+        <span class="font-semibold text-slate-500">Alamat Gmail:</span>
+        <span id="profile-email" class="font-bold text-slate-800">-</span>
+       </div>
+       <div class="flex justify-between border-b pb-2">
+        <span class="font-semibold text-slate-500">Status Akun:</span>
+        <span class="font-bold text-emerald-600">Aktif &amp; Terverifikasi</span>
+       </div>
+      </div>
+     </div>
+    </section>
+
+    <!-- 8. MENU PENCARIAN -->
+    <section id="page-search" class="page" aria-labelledby="search-page-title">
+     <div class="mb-5">
+      <p class="text-xs font-bold uppercase tracking-wider text-blue-600">Pencarian Cepat</p>
+      <h2 id="search-page-title" class="text-xl font-extrabold mt-0.5 tracking-tight">Cari Data Laporan</h2>
+     </div>
+     <div class="space-y-4">
+      <div class="section-card p-4 bg-white">
+       <div class="flex gap-2">
+        <input id="search-keyword" class="field-control flex-1 text-xs" placeholder="Ketik nama toko, merek, atau komoditas...">
+        <button id="btn-do-search" type="button" class="primary-btn px-4 text-xs"><i data-lucide="search" class="w-4 h-4"></i> Cari</button>
+       </div>
+      </div>
+      <div id="search-results-list" class="space-y-3">
+       <div class="empty-state">
+        <p class="font-bold text-slate-700 text-xs">Masukkan kata kunci untuk mulai mencari data.</p>
+       </div>
+      </div>
+     </div>
+    </section>
+
+    <!-- 9. MENU PETA LOKASI -->
+    <section id="page-maps" class="page" aria-labelledby="maps-page-title">
+     <div class="mb-5">
+      <p class="text-xs font-bold uppercase tracking-wider text-blue-600">Visualisasi Lokasi</p>
+      <h2 id="maps-page-title" class="text-xl font-extrabold mt-0.5 tracking-tight">Peta Titik Koordinat Toko</h2>
+      <p class="text-xs text-slate-500 mt-0.5">Daftar lokasi toko yang telah terekam koordinat GPS-nya.</p>
+     </div>
+     <div id="maps-list" class="space-y-3"></div>
+    </section>
+
+    <!-- 10. MENU PENGATURAN & BANTUAN -->
+    <section id="page-settings" class="page" aria-labelledby="settings-page-title">
+     <div class="mb-5">
+      <p class="text-xs font-bold uppercase tracking-wider text-blue-600">Bantuan &amp; Pengaturan</p>
+      <h2 id="settings-page-title" class="text-xl font-extrabold mt-0.5 tracking-tight">Pengaturan Aplikasi</h2>
+     </div>
+     <div class="space-y-4">
+      <div class="section-card p-5 bg-white space-y-3">
+       <h3 class="font-bold text-sm text-slate-800 flex items-center gap-2"><i data-lucide="help-circle" class="w-4 h-4 text-blue-600"></i> Pusat Bantuan &amp; Helpdesk</h3>
+       <p class="text-xs text-slate-600 leading-relaxed">Jika mengalami kendala teknis saat pengawasan di lapangan, silakan hubungi tim IT Pusat.</p>
+       <div class="p-3 bg-blue-50 border border-blue-100 rounded-xl text-xs space-y-1">
+        <p class="font-bold text-blue-900">Email Helpdesk: it.pktn@kemendag.go.id</p>
+        <p class="text-blue-700">WhatsApp Layanan: 0811-999-PKTN</p>
+       </div>
+      </div>
+      <div class="section-card p-5 bg-white space-y-2">
+       <h3 class="font-bold text-sm text-slate-800 flex items-center gap-2"><i data-lucide="info" class="w-4 h-4 text-blue-600"></i> Tentang Aplikasi</h3>
+       <p class="text-xs text-slate-500">PAGAR PKTN Versi 2026.0 — Sistem Pengawasan Barang Beredar &amp; SNI Terintegrasi.</p>
       </div>
      </div>
     </section>
    </main>
 
+   <!-- FLOATING ACTION BUTTON (FAB) -->
+   <button id="fab-form" class="fab-btn" title="Buat Laporan Baru" aria-label="Buat Laporan Baru">
+    <i data-lucide="plus" class="w-7 h-7"></i>
+   </button>
+
+   <!-- NAVIGASI BAWAH ERGONOMIS (5 MENU UTAMA) -->
    <nav class="bottom-nav">
     <div class="nav-inner">
-     <button data-target="page-form" class="nav-btn active" type="button"><i data-lucide="file-text"></i><span>Formulir</span></button> 
+     <button data-target="page-form" class="nav-btn active" type="button"><i data-lucide="file-text"></i><span>Form</span></button> 
      <button data-target="page-history" class="nav-btn" type="button"><i data-lucide="history"></i><span>Riwayat</span></button> 
-     <button data-target="page-analytics" class="nav-btn" type="button"><i data-lucide="bar-chart-3"></i><span>Statistik</span></button> 
-     <button data-target="page-sync" class="nav-btn" type="button"><i data-lucide="cloud" class="w-5 h-5"></i><span>Sinkron</span></button> 
-     <button data-target="page-guide" class="nav-btn" type="button"><i data-lucide="book-open"></i><span>Panduan</span></button>
+     <button data-target="page-search" class="nav-btn" type="button"><i data-lucide="search"></i><span>Cari</span></button>
+     <button data-target="page-maps" class="nav-btn" type="button"><i data-lucide="map"></i><span>Peta</span></button>
+     <button data-target="page-profile" class="nav-btn" type="button"><i data-lucide="user"></i><span>Profil</span></button>
     </div>
    </nav>
+  </div>
+
+  <!-- MENU LACI (DRAWER) -->
+  <div id="drawer-backdrop" class="drawer-backdrop"></div>
+  <div id="drawer-panel" class="drawer-panel">
+   <div class="flex items-center justify-between border-b pb-3">
+    <h3 class="font-bold text-base">Menu Lainnya</h3>
+    <button id="btn-close-drawer" class="secondary-btn w-8 h-8 p-0 rounded-full flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button>
+   </div>
+   <div class="space-y-2 flex-1 overflow-y-auto">
+    <button data-target="page-analytics" class="drawer-menu-item w-full text-left px-3 py-3 rounded-xl flex items-center gap-3 font-semibold text-xs hover:bg-blue-50 text-slate-700" type="button"><i data-lucide="bar-chart-3" class="w-4 h-4 text-blue-600"><span>Statistik Kepatuhan</span></i></button>
+    <button data-target="page-sync" class="drawer-menu-item w-full text-left px-3 py-3 rounded-xl flex items-center gap-3 font-semibold text-xs hover:bg-blue-50 text-slate-700" type="button"><i data-lucide="cloud" class="w-4 h-4 text-blue-600"><span>Sinkron &amp; Backup</span></i></button>
+    <button data-target="page-guide" class="drawer-menu-item w-full text-left px-3 py-3 rounded-xl flex items-center gap-3 font-semibold text-xs hover:bg-blue-50 text-slate-700" type="button"><i data-lucide="book-open" class="w-4 h-4 text-blue-600"><span>Panduan SOP</span></i></button>
+    <button data-target="page-regulasi" class="drawer-menu-item w-full text-left px-3 py-3 rounded-xl flex items-center gap-3 font-semibold text-xs hover:bg-blue-50 text-slate-700" type="button"><i data-lucide="scale" class="w-4 h-4 text-blue-600"><span>Direktori UU / SNI</span></i></button>
+    <button data-target="page-settings" class="drawer-menu-item w-full text-left px-3 py-3 rounded-xl flex items-center gap-3 font-semibold text-xs hover:bg-blue-50 text-slate-700" type="button"><i data-lucide="settings" class="w-4 h-4 text-blue-600"><span>Pengaturan &amp; Helpdesk</span></i></button>
+   </div>
   </div>
 
   <div id="toast-container" class="toast-container" role="status" aria-live="polite"></div>
@@ -593,72 +829,28 @@
   <div id="login-modal" class="google-modal-backdrop open" role="dialog" aria-modal="true" aria-labelledby="login-title">
    <div class="google-card space-y-5">
     <div class="text-center">
-     <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-3 shadow-inner">
-      <i data-lucide="shield-check" class="w-7 h-7"></i>
-     </div>
-     <h3 id="login-title" class="font-bold text-2xl text-slate-900 tracking-tight" id="modal-heading">Sign in</h3>
+     <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-3 shadow-inner"><i data-lucide="shield-check" class="w-7 h-7"></i></div>
+     <h3 id="login-title" class="font-bold text-2xl text-slate-900 tracking-tight">Sign in</h3>
      <p id="modal-subheading" class="text-sm text-slate-500 mt-1">Gunakan akun Gmail resmi Anda</p>
     </div>
     
-    <!-- FORM LOGIN -->
     <form id="login-form" class="space-y-4" autocomplete="on">
-     <div>
-      <label class="field-label" for="login-user">Email / Gmail</label>
-      <input id="login-user" type="email" class="field-control" required placeholder="nama@gmail.com" autocomplete="email">
-     </div>
-     <div>
-      <label class="field-label" for="login-pass">Password</label>
-      <input id="login-pass" type="password" class="field-control" required placeholder="••••••••" autocomplete="current-password">
-     </div>
-     
-     <!-- FITUR INGAT SAYA -->
-     <div class="flex items-center gap-2.5 py-1">
-      <input type="checkbox" id="remember-me" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 cursor-pointer" checked>
-      <label for="remember-me" class="text-xs font-semibold text-slate-700 cursor-pointer select-none">Ingat saya di perangkat ini</label>
-     </div>
-
+     <div><label class="field-label" for="login-user">Email / Gmail</label><input id="login-user" type="email" class="field-control" required placeholder="nama@gmail.com" autocomplete="email"></div>
+     <div><label class="field-label" for="login-pass">Password</label><input id="login-pass" type="password" class="field-control" required placeholder="••••••••" autocomplete="current-password"></div>
+     <div class="flex items-center gap-2.5 py-1"><input type="checkbox" id="remember-me" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 cursor-pointer" checked><label for="remember-me" class="text-xs font-semibold text-slate-700 cursor-pointer select-none">Ingat saya di perangkat ini</label></div>
      <div id="login-error" class="hidden text-xs font-semibold text-rose-600" role="alert"></div>
-     
-     <div class="pt-2 space-y-2">
-      <button type="submit" class="primary-btn w-full py-3.5 text-sm font-bold shadow-sm">
-       Masuk
-      </button>
-      <button type="button" id="to-register-btn" class="secondary-btn w-full py-3 text-xs font-semibold">
-       Buat Akun Baru (Daftar dengan Gmail)
-      </button>
-     </div>
+     <div class="pt-2 space-y-2"><button type="submit" class="primary-btn w-full py-3.5 text-sm font-bold shadow-sm">Masuk</button><button type="button" id="to-register-btn" class="secondary-btn w-full py-3 text-xs font-semibold">Buat Akun Baru (Daftar dengan Gmail)</button></div>
     </form>
 
-    <!-- FORM REGISTRASI -->
     <form id="register-form" class="space-y-3 hidden">
-     <div>
-      <label class="field-label" for="reg-name">Nama Lengkap &amp; Gelar</label>
-      <input id="reg-name" class="field-control" required placeholder="Contoh: Budi Santoso, S.T.">
-     </div>
-     <div>
-      <label class="field-label" for="reg-nip">NIP / ID Petugas</label>
-      <input id="reg-nip" class="field-control" required placeholder="Nomor Induk Pegawai">
-     </div>
-     <div>
-      <label class="field-label" for="reg-email">Alamat Gmail</label>
-      <input id="reg-email" type="email" class="field-control" required placeholder="petugas@gmail.com">
-     </div>
-     <div>
-      <label class="field-label" for="reg-pass">Buat Password</label>
-      <input id="reg-pass" type="password" class="field-control" required placeholder="Minimal 6 karakter">
-     </div>
+     <div><label class="field-label" for="reg-name">Nama Lengkap &amp; Gelar</label><input id="reg-name" class="field-control" required placeholder="Contoh: Budi Santoso, S.T."></div>
+     <div><label class="field-label" for="reg-nip">NIP / ID Petugas</label><input id="reg-nip" class="field-control" required placeholder="Nomor Induk Pegawai"></div>
+     <div><label class="field-label" for="reg-email">Alamat Gmail</label><input id="reg-email" type="email" class="field-control" required placeholder="petugas@gmail.com"></div>
+     <div><label class="field-label" for="reg-pass">Buat Password</label><input id="reg-pass" type="password" class="field-control" required placeholder="Minimal 6 karakter"></div>
      <div id="reg-error" class="hidden text-xs font-semibold text-rose-600" role="alert"></div>
-     <div class="pt-2 space-y-2">
-      <button type="submit" class="primary-btn w-full py-3 text-sm font-bold shadow-sm bg-emerald-600 hover:bg-emerald-700">
-       Daftarkan Akun (Menunggu Verifikasi Admin)
-      </button>
-      <button type="button" id="to-login-btn" class="secondary-btn w-full py-2.5 text-xs font-semibold">
-       Kembali ke Menu Masuk
-      </button>
-     </div>
+     <div class="pt-2 space-y-2"><button type="submit" class="primary-btn w-full py-3 text-sm font-bold shadow-sm bg-emerald-600 hover:bg-emerald-700">Daftarkan Akun (Menunggu Verifikasi Admin)</button><button type="button" id="to-login-btn" class="secondary-btn w-full py-2.5 text-xs font-semibold">Kembali ke Menu Masuk</button></div>
     </form>
 
-    <!-- PANEL ADMIN -->
     <div id="admin-pending-box" class="hidden pt-3 border-t border-slate-200">
      <h4 class="font-bold text-xs text-slate-700 mb-2">Panel Admin: Verifikasi Akun Petugas</h4>
      <div id="pending-users-list" class="space-y-2 max-h-40 overflow-y-auto"></div>
@@ -680,24 +872,41 @@
     let reports = JSON.parse(localStorage.getItem('pagar_pktn_reports') || '[]');
     let isOnline = navigator.onLine;
 
-    // DATABASE PENGGUNA TERDAFTAR
+    const currentTheme = localStorage.getItem('pagar_pktn_theme') || 'light';
+    document.documentElement.setAttribute('data-theme', currentTheme);
+
+    document.getElementById('btn-theme-toggle').addEventListener('click', () => {
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('pagar_pktn_theme', theme);
+      const icon = theme === 'dark' ? 'sun' : 'moon';
+      document.getElementById('btn-theme-toggle').innerHTML = `<i data-lucide="${icon}" class="w-4 h-4"></i>`;
+      lucide.createIcons();
+    });
+    if(currentTheme === 'dark') {
+      document.getElementById('btn-theme-toggle').innerHTML = `<i data-lucide="sun" class="w-4 h-4"></i>`;
+    }
+
+    const drawer = document.getElementById('drawer-panel');
+    const backdrop = document.getElementById('drawer-backdrop');
+    document.getElementById('btn-open-menu').addEventListener('click', () => { drawer.classList.add('open'); backdrop.classList.add('open'); });
+    document.getElementById('btn-close-drawer').addEventListener('click', () => { drawer.classList.remove('open'); backdrop.classList.remove('open'); });
+    backdrop.addEventListener('click', () => { drawer.classList.remove('open'); backdrop.classList.remove('open'); });
+
+    document.getElementById('fab-form').addEventListener('click', () => {
+      switchPage('page-form');
+    });
+
     let registeredUsers = JSON.parse(localStorage.getItem('pagar_pktn_users') || JSON.stringify([
       { email: 'admin@gmail.com', password: 'admin123', name: 'Admin Pusat', nip: 'ADMIN-01', role: 'admin', status: 'approved' },
       { email: 'petugas1@gmail.com', password: 'pktn2026', name: 'Budi Santoso, S.T.', nip: '198505202010011005', role: 'petugas', status: 'approved' }
     ]));
 
-    // MEMUAT SESI SECARA OTOMATIS
     let currentInspector = null;
     try {
       const savedSession = localStorage.getItem('pagar_pktn_persistent_session');
-      if (savedSession) {
-        currentInspector = JSON.parse(savedSession);
-      } else {
-        currentInspector = JSON.parse(sessionStorage.getItem('pagar_pktn_session') || 'null');
-      }
-    } catch (e) {
-      currentInspector = null;
-    }
+      currentInspector = savedSession ? JSON.parse(savedSession) : JSON.parse(sessionStorage.getItem('pagar_pktn_session') || 'null');
+    } catch (e) { currentInspector = null; }
 
     function checkSession() {
       const loginModal = document.getElementById('login-modal');
@@ -706,299 +915,169 @@
         loginModal.classList.add('open');
       } else {
         loginModal.classList.remove('open');
-        badge.textContent = `Petugas: ${currentInspector.name} (${currentInspector.role === 'admin' ? 'ADMIN' : 'Petugas'})`;
-        requestNotificationPermission();
-        if (currentInspector.role === 'admin') {
-          renderPendingUsers();
-        } else {
-          document.getElementById('admin-pending-box').classList.add('hidden');
-        }
+        badge.textContent = `Petugas: ${currentInspector.name}`;
+        document.getElementById('profile-name').textContent = currentInspector.name;
+        document.getElementById('profile-nip').textContent = currentInspector.nip;
+        document.getElementById('profile-email').textContent = currentInspector.email;
+        document.getElementById('profile-role').textContent = currentInspector.role === 'admin' ? 'Administrator Pusat' : 'Petugas Lapangan';
+        if (currentInspector.role === 'admin') renderPendingUsers();
       }
     }
 
-    // TOGGLE MENU LOGIN <-> REGISTRASI
+    const countrySelect = document.getElementById('country');
+    const producerSection = document.getElementById('producer-section');
+    const importerSection = document.getElementById('importer-section');
+    const producerNameInput = document.getElementById('producer-name');
+    const producerAddressInput = document.getElementById('producer-address');
+    const importerNameInput = document.getElementById('importer-name');
+    const importerAddressInput = document.getElementById('importer-address');
+
+    function handleCountryChange() {
+      const val = countrySelect.value;
+      if (val === 'Indonesia') {
+        producerSection.classList.remove('hidden'); importerSection.classList.add('hidden');
+        producerNameInput.required = true; producerAddressInput.required = true;
+        importerNameInput.required = false; importerAddressInput.required = false;
+      } else {
+        producerSection.classList.add('hidden'); importerSection.classList.remove('hidden');
+        producerNameInput.required = false; producerAddressInput.required = false;
+        importerNameInput.required = true; importerAddressInput.required = true;
+      }
+    }
+    countrySelect.addEventListener('change', handleCountryChange);
+    handleCountryChange();
+
     document.getElementById('to-register-btn').addEventListener('click', () => {
-      document.getElementById('login-form').classList.add('hidden');
-      document.getElementById('register-form').classList.remove('hidden');
-      document.getElementById('modal-heading').textContent = 'Buat Akun';
-      document.getElementById('modal-subheading').textContent = 'Pendaftaran akun petugas lapangan';
+      document.getElementById('login-form').classList.add('hidden'); document.getElementById('register-form').classList.remove('hidden');
     });
-
     document.getElementById('to-login-btn').addEventListener('click', () => {
-      document.getElementById('register-form').classList.add('hidden');
-      document.getElementById('login-form').classList.remove('hidden');
-      document.getElementById('modal-heading').textContent = 'Sign in';
-      document.getElementById('modal-subheading').textContent = 'Gunakan akun Gmail resmi Anda';
+      document.getElementById('register-form').classList.add('hidden'); document.getElementById('login-form').classList.remove('hidden');
     });
 
-    // PROSES REGISTRASI AKUN BARU
     document.getElementById('register-form').addEventListener('submit', e => {
       e.preventDefault();
-      const name = (document.getElementById('reg-name').value || '').trim();
-      const nip = (document.getElementById('reg-nip').value || '').trim();
-      const email = (document.getElementById('reg-email').value || '').trim().toLowerCase();
+      const name = document.getElementById('reg-name').value.trim();
+      const nip = document.getElementById('reg-nip').value.trim();
+      const email = document.getElementById('reg-email').value.trim().toLowerCase();
       const password = document.getElementById('reg-pass').value;
       const errEl = document.getElementById('reg-error');
 
-      if (!email.endsWith('@gmail.com')) {
-        errEl.textContent = '⚠️ Harap gunakan alamat Gmail yang valid.';
-        errEl.classList.remove('hidden');
-        return;
-      }
-
-      const existing = registeredUsers.find(u => u.email === email);
-      if (existing) {
-        errEl.textContent = '⚠️ Email Gmail tersebut sudah terdaftar.';
-        errEl.classList.remove('hidden');
-        return;
-      }
-
+      if (!email.endsWith('@gmail.com')) { errEl.textContent = 'Harap gunakan Gmail valid.'; errEl.classList.remove('hidden'); return; }
       registeredUsers.push({ email, password, name, nip, role: 'petugas', status: 'pending' });
       localStorage.setItem('pagar_pktn_users', JSON.stringify(registeredUsers));
-
-      showToast('Pendaftaran Berhasil', 'Akun Anda berhasil didaftarkan dan sedang menunggu persetujuan Admin pusat.', 'success');
-      document.getElementById('register-form').reset();
-      document.getElementById('to-login-btn').click();
+      showToast('Pendaftaran Berhasil', 'Menunggu persetujuan Admin pusat.', 'success');
+      document.getElementById('register-form').reset(); document.getElementById('to-login-btn').click();
     });
 
-    // PROSES LOGIN DENGAN PENYIMPANAN SESI PERMANEN
     document.getElementById('login-form').addEventListener('submit', e => {
       e.preventDefault();
-      const emailInput = document.getElementById('login-user');
-      const passInput = document.getElementById('login-pass');
-      const rememberCheckbox = document.getElementById('remember-me');
+      const email = document.getElementById('login-user').value.trim().toLowerCase();
+      const password = document.getElementById('login-pass').value;
+      const remember = document.getElementById('remember-me').checked;
       const errEl = document.getElementById('login-error');
 
-      const email = (emailInput.value || '').trim().toLowerCase();
-      const password = passInput.value;
-      const remember = rememberCheckbox.checked;
-
       const user = registeredUsers.find(u => u.email === email && u.password === password);
-
-      if (!user) {
-        errEl.textContent = '⚠️ Email atau Password salah.';
-        errEl.classList.remove('hidden');
-        return;
-      }
-
-      if (user.status !== 'approved') {
-        errEl.textContent = '⚠️ Akun Anda belum diverifikasi oleh Admin.';
-        errEl.classList.remove('hidden');
-        return;
-      }
+      if (!user) { errEl.textContent = 'Email atau Password salah.'; errEl.classList.remove('hidden'); return; }
+      if (user.status !== 'approved') { errEl.textContent = 'Akun belum disetujui Admin.'; errEl.classList.remove('hidden'); return; }
 
       currentInspector = { name: user.name, nip: user.nip, email: user.email, role: user.role };
-      
-      // Bersihkan sesi lama
-      localStorage.removeItem('pagar_pktn_persistent_session');
-      sessionStorage.removeItem('pagar_pktn_session');
-
-      if (remember) {
-        localStorage.setItem('pagar_pktn_persistent_session', JSON.stringify(currentInspector));
-      } else {
-        sessionStorage.setItem('pagar_pktn_session', JSON.stringify(currentInspector));
-      }
+      if (remember) localStorage.setItem('pagar_pktn_persistent_session', JSON.stringify(currentInspector));
+      else sessionStorage.setItem('pagar_pktn_session', JSON.stringify(currentInspector));
 
       document.getElementById('login-modal').classList.remove('open');
       checkSession();
-      
-      showToast('Selamat Datang di PAGAR PKTN!', `Halo ${user.name}, sesi aktif. Silakan melaksanakan pengawasan lapangan.`, 'success');
+      showToast('Selamat Datang!', `Halo ${user.name}, sesi aktif.`, 'success');
     });
 
-    // RENDER PANEL VERIFIKASI ADMIN
     function renderPendingUsers() {
       const box = document.getElementById('admin-pending-box');
       const list = document.getElementById('pending-users-list');
       const pending = registeredUsers.filter(u => u.status === 'pending');
-
-      if (pending.length > 0 && currentInspector && currentInspector.role === 'admin') {
+      if (pending.length > 0) {
         box.classList.remove('hidden');
-        list.innerHTML = pending.map((u, idx) => `
+        list.innerHTML = pending.map(u => `
           <div class="p-2.5 bg-amber-50 border border-amber-200 rounded-lg flex items-center justify-between text-xs">
-            <div>
-              <p class="font-bold text-slate-800">${u.name} (${u.nip})</p>
-              <p class="text-[11px] text-slate-500">${u.email}</p>
-            </div>
-            <button type="button" class="primary-btn px-2.5 py-1.5 text-[11px] bg-emerald-600 hover:bg-emerald-700 font-bold" onclick="approveUser('${u.email}')">Setujui</button>
+            <div><p class="font-bold text-slate-800">${u.name}</p><p class="text-[11px] text-slate-500">${u.email}</p></div>
+            <button type="button" class="primary-btn px-2 py-1 text-[11px] bg-emerald-600 font-bold" onclick="approveUser('${u.email}')">Setujui</button>
           </div>
         `).join('');
-      } else {
-        box.classList.add('hidden');
-      }
+      } else { box.classList.add('hidden'); }
     }
 
     window.approveUser = function(email) {
       const u = registeredUsers.find(item => item.email === email);
-      if (u) {
-        u.status = 'approved';
-        localStorage.setItem('pagar_pktn_users', JSON.stringify(registeredUsers));
-        showToast('Verifikasi Berhasil', `Akun petugas ${u.name} telah disetujui.`, 'success');
-        renderPendingUsers();
-      }
+      if (u) { u.status = 'approved'; localStorage.setItem('pagar_pktn_users', JSON.stringify(registeredUsers)); renderPendingUsers(); showToast('Sukses', 'Akun disetujui.', 'success'); }
     };
 
     document.getElementById('btn-logout').addEventListener('click', () => {
-      if (confirm('Keluar dari sesi petugas?')) {
-        localStorage.removeItem('pagar_pktn_persistent_session');
-        sessionStorage.removeItem('pagar_pktn_session');
-        currentInspector = null;
-        document.getElementById('login-user').value = '';
-        document.getElementById('login-pass').value = '';
-        checkSession();
-        showToast('Keluar Akun', 'Anda telah berhasil keluar dari sesi aplikasi.', 'info');
+      if (confirm('Keluar sesi?')) {
+        localStorage.removeItem('pagar_pktn_persistent_session'); sessionStorage.removeItem('pagar_pktn_session');
+        currentInspector = null; checkSession(); showToast('Keluar', 'Sesi diakhiri.', 'info');
       }
     });
 
-    function requestNotificationPermission() {
-      if ("Notification" in window && Notification.permission !== "granted") {
-        Notification.requestPermission();
-      }
-    }
-
-    function sendPushReminder(unsyncedCount) {
-      if ("Notification" in window && Notification.permission === "granted") {
-        const title = "🔔 PAGAR PKTN — Sinkronisasi Tertunda";
-        const options = {
-          body: `Koneksi internet pulih! Terdapat ${unsyncedCount} laporan offline di HP yang perlu divalidasi SNI & dikirim ke server pusat.`,
-          icon: "https://cdn-icons-png.flaticon.com/512/2921/2921222.svg",
-          tag: "sync-reminder"
-        };
-        new Notification(title, options);
-      }
-    }
-
-    function showToast(title, message, type = 'info', duration = 3500) {
+    function showToast(title, message, type = 'info') {
       const container = document.getElementById('toast-container');
-      
-      let iconName = 'info';
-      if (type === 'success') iconName = 'check-circle-2';
-      if (type === 'error') iconName = 'alert-triangle';
-
       const card = document.createElement('div');
       card.className = `toast-card ${type}`;
-      card.innerHTML = `
-        <div class="toast-icon"><i data-lucide="${iconName}"></i></div>
-        <div class="toast-content">
-          <div class="toast-title">${title}</div>
-          <div>${message}</div>
-        </div>
-      `;
-
-      container.appendChild(card);
-      container.classList.add('show');
-      lucide.createIcons();
-
-      setTimeout(() => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(10px)';
-        setTimeout(() => {
-          card.remove();
-          if (container.children.length === 0) {
-            container.classList.remove('show');
-          }
-        }, 300);
-      }, duration);
+      card.innerHTML = `<div class="toast-content"><div class="toast-title">${title}</div><div>${message}</div></div>`;
+      container.appendChild(card); container.classList.add('show');
+      setTimeout(() => { card.remove(); container.classList.remove('show'); }, 3500);
     }
 
-    function updateNetworkStatus() {
-      isOnline = navigator.onLine;
-      const el = document.getElementById('network-status');
-      const lbl = document.getElementById('network-label');
-      const onlineBox = document.getElementById('online-bangbeni-box');
-      const offlineBox = document.getElementById('offline-warning-box');
-      const sniSelect = document.getElementById('sni-status');
-      const chkWrap = document.getElementById('bangbeni-checkbox-wrap');
-
-      if (isOnline) {
-        el.className = 'network-pill online';
-        lbl.textContent = 'Online';
-        onlineBox.classList.remove('hidden');
-        offlineBox.classList.add('hidden');
-        chkWrap.classList.remove('hidden');
-
-        const unsyncedReports = reports.filter(r => !r.synced || r.sniStatus === 'Belum Terverifikasi');
-        if (unsyncedReports.length > 0) {
-          sendPushReminder(unsyncedReports.length);
-        }
-      } else {
-        el.className = 'network-pill offline';
-        lbl.textContent = 'Offline';
-        onlineBox.classList.add('hidden');
-        offlineBox.classList.remove('hidden');
-        chkWrap.classList.add('hidden');
-        sniSelect.value = "Belum Terverifikasi";
-      }
-      handleDynamicValidation();
+    function switchPage(target) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(target).classList.add('active');
+      const navBtn = document.querySelector(`.nav-btn[data-target="${target}"]`);
+      if(navBtn) navBtn.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (target === 'page-history') renderHistory();
+      if (target === 'page-analytics') renderAnalytics();
+      if (target === 'page-maps') renderMapsList();
     }
 
-    window.addEventListener('online', updateNetworkStatus);
-    window.addEventListener('offline', updateNetworkStatus);
-
-    const sniStatusSelect = document.getElementById('sni-status');
-    const labelNpb = document.getElementById('label-npb');
-    const labelProductSni = document.getElementById('label-product-sni');
-    const inputNpb = document.getElementById('npb-number');
-    const inputProductSni = document.getElementById('product-sni');
-
-    function handleDynamicValidation() {
-      const val = sniStatusSelect.value;
-      if (val === 'Terdaftar dan Sesuai (Legal)') {
-        labelNpb.innerHTML = 'Nomor NPB (Nomor Pendaftaran Barang) <span class="text-rose-600 font-bold">*Wajib untuk Legal</span>';
-        labelProductSni.innerHTML = 'Nomor SNI / No. LSPro pada Produk <span class="text-rose-600 font-bold">*Wajib untuk Legal</span>';
-        inputNpb.style.borderColor = '#1a73e8';
-        inputProductSni.style.borderColor = '#1a73e8';
-      } else {
-        labelNpb.textContent = 'Nomor NPB (Nomor Pendaftaran Barang)';
-        labelProductSni.textContent = 'Nomor SNI / No. LSPro pada Produk';
-        inputNpb.style.borderColor = '#dadce0';
-        inputProductSni.style.borderColor = '#dadce0';
-      }
-    }
-
-    sniStatusSelect.addEventListener('change', handleDynamicValidation);
-
-    document.getElementById('check-bangbeni-confirm').addEventListener('change', function() {
-      const hint = document.getElementById('validation-hint');
-      if (this.checked) {
-        hint.textContent = "(Tervalidasi Bang Beni)";
-        hint.className = "text-[11px] font-bold text-emerald-600";
-      } else {
-        hint.textContent = "(Perlu konfirmasi/validasi)";
-        hint.className = "text-[11px] font-medium text-amber-600";
-      }
-    });
-
-    document.querySelectorAll('.nav-btn').forEach(btn => {
+    document.querySelectorAll('.nav-btn, .drawer-menu-item').forEach(btn => {
       btn.addEventListener('click', () => {
         const target = btn.getAttribute('data-target');
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(target).classList.add('active');
-        btn.classList.add('active');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        if (target === 'page-history') renderHistory();
-        if (target === 'page-analytics') renderAnalytics();
+        switchPage(target);
+        drawer.classList.remove('open'); backdrop.classList.remove('open');
       });
     });
+
+    document.getElementById('btn-do-search').addEventListener('click', () => {
+      const keyword = document.getElementById('search-keyword').value.trim().toLowerCase();
+      const resultsContainer = document.getElementById('search-results-list');
+      if (!keyword) return;
+      const filtered = reports.filter(r => r.businessName.toLowerCase().includes(keyword) || r.productType.toLowerCase().includes(keyword) || r.brand.toLowerCase().includes(keyword));
+      resultsContainer.innerHTML = filtered.length === 0 ? `<div class="empty-state"><p class="text-xs">Tidak ditemukan.</p></div>` : filtered.map(r => `
+        <div class="history-card ${r.sniStatus.includes('Legal') ? 'legal' : (r.sniStatus.includes('Temuan') ? 'temuan' : 'pending-status')}">
+          <h4 class="font-bold text-sm">${r.businessName}</h4>
+          <p class="text-xs text-slate-500">${r.productType} • ${r.sniStatus}</p>
+        </div>
+      `).join('');
+    });
+
+    function renderMapsList() {
+      const container = document.getElementById('maps-list');
+      const withGps = reports.filter(r => r.coordinates && r.coordinates.includes(','));
+      container.innerHTML = withGps.length === 0 ? `<div class="empty-state"><p class="text-xs">Belum ada titik GPS.</p></div>` : withGps.map(r => `
+        <div class="section-card p-4 flex items-center justify-between gap-3">
+          <div><span class="text-xs font-bold text-blue-600">${r.businessName}</span><p class="text-xs font-bold mt-0.5">GPS: ${r.coordinates}</p></div>
+          <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.coordinates)}" target="_blank" class="secondary-btn px-3 py-2 text-xs font-bold">Buka Maps</a>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
 
     document.getElementById('gps-button').addEventListener('click', () => {
       const feedback = document.getElementById('gps-feedback');
       const coordInput = document.getElementById('coordinates');
-      if (!navigator.geolocation) {
-        feedback.textContent = 'Geolocation tidak didukung.';
-        return;
-      }
-      feedback.textContent = 'Mengambil koordinat...';
+      if (!navigator.geolocation) return;
+      feedback.textContent = 'Mengambil...';
       navigator.geolocation.getCurrentPosition(
-        pos => {
-          coordInput.value = `${pos.coords.latitude.toFixed(6)}, ${pos.coords.longitude.toFixed(6)}`;
-          feedback.textContent = 'GPS diperoleh.';
-          feedback.className = 'mt-2 text-xs text-emerald-600 font-medium';
-        },
-        err => {
-          feedback.textContent = 'Gagal GPS: ' + err.message;
-          feedback.className = 'mt-2 text-xs text-rose-600 font-medium';
-        },
+        pos => { coordInput.value = `${pos.coords.latitude.toFixed(6)}, ${pos.coords.longitude.toFixed(6)}`; feedback.textContent = 'GPS diperoleh.'; feedback.className = 'mt-2 text-xs text-emerald-600 font-medium'; },
+        err => { feedback.textContent = 'Gagal GPS.'; feedback.className = 'mt-2 text-xs text-rose-600 font-medium'; },
         { timeout: 10000, enableHighAccuracy: true }
       );
     });
@@ -1008,329 +1087,59 @@
       const count = list.querySelectorAll('.officer-row').length;
       const row = document.createElement('div');
       row.className = 'officer-row flex gap-2';
-      row.innerHTML = `
-        <input id="officer-${count}" class="field-control officer-input" required placeholder="Nama petugas">
-        <button type="button" class="danger-btn w-11 h-[48px] shrink-0 p-0" onclick="this.parentElement.remove()"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-      `;
-      list.appendChild(row);
-      lucide.createIcons();
+      row.innerHTML = `<input id="officer-${count}" class="field-control officer-input" required placeholder="Nama petugas"><button type="button" class="danger-btn w-11 h-[48px] shrink-0 p-0" onclick="this.parentElement.remove()"><i data-lucide="trash-2" class="w-4 h-4"></i></button>`;
+      list.appendChild(row); lucide.createIcons();
     });
-
-    const photoInputs = ['photo-spec', 'photo-snibarw', 'photo-snikem', 'photo-usage', 'photo-warranty'];
-    photoInputs.forEach(id => {
-      const input = document.getElementById(id);
-      input.addEventListener('change', e => {
-        const span = document.getElementById(id + '-name');
-        if (e.target.files && e.target.files[0]) {
-          span.textContent = e.target.files[0].name;
-          span.className = 'text-[11px] font-bold text-emerald-600 truncate max-w-full';
-        } else {
-          span.textContent = 'Ketuk untuk buka kamera';
-          span.className = 'text-[11px] text-slate-500';
-        }
-      });
-    });
-
-    function readFileAsBase64(file) {
-      return new Promise((resolve, reject) => {
-        if (!file) {
-          resolve(null);
-          return;
-        }
-        const reader = new FileReader();
-        reader.onload = () => resolve({ name: file.name, data: reader.result });
-        reader.onerror = error => reject(error);
-        reader.readAsDataURL(file);
-      });
-    }
 
     document.getElementById('inspection-form').addEventListener('submit', async e => {
       e.preventDefault();
-      if (!currentInspector) {
-        checkSession();
-        return;
-      }
-
+      if (!currentInspector) { checkSession(); return; }
       const form = e.target;
-      const errBox = document.getElementById('form-error');
-      const submitBtn = document.getElementById('submit-btn');
-      const submitBtnText = document.getElementById('submit-btn-text');
-
-      const agency = (form.agency.value || '').trim();
-      const businessName = (form.business_name.value || '').trim();
-      const ownerName = (form.owner_name.value || '').trim();
-      const productType = (form.product_type.value || '').trim();
-      const brand = (form.brand.value || '').trim();
-      const phone = (form.phone.value || '').trim();
-      const npbNumber = (form.npb_number.value || '').trim();
-      const productSni = (form.product_sni.value || '').trim();
-      const packageSni = (form.package_sni.value || '').trim();
-      const country = (form.country.value || '').trim();
-      
-      const sniStatus = isOnline ? form.sni_status.value : "Belum Terverifikasi";
-      const officers = Array.from(form.querySelectorAll('.officer-input'))
-                            .map(i => (i.value || '').trim())
-                            .filter(Boolean);
-
-      if (!agency || !businessName || !ownerName || !productType || !brand || officers.length === 0) {
-        errBox.textContent = '⚠️ Mohon lengkapi seluruh field wajib bercentang (*).';
-        errBox.classList.remove('hidden');
-        errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        return;
-      }
-
-      if (phone) {
-        const phoneRegex = /^(\+62|62|0)8[1-9][0-9]{7,11}$/;
-        if (!phoneRegex.test(phone.replace(/[\s-]/g, ''))) {
-          errBox.textContent = '⚠️ Format Nomor Telepon/WhatsApp tidak valid. Contoh benar: 08123456789 atau +628123456789.';
-          errBox.classList.remove('hidden');
-          form.phone.focus();
-          form.phone.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          return;
-        }
-      }
-
-      if (npbNumber) {
-        const npbRegex = /^[A-Za-z0-9\-\.\/]{5,30}$/;
-        if (!npbRegex.test(npbNumber)) {
-          errBox.textContent = '⚠️ Format Nomor NPB tidak valid (gunakan huruf, angka, tanda hubung/titik, 5-30 karakter).';
-          errBox.classList.remove('hidden');
-          document.getElementById('npb-number').focus();
-          document.getElementById('npb-number').scrollIntoView({ behavior: 'smooth', block: 'center' });
-          return;
-        }
-      }
-
-      if (sniStatus === 'Terdaftar dan Sesuai (Legal)') {
-        if (!productSni || !npbNumber) {
-          errBox.textContent = '⚠️ Status Legal mewajibkan pengisian "Nomor SNI Produk" dan "Nomor NPB" secara lengkap.';
-          errBox.classList.remove('hidden');
-          errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          return;
-        }
-      }
-
-      errBox.classList.add('hidden');
-      
-      submitBtn.disabled = true;
-      submitBtnText.textContent = "Sedang Mengirim & Memproses Foto...";
-      showToast('Memproses Data', 'Menyiapkan arsip laporan dan foto lapangan...', 'info');
-
-      try {
-        const photoSpecFile = document.getElementById('photo-spec').files[0];
-        const photoSnibarwFile = document.getElementById('photo-snibarw').files[0];
-        const photoSnikemFile = document.getElementById('photo-snikem').files[0];
-        const photoUsageFile = document.getElementById('photo-usage').files[0];
-        const photoWarrantyFile = document.getElementById('photo-warranty').files[0];
-
-        const [specData, snibarwData, snikemData, usageData, warrantyData] = await Promise.all([
-          readFileAsBase64(photoSpecFile),
-          readFileAsBase64(photoSnibarwFile),
-          readFileAsBase64(photoSnikemFile),
-          readFileAsBase64(photoUsageFile),
-          readFileAsBase64(photoWarrantyFile)
-        ]);
-
-        const formData = {
-          id: 'INS-' + Date.now().toString(36).toUpperCase(),
-          timestamp: new Date().toISOString(),
-          agency,
-          officers,
-          businessName,
-          ownerName,
-          phone,
-          coordinates: (form.coordinates.value || '').trim(),
-          productType,
-          brand,
-          country,
-          npbNumber,
-          productSni,
-          packageSni,
-          sniStatus,
-          usage: form.usage.value,
-          maintenance: form.maintenance.value,
-          clause: form.clause.value,
-          warranty: form.warranty.value,
-          inspectorAccount: `${currentInspector.name} (NIP: ${currentInspector.nip})`,
-          photos: {
-            spec: specData,
-            snibarw: snibarwData,
-            snikem: snikemData,
-            usage: usageData,
-            warranty: warrantyData
-          },
-          synced: false
-        };
-
-        reports.unshift(formData);
-        localStorage.setItem('pagar_pktn_reports', JSON.stringify(reports));
-
-        if (isOnline) {
-          showToast('Sinkronisasi Server', 'Mengirim data dan arsip foto ke server pusat...', 'info');
-          syncSingleReport(formData, () => {
-            showToast('Laporan Berhasil Terkirim', 'Data inspeksi dan dokumentasi foto sukses diunggah ke server pusat!', 'success');
-            renderHistory();
-            resetFormAndButton(form, submitBtn, submitBtnText);
-          });
-        } else {
-          showToast('Tersimpan Offline', 'Perangkat tanpa sinyal. Laporan & foto tersimpan aman di HP. Sinkronkan nanti.', 'info');
-          renderHistory();
-          resetFormAndButton(form, submitBtn, submitBtnText);
-        }
-
-      } catch (err) {
-        showToast('Gagal Proses', 'Gagal memproses unggahan: ' + err.message, 'error');
-        submitBtn.disabled = false;
-        submitBtnText.textContent = "Kirim Data";
-      }
+      const formData = {
+        id: 'INS-' + Date.now().toString(36).toUpperCase(),
+        timestamp: new Date().toISOString(),
+        agency: form.agency.value.trim(),
+        businessName: form.business_name.value.trim(),
+        ownerName: form.owner_name.value.trim(),
+        productType: form.product_type.value.trim(),
+        brand: form.brand.value.trim(),
+        country: form.country.value.trim(),
+        sniStatus: isOnline ? form.sni_status.value : "Belum Terverifikasi",
+        coordinates: form.coordinates.value.trim(),
+        synced: false
+      };
+      reports.unshift(formData);
+      localStorage.setItem('pagar_pktn_reports', JSON.stringify(reports));
+      showToast('Sukses', 'Laporan tersimpan.', 'success');
+      form.reset(); switchPage('page-history');
     });
-
-    function resetFormAndButton(form, btn, btnText) {
-      form.reset();
-      document.getElementById('coordinates').value = '';
-      document.getElementById('check-bangbeni-confirm').checked = false;
-      document.getElementById('validation-hint').textContent = "(Perlu konfirmasi/validasi)";
-      document.getElementById('validation-hint').className = "text-[11px] font-medium text-amber-600";
-      handleDynamicValidation();
-      
-      ['photo-spec', 'photo-snibarw', 'photo-snikem', 'photo-usage', 'photo-warranty'].forEach(id => {
-        document.getElementById(id + '-name').textContent = 'Ketuk untuk buka kamera';
-        document.getElementById(id + '-name').className = 'text-[11px] text-slate-500';
-      });
-
-      btn.disabled = false;
-      btnText.textContent = "Kirim Data";
-      document.querySelector('[data-target="page-history"]').click();
-    }
-
-    function syncSingleReport(formData, callback) {
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
-        google.script.run
-          .withSuccessHandler(res => {
-            if (res.success) {
-              formData.synced = true;
-              localStorage.setItem('pagar_pktn_reports', JSON.stringify(reports));
-              if (callback) callback();
-            }
-          })
-          .withFailureHandler(() => {
-            showToast('Sinkron Gagal', 'Gagal sinkron ke server (data aman tersimpan lokal).', 'error');
-          })
-          .saveDataToSheet(formData);
-      } else {
-        setTimeout(() => {
-          formData.synced = true;
-          localStorage.setItem('pagar_pktn_reports', JSON.stringify(reports));
-          if (callback) callback();
-        }, 800);
-      }
-    }
 
     function renderHistory() {
       const list = document.getElementById('history-list');
       document.getElementById('stat-total').textContent = reports.length;
       document.getElementById('stat-synced').textContent = reports.filter(r => r.synced).length;
-
-      if (reports.length === 0) {
-        list.innerHTML = `
-          <div class="empty-state">
-            <i data-lucide="folder-open" class="w-10 h-10 mx-auto text-slate-400 mb-2"></i>
-            <p class="font-bold text-slate-700">Belum Ada Data</p>
-            <p class="text-xs text-slate-500 mt-1">Data pengawasan akan muncul di sini.</p>
+      list.innerHTML = reports.length === 0 ? `<div class="empty-state"><p class="text-xs">Belum ada data.</p></div>` : reports.map((r, i) => `
+        <div class="history-card ${r.sniStatus.includes('Legal') ? 'legal' : (r.sniStatus.includes('Temuan') ? 'temuan' : 'pending-status')} flex justify-between items-center gap-3">
+          <div class="min-w-0 flex-1 cursor-pointer" onclick="openDetail(${i})">
+            <span class="text-xs font-bold text-blue-600">${r.id}</span>
+            <h4 class="font-bold text-sm truncate">${r.businessName}</h4>
+            <p class="text-xs text-slate-500">${r.productType} • Status: ${r.sniStatus}</p>
           </div>
-        `;
-        lucide.createIcons();
-        return;
-      }
-
-      list.innerHTML = reports.map((r, index) => {
-        let statusColorClass = 'text-amber-600';
-        if (r.sniStatus === 'Terdaftar dan Sesuai (Legal)') statusColorClass = 'text-emerald-600';
-        else if (r.sniStatus === 'Tidak Terdaftar (Temuan)') statusColorClass = 'text-rose-600';
-
-        return `
-          <div class="history-card flex items-center justify-between gap-3">
-            <div class="min-w-0 flex-1 cursor-pointer" onclick="openDetail(${index})">
-              <div class="flex items-center gap-2 mb-1">
-                <span class="text-xs font-bold text-blue-600">${r.id}</span>
-                <span class="badge ${r.synced ? 'sent' : 'pending'}">${r.synced ? 'Tersinkron' : 'Belum Verifikasi / Antrean'}</span>
-              </div>
-              <h4 class="font-extrabold text-sm truncate">${r.businessName}</h4>
-              <p class="text-xs text-slate-500 truncate">${r.productType} • Akun: ${r.inspectorAccount || '-'}</p>
-            </div>
-            <div class="flex items-center gap-1 shrink-0">
-              <button type="button" class="secondary-btn px-3 py-2 text-xs font-bold" onclick="openDetail(${index})">Detail</button>
-              <button type="button" class="danger-btn w-9 h-9 p-0 flex items-center justify-center" onclick="deleteReport(${index})" aria-label="Hapus"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-            </div>
-          </div>
-        `;
-      }).join('');
+          <button type="button" class="secondary-btn px-3 py-2 text-xs font-bold" onclick="openDetail(${i})">Detail</button>
+        </div>
+      `).join('');
       lucide.createIcons();
-    }
-
-    function renderAnalytics() {
-      const total = reports.length;
-      const legal = reports.filter(r => r.sniStatus === 'Terdaftar dan Sesuai (Legal)').length;
-      const temuan = reports.filter(r => r.sniStatus === 'Tidak Terdaftar (Temuan)').length;
-      const notspec = reports.filter(r => r.sniStatus === 'Terdaftar namun Tidak Sesuai Spesifikasinya').length;
-      const unverified = reports.filter(r => r.sniStatus === 'Belum Terverifikasi').length;
-
-      document.getElementById('count-legal').textContent = `${legal} laporan`;
-      document.getElementById('count-temuan').textContent = `${temuan} laporan`;
-      document.getElementById('count-notspec').textContent = `${notspec + unverified} laporan`;
-
-      document.getElementById('bar-legal').style.width = total ? `${(legal / total) * 100}%` : '0%';
-      document.getElementById('bar-temuan').style.width = total ? `${(temuan / total) * 100}%` : '0%';
-      document.getElementById('bar-notspec').style.width = total ? `${((notspec + unverified) / total) * 100}%` : '0%';
     }
 
     window.openDetail = function(index) {
       const r = reports[index];
-      if (!r) return;
       const modal = document.getElementById('detail-modal');
-      const content = document.getElementById('modal-content');
-      
-      content.innerHTML = `
+      document.getElementById('modal-content').innerHTML = `
         <div class="space-y-3">
-          <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
-            <span class="text-xs font-bold text-blue-600">ID: ${r.id}</span>
-            <h4 class="font-extrabold text-base mt-0.5">${r.businessName}</h4>
-            <p class="text-xs text-slate-500">Akun Pengawas: <strong>${r.inspectorAccount || '-'}</strong></p>
-            <p class="text-xs text-slate-500 mt-1">Pemilik: ${r.ownerName} • Telp: ${r.phone || '-'}</p>
-            <p class="text-xs text-slate-500">Produk: ${r.productType} (${r.brand}) | Status: ${r.sniStatus}</p>
-          </div>
-
-          <div class="p-3.5 bg-emerald-50/60 border border-emerald-200 rounded-xl flex items-center justify-between gap-3">
-            <div>
-              <h5 class="font-bold text-xs text-emerald-900">Dokumen Laporan Word</h5>
-              <p class="text-[11px] text-emerald-700">Unduh rekap laporan ini ke format Microsoft Word (.docx).</p>
-            </div>
-            <button type="button" class="primary-btn px-3 py-2 text-xs bg-emerald-600 hover:bg-emerald-700 shrink-0 font-semibold" onclick="downloadWordReport(${index})">
-              <i data-lucide="file-text" class="w-3.5 h-3.5"></i> Unduh .docx
-            </button>
-          </div>
-
-          <div class="p-4 bg-blue-50/60 border border-blue-200 rounded-xl space-y-3">
-            <h5 class="font-bold text-xs text-blue-900 uppercase tracking-wider">Verifikasi SNI (Bang Beni)</h5>
-            <p class="text-xs text-blue-700">Jika Anda sekarang sudah online, silakan cek nomor SNI di atas melalui Bang Beni, lalu perbarui status validasinya:</p>
-            
-            <a href="https://bangbeni.bsn.go.id" target="_blank" class="primary-btn px-3 py-2 text-xs inline-flex font-semibold">
-              <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Buka Portal Bang Beni
-            </a>
-
-            <div class="pt-2">
-              <label class="field-label" for="update-sni-status">Perbarui Status Validasi SNI:</label>
-              <select id="update-sni-status" class="field-control text-xs">
-                <option value="Belum Terverifikasi" ${r.sniStatus === 'Belum Terverifikasi' ? 'selected' : ''}>Belum Terverifikasi</option>
-                <option value="Terdaftar dan Sesuai (Legal)" ${r.sniStatus === 'Terdaftar dan Sesuai (Legal)' ? 'selected' : ''}>Terdaftar dan Sesuai (Legal)</option>
-                <option value="Tidak Terdaftar (Temuan)" ${r.sniStatus === 'Tidak Terdaftar (Temuan)' ? 'selected' : ''}>Tidak Terdaftar (Temuan)</option>
-                <option value="Terdaftar namun Tidak Sesuai Spesifikasinya" ${r.sniStatus === 'Terdaftar namun Tidak Sesuai Spesifikasinya' ? 'selected' : ''}>Terdaftar namun Tidak Sesuai Spesifikasinya</option>
-              </select>
-            </div>
-
-            <button type="button" class="primary-btn w-full py-3 text-xs bg-emerald-600 hover:bg-emerald-700 font-bold" onclick="saveAndSyncVerification(${index})">
-              <i data-lucide="cloud-upload" class="w-4 h-4"></i> Simpan &amp; Kirim ke Server Pusat
-            </button>
+          <div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl">
+            <h4 class="font-bold text-base">${r.businessName}</h4>
+            <p class="text-xs">Produk: ${r.productType} (${r.brand})</p>
+            <p class="text-xs font-semibold mt-1">Status Validasi: ${r.sniStatus}</p>
           </div>
         </div>
       `;
@@ -1338,111 +1147,17 @@
       lucide.createIcons();
     };
 
-    window.downloadWordReport = function(index) {
-      const r = reports[index];
-      showToast('Proses Dokumen', 'Membuat dokumen Word (.docx)...', 'info');
-      
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
-        google.script.run
-          .withSuccessHandler(res => {
-            if (res.success) {
-              showToast('Dokumen Siap', 'Dokumen Word berhasil dibuat. Membuka tautan...', 'success');
-              window.open(res.url, '_blank');
-            } else {
-              showToast('Gagal Dokumen', 'Gagal membuat dokumen: ' + res.message, 'error');
-            }
-          })
-          .withFailureHandler(() => {
-            showToast('Kesalahan Sistem', 'Terjadi kesalahan saat membuat dokumen Word.', 'error');
-          })
-          .generateDocxReport(r);
-      } else {
-        showToast('Mode Simulasi', 'Fitur unduh Word memerlukan koneksi ke Google Apps Script.', 'info');
-      }
-    };
-
-    window.saveAndSyncVerification = function(index) {
-      const newStatus = document.getElementById('update-sni-status').value;
-      reports[index].sniStatus = newStatus;
-      
-      showToast('Pembaruan Status', 'Menyinkronkan data terverifikasi ke server...', 'info');
-      
-      syncSingleReport(reports[index], () => {
-        showToast('Verifikasi Selesai', 'Status diperbarui dan data sukses terkirim ke server pusat!', 'success');
-        document.getElementById('detail-modal').classList.remove('open');
-        renderHistory();
-      });
-    };
-
-    window.deleteReport = function(index) {
-      if (confirm('Hapus data ini?')) {
-        reports.splice(index, 1);
-        localStorage.setItem('pagar_pktn_reports', JSON.stringify(reports));
-        renderHistory();
-        showToast('Data Dihapus', 'Laporan pengawasan berhasil dihapus dari perangkat.', 'info');
-      }
-    };
-
-    document.getElementById('close-modal').addEventListener('click', () => {
-      document.getElementById('detail-modal').classList.remove('open');
-    });
+    document.getElementById('close-modal').addEventListener('click', () => { document.getElementById('detail-modal').classList.remove('open'); });
 
     document.getElementById('export-all').addEventListener('click', () => {
-      if (reports.length === 0) { showToast('Arsip Kosong', 'Tidak ada data laporan untuk diekspor.', 'info'); return; }
-      const headers = ['ID', 'Tanggal', 'Instansi', 'Akun Pengawas', 'Nama Toko', 'Produk', 'Merek', 'NPB', 'Status Validasi SNI', 'Status Kirim'];
-      const rows = reports.map(r => [r.id, r.timestamp, `"${r.agency}"`, `"${r.inspectorAccount || '-'}"`, `"${r.businessName}"`, `"${r.productType}"`, `"${r.brand}"`, `"${r.npbNumber}"`, `"${r.sniStatus}"`, r.synced ? 'Tersinkron' : 'Belum Sinkron']);
-      const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
-      const link = document.createElement('a');
-      link.setAttribute('href', encodeURI(csvContent));
-      link.setAttribute('download', `data_pengawasan_sni_${Date.now()}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      showToast('Ekspor CSV', 'File laporan berhasil diunduh dalam format CSV.', 'success');
-    });
-
-    document.getElementById('btn-sync-now').addEventListener('click', () => {
-      const unsynced = reports.filter(r => !r.synced);
-      if (unsynced.length === 0) {
-        showToast('Sinkronisasi', 'Semua data sudah tersinkron dengan server pusat.', 'success');
-        return;
-      }
-      showToast('Sinkronisasi Masal', `Mengirimkan ${unsynced.length} data antrean ke server pusat...`, 'info');
-      let count = 0;
-      unsynced.forEach(r => {
-        syncSingleReport(r, () => {
-          count++;
-          if (count === unsynced.length) {
-            showToast('Sinkronisasi Selesai', 'Semua antrean data berhasil disinkronkan!', 'success');
-            renderHistory();
-          }
-        });
-      });
-    });
-
-    document.getElementById('btn-backup').addEventListener('click', () => {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(reports, null, 2));
-      const downloadAnchor = document.createElement('a');
-      downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", `backup_pagar_pktn_${Date.now()}.json`);
-      document.body.appendChild(downloadAnchor);
-      downloadAnchor.click();
-      downloadAnchor.remove();
-      showToast('Backup Berhasil', 'File cadangan JSON berhasil diunduh.', 'success');
-    });
-
-    document.getElementById('btn-reset-data').addEventListener('click', () => {
-      if (confirm('Hapus semua data lokal?')) {
-        reports = [];
-        localStorage.removeItem('pagar_pktn_reports');
-        renderHistory();
-        renderAnalytics();
-        showToast('Reset Data', 'Semua data lokal perangkat telah dibersihkan.', 'info');
-      }
+      if (reports.length === 0) return;
+      const csvContent = 'data:text/csv;charset=utf-8,' + ['ID,Toko,Produk,Status'].map(e=>e).join('\n') + '\n' + reports.map(r => `"${r.id}","${r.businessName}","${r.productType}","${r.sniStatus}"`).join('\n');
+      const link = document.createElement('a'); link.setAttribute('href', encodeURI(csvContent)); link.setAttribute('download', `laporan_${Date.now()}.csv`);
+      document.body.appendChild(link); link.click(); link.remove();
+      showToast('Ekspor', 'File CSV diunduh.', 'success');
     });
 
     checkSession();
-    updateNetworkStatus();
     lucide.createIcons();
   </script>
  </body>
