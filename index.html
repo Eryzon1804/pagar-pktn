@@ -610,7 +610,7 @@
      </div>
     </section>
 
-    <!-- 5. HALAMAN PANDUAN SOP UTUH (DIGABUNGKAN SECARA KOMPREHENSIF) -->
+    <!-- 5. HALAMAN PANDUAN SOP -->
     <section id="page-guide" class="page" aria-labelledby="guide-page-title">
      <div class="mb-5">
       <p class="text-xs font-bold uppercase tracking-wider text-blue-600">Panduan SOP</p>
@@ -628,8 +628,8 @@
        <h3 class="font-extrabold text-blue-600 flex items-center gap-2"><i data-lucide="file-text" class="w-4 h-4"></i> 2. Pengisian Formulir &amp; Fitur Dinamis Lapangan</h3>
        <ul class="list-disc pl-5 text-xs text-slate-600 space-y-1">
         <li><strong>Tim &amp; Toko:</strong> Masukkan instansi, nama petugas (dapat ditambah via tombol *Tambah Petugas*), identitas toko, dan nomor WhatsApp.</li>
-        <li><strong>Pengambilan GPS:</strong> Tombol <em>Ambil GPS</em> berfungsi membaca koordinat lintang/bujur secara akurat **bahkan dalam keadaan offline tanpa sinyal internet**.</li>
-        <li><strong>Negara Asal &amp; Produsen/Importir Dinamis:</strong> Jika memilih <em>Indonesia</em>, sistem otomatis menampilkan kolom <strong>Nama &amp; Alamat Produsen</strong>. Jika memilih negara lain, sistem otomatis menampilkan kolom <strong>Nama &amp; Alamat Importir</strong>.</li>
+        <li><strong>Pengambilan GPS:</strong> Tombol <em>Ambil GPS</em> membaca koordinat lintang/bujur secara akurat **bahkan dalam keadaan offline tanpa sinyal internet**.</li>
+        <li><strong>Negara Asal &amp; Produsen/Importir Dinamis:</strong> Memilih <em>Indonesia</em> otomatis memunculkan kolom **Nama &amp; Alamat Produsen**. Memilih negara lain memunculkan kolom **Nama &amp; Alamat Importir**.</li>
         <li><strong>Validasi SNI &amp; Bang Beni:</strong> Lakukan pengecekan keaslian nomor SNI melalui portal resmi **Bang Beni** (`https://bangbeni.bsn.go.id`).</li>
         <li><strong>Foto Lapangan:</strong> Unggah 5 kategori foto wajib langsung dari kamera perangkat HP.</li>
        </ul>
@@ -637,25 +637,25 @@
 
       <div class="section-card p-5 bg-white space-y-2">
        <h3 class="font-extrabold text-amber-600 flex items-center gap-2"><i data-lucide="cloud-off" class="w-4 h-4"></i> 3. Mode Offline &amp; Reminder Notifikasi</h3>
-       <p class="text-slate-600 text-xs leading-relaxed">Saat di area tanpa sinyal, data dan foto tetap tersimpan aman di memori lokal HP dengan status <em>Belum Terverifikasi</em>. Notifikasi pengingat (*push notification*) akan muncul di HP begitu koneksi internet pulih.</p>
+       <p class="text-slate-600 text-xs leading-relaxed">Saat di area tanpa sinyal, data dan foto tetap tersimpan aman di memori lokal HP dengan status <em>Belum Terverifikasi</em>. Notifikasi pengingat akan muncul begitu koneksi internet pulih.</p>
       </div>
 
       <div class="section-card p-5 bg-white space-y-2">
        <h3 class="font-extrabold text-blue-600 flex items-center gap-2"><i data-lucide="smartphone" class="w-4 h-4"></i> 4. Navigasi Cepat, FAB &amp; Mode Gelap (*Dark Mode*)</h3>
        <ul class="list-disc pl-5 text-xs text-slate-600 space-y-1">
-        <li><strong>Tombol Mengambang (FAB):</strong> Ketuk tombol bulat plus (`+`) di pojok kanan bawah dari halaman mana pun untuk langsung membuka formulir laporan baru secara instan tanpa harus kembali ke menu utama.</li>
-        <li><strong>Menu Laci (Drawer Menu):</strong> Ketuk ikon garis tiga di pojok kanan atas untuk mengakses menu pendukung (*Statistik, Sinkron, SOP, UU/SNI, dan Atur*), menjaga tampilan bawah tetap bersih.</li>
-        <li><strong>Mode Gelap (Dark Mode):</strong> Gunakan tombol ikon bulan/matahari di header atas untuk mengaktifkan tema gelap guna mengurangi silau saat memeriksa toko di bawah terik matahari atau saat inspeksi malam hari.</li>
+        <li><strong>Tombol Mengambang (FAB):</strong> Ketuk tombol bulat plus (`+`) di pojok kanan bawah dari halaman mana pun untuk langsung membuka formulir laporan baru secara instan.</li>
+        <li><strong>Menu Laci (Drawer Menu):</strong> Ketuk ikon garis tiga di pojok kanan atas untuk mengakses menu pendukung (*Statistik, Sinkron, SOP, UU/SNI, dan Atur*).</li>
+        <li><strong>Mode Gelap (Dark Mode):</strong> Gunakan tombol ikon bulan/matahari di header atas untuk mengaktifkan tema gelap guna mengurangi silau di bawah terik matahari.</li>
        </ul>
       </div>
 
       <div class="section-card p-5 bg-white space-y-2">
        <h3 class="font-extrabold text-emerald-600 flex items-center gap-2"><i data-lucide="palette" class="w-4 h-4"></i> 5. Panduan Membaca Indikator Warna Status</h3>
-       <p class="text-slate-600 text-xs leading-relaxed mb-1">Garis tepi tebal pada kartu laporan di menu Riwayat dan Pencarian menunjukkan status dengan cepat:</p>
+       <p class="text-slate-600 text-xs leading-relaxed mb-1">Garis tepi tebal pada kartu laporan menunjukkan status:</p>
        <ul class="list-disc pl-5 text-xs text-slate-600 space-y-1">
-        <li><strong class="text-emerald-600">Garis Hijau (Legal):</strong> Produk terdaftar, sesuai, dan memenuhi standar SNI.</li>
-        <li><strong class="text-rose-600">Garis Merah (Temuan):</strong> Produk merupakan temuan pelanggaran / tidak terdaftar.</li>
-        <li><strong class="text-amber-600">Garis Kuning (Pending):</strong> Produk belum diverifikasi atau spesifikasinya tidak sesuai (butuh pengecekan saat online).</li>
+        <li><strong class="text-emerald-600">Garis Hijau (Legal):</strong> Produk terdaftar dan sesuai SNI.</li>
+        <li><strong class="text-rose-600">Garis Merah (Temuan):</strong> Produk merupakan temuan pelanggaran.</li>
+        <li><strong class="text-amber-600">Garis Kuning (Pending):</strong> Produk belum diverifikasi atau spesifikasinya tidak sesuai.</li>
        </ul>
       </div>
 
@@ -663,15 +663,15 @@
        <h3 class="font-extrabold text-blue-600 flex items-center gap-2"><i data-lucide="layout-grid" class="w-4 h-4"></i> 6. Panduan 10 Menu Utama Aplikasi</h3>
        <ul class="list-disc pl-5 text-xs text-slate-600 space-y-1">
         <li><strong>Form:</strong> Mengisi dan mengirim laporan pengawasan baru.</li>
-        <li><strong>Riwayat:</strong> Memantau status pengiriman, menghapus data, mengekspor CSV, membuka Detail untuk verifikasi ulang, serta mengunduh rekap laporan dalam format **Microsoft Word (.docx)**.</li>
-        <li><strong>Statistik:</strong> Grafik visual tingkat kepatuhan SNI (Legal vs Temuan).</li>
-        <li><strong>Sinkron:</strong> Mengirim antrean data offline saat kembali online dan mencadangkan data ke file JSON.</li>
+        <li><strong>Riwayat:</strong> Memantau status, ekspor CSV, unduh **Word (.docx)**, dan verifikasi ulang.</li>
+        <li><strong>Statistik:</strong> Grafik visual tingkat kepatuhan SNI.</li>
+        <li><strong>Sinkron:</strong> Mengirim antrean offline dan *backup* JSON.</li>
         <li><strong>SOP:</strong> Petunjuk teknis operasional aplikasi (halaman ini).</li>
-        <li><strong>UU/SNI:</strong> Direktori dasar hukum resmi (UU Perlindungan Konsumen, UU Standardisasi, dan Permendag).</li>
-        <li><strong>Profil:</strong> Menampilkan informasi kartu identitas petugas yang sedang aktif.</li>
-        <li><strong>Cari:</strong> Pencarian cepat laporan berdasarkan nama toko, merek, atau komoditas.</li>
-        <li><strong>Peta:</strong> Daftar titik koordinat toko yang dilengkapi tombol navigasi langsung ke **Google Maps**.</li>
-        <li><strong>Atur:</strong> Pusat bantuan (*helpdesk* IT Kementerian Perdagangan) dan info aplikasi.</li>
+        <li><strong>UU/SNI:</strong> Direktori dasar hukum resmi (UU Perlindungan Konsumen, UU Standardisasi, Permendag).</li>
+        <li><strong>Profil:</strong> Kartu identitas akun petugas yang aktif.</li>
+        <li><strong>Cari:</strong> Pencarian cepat laporan.</li>
+        <li><strong>Peta:</strong> Daftar titik koordinat toko dan navigasi **Google Maps**.</li>
+        <li><strong>Atur:</strong> Pusat bantuan (*helpdesk* IT Kementerian Perdagangan).</li>
        </ul>
       </div>
      </div>
@@ -807,7 +807,7 @@
    </nav>
   </div>
 
-  <!-- MENU LACI (DRAWER) -->
+  <!-- MENU LACI (DRAWER) DENGAN PERBAIKAN STRUKTUR TEKS -->
   <div id="drawer-backdrop" class="drawer-backdrop"></div>
   <div id="drawer-panel" class="drawer-panel">
    <div class="flex items-center justify-between border-b pb-3">
@@ -815,11 +815,21 @@
     <button id="btn-close-drawer" class="secondary-btn w-8 h-8 p-0 rounded-full flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button>
    </div>
    <div class="space-y-2 flex-1 overflow-y-auto">
-    <button data-target="page-analytics" class="drawer-menu-item w-full text-left px-3 py-3 rounded-xl flex items-center gap-3 font-semibold text-xs hover:bg-blue-50 text-slate-700" type="button"><i data-lucide="bar-chart-3" class="w-4 h-4 text-blue-600"><span>Statistik Kepatuhan</span></i></button>
-    <button data-target="page-sync" class="drawer-menu-item w-full text-left px-3 py-3 rounded-xl flex items-center gap-3 font-semibold text-xs hover:bg-blue-50 text-slate-700" type="button"><i data-lucide="cloud" class="w-4 h-4 text-blue-600"><span>Sinkron &amp; Backup</span></i></button>
-    <button data-target="page-guide" class="drawer-menu-item w-full text-left px-3 py-3 rounded-xl flex items-center gap-3 font-semibold text-xs hover:bg-blue-50 text-slate-700" type="button"><i data-lucide="book-open" class="w-4 h-4 text-blue-600"><span>Panduan SOP</span></i></button>
-    <button data-target="page-regulasi" class="drawer-menu-item w-full text-left px-3 py-3 rounded-xl flex items-center gap-3 font-semibold text-xs hover:bg-blue-50 text-slate-700" type="button"><i data-lucide="scale" class="w-4 h-4 text-blue-600"><span>Direktori UU / SNI</span></i></button>
-    <button data-target="page-settings" class="drawer-menu-item w-full text-left px-3 py-3 rounded-xl flex items-center gap-3 font-semibold text-xs hover:bg-blue-50 text-slate-700" type="button"><i data-lucide="settings" class="w-4 h-4 text-blue-600"><span>Pengaturan &amp; Helpdesk</span></i></button>
+    <button data-target="page-analytics" class="drawer-menu-item w-full text-left px-3 py-3 rounded-xl flex items-center gap-3 font-semibold text-xs hover:bg-blue-50 text-slate-700" type="button">
+     <i data-lucide="bar-chart-3" class="w-4 h-4 text-blue-600 shrink-0"></i><span>Statistik Kepatuhan</span>
+    </button>
+    <button data-target="page-sync" class="drawer-menu-item w-full text-left px-3 py-3 rounded-xl flex items-center gap-3 font-semibold text-xs hover:bg-blue-50 text-slate-700" type="button">
+     <i data-lucide="cloud" class="w-4 h-4 text-blue-600 shrink-0"></i><span>Sinkron &amp; Backup</span>
+    </button>
+    <button data-target="page-guide" class="drawer-menu-item w-full text-left px-3 py-3 rounded-xl flex items-center gap-3 font-semibold text-xs hover:bg-blue-50 text-slate-700" type="button">
+     <i data-lucide="book-open" class="w-4 h-4 text-blue-600 shrink-0"></i><span>Panduan SOP</span>
+    </button>
+    <button data-target="page-regulasi" class="drawer-menu-item w-full text-left px-3 py-3 rounded-xl flex items-center gap-3 font-semibold text-xs hover:bg-blue-50 text-slate-700" type="button">
+     <i data-lucide="scale" class="w-4 h-4 text-blue-600 shrink-0"></i><span>Direktori UU / SNI</span>
+    </button>
+    <button data-target="page-settings" class="drawer-menu-item w-full text-left px-3 py-3 rounded-xl flex items-center gap-3 font-semibold text-xs hover:bg-blue-50 text-slate-700" type="button">
+     <i data-lucide="settings" class="w-4 h-4 text-blue-600 shrink-0"></i><span>Pengaturan &amp; Helpdesk</span>
+    </button>
    </div>
   </div>
 
