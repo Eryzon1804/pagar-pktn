@@ -521,7 +521,7 @@
         <div class="section-icon"><i data-lucide="camera"></i></div>
         <div>
          <h3 class="font-bold text-base">6. Dokumentasi Foto Lapangan</h3>
-         <p class="text-xs text-slate-500">Ambil foto langsung menggunakan kamera perangkat HP Anda (5 Kategori, Otomatis Terkompres).</p>
+         <p class="text-xs text-slate-500">Ambil foto langsung menggunakan kamera perangkat HP Anda (5 Kategori, Resolusi Penuh).</p>
         </div>
        </div>
        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -627,7 +627,7 @@
     <section id="page-sync" class="page" aria-labelledby="sync-page-title">
      <div class="mb-5">
       <p class="text-xs font-bold uppercase tracking-wider text-blue-600">Manajemen Data</p>
-      <h2 id="sync-page-title" class="text-xl font-extrabold mt-0.5 tracking-tight">Penyinkronan &amp; Backup Cloud</h2>
+      <h2 id="sync-page-title" class="text-xl font-extrabold mt-0.5 tracking-tight">Penyinkronan &amp; Database (IndexedDB)</h2>
      </div>
      <div class="space-y-4">
       <div class="section-card p-5 bg-white space-y-4">
@@ -635,13 +635,8 @@
         <div class="section-icon"><i data-lucide="cloud-cog" class="w-5 h-5"></i></div>
         <div>
          <h3 class="font-bold text-base">Sinkronisasi ke Cloud (GAS)</h3>
-         <p id="sync-status-desc" class="text-xs text-slate-500">Kirim antrean laporan lokal ke server pusat.</p>
+         <p id="sync-status-desc" class="text-xs text-slate-500">Kirim antrean laporan dan foto resolusi penuh ke server pusat.</p>
         </div>
-       </div>
-       <div>
-        <label class="field-label" for="gas-endpoint-url">URL Web App Google Apps Script</label>
-        <input id="gas-endpoint-url" class="field-control text-xs" placeholder="https://script.google.com/macros/s/.../exec">
-        <p class="text-[11px] text-slate-500 mt-1">Masukkan URL Web App GAS Anda agar tombol sinkron otomatis mengirim data ke Google Sheets.</p>
        </div>
        <div class="flex flex-col sm:flex-row gap-2 pt-2">
         <button id="btn-sync-now" type="button" class="primary-btn px-4 py-3 flex-1"><i data-lucide="cloud-upload" class="w-4 h-4"></i> Sinkronkan Antrean ke Cloud</button> 
@@ -653,10 +648,10 @@
         <div class="section-icon bg-rose-50 text-rose-600"><i data-lucide="alert-triangle" class="w-5 h-5"></i></div>
         <div>
          <h3 class="font-bold text-rose-900 text-base">Zona Berbahaya</h3>
-         <p class="text-xs text-slate-500">Hapus seluruh riwayat tersimpan di perangkat ini untuk keperluan uji coba.</p>
+         <p class="text-xs text-slate-500">Hapus seluruh riwayat tersimpan di database perangkat untuk keperluan uji coba.</p>
         </div>
        </div>
-       <button id="btn-reset-data" type="button" class="danger-btn w-full py-3 text-xs font-bold"><i data-lucide="trash-2" class="w-4 h-4"></i> Hapus Semua Data Lokal</button>
+       <button id="btn-reset-data" type="button" class="danger-btn w-full py-3 text-xs font-bold"><i data-lucide="trash-2" class="w-4 h-4"></i> Hapus Semua Data Database</button>
       </div>
      </div>
     </section>
@@ -672,28 +667,30 @@
      <div class="space-y-4 text-sm">
       <div class="section-card p-5 bg-white space-y-2">
        <h3 class="font-extrabold text-blue-600 flex items-center gap-2"><i data-lucide="user-plus" class="w-4 h-4"></i> 1. Otentikasi, Akun &amp; Sesi Petugas</h3>
-       <p class="text-slate-600 text-xs leading-relaxed">Pengguna wajib masuk menggunakan akun Gmail resmi. Nama petugas pertama pada formulir otomatis terisi nama akun yang sedang aktif.</p>
+       <p class="text-slate-600 text-xs leading-relaxed">Pengguna wajib masuk menggunakan akun Gmail resmi. Akun baru berstatus <em>Pending</em> sampai disetujui Admin pusat. Centang opsi <strong>Ingat Saya</strong> agar sesi login tetap tersimpan di perangkat. Nama petugas pengawas pertama otomatis terisi sesuai nama akun yang aktif.</p>
       </div>
 
       <div class="section-card p-5 bg-white space-y-2">
-       <h3 class="font-extrabold text-blue-600 flex items-center gap-2"><i data-lucide="file-text" class="w-4 h-4"></i> 2. Kompresi Foto Otomatis &amp; Sinkron Cloud</h3>
+       <h3 class="font-extrabold text-blue-600 flex items-center gap-2"><i data-lucide="file-text" class="w-4 h-4"></i> 2. Pengisian Form &amp; Dropdown Ketersediaan SNI</h3>
        <ul class="list-disc pl-5 text-xs text-slate-600 space-y-1">
-        <li><strong>Kompresi Foto:</strong> Setiap foto kamera otomatis dioptimalkan ukurannya agar hemat memori HP dan cepat saat dikirim.</li>
-        <li><strong>Sinkronisasi Cloud:</strong> Petugas dapat memasukkan URL Google Apps Script di menu *Sinkron & Backup* untuk langsung mengirim laporan ke database pusat saat online.</li>
-        <li><strong>Hapus Laporan:</strong> Gunakan tombol hapus untuk membersihkan data uji coba sebelum turun ke lapangan.</li>
+        <li><strong>Instansi Otomatis:</strong> Instansi langsung terisi *Dinas Perindustrian dan Perdagangan Pemerintah Provinsi NTT*.</li>
+        <li><strong>Dropdown Tersedia / Tidak Ada:</strong> Pada bagian NPB dan No. SNI, pilih <em>Tersedia</em> untuk memasukkan nomornya, atau pilih <em>Tidak Ada</em> jika barang tidak mencantumkan nomor.</li>
+        <li><strong>Negara Asal Lainnya:</strong> Jika memilih *Lainnya (Impor)*, masukkan nama negara pada kolom tambahan yang muncul.</li>
+        <li><strong>Automasi Temuan:</strong> Jika Anda memilih <em>Tidak Ada</em> pada nomor SNI produk/kemasan, sistem otomatis mengubah hasil validasi menjadi **"Tidak Terdaftar (Temuan)"**.</li>
+        <li><strong>Fitur Edit & Hapus Laporan:</strong> Laporan dapat diubah atau dihapus satu per satu maupun secara keseluruhan (untuk uji coba).</li>
        </ul>
       </div>
 
       <div class="section-card p-5 bg-white space-y-2">
-       <h3 class="font-extrabold text-amber-600 flex items-center gap-2"><i data-lucide="cloud-off" class="w-4 h-4"></i> 3. Mode Offline &amp; Reminder Notifikasi</h3>
-       <p class="text-slate-600 text-xs leading-relaxed">Saat di area tanpa sinyal, data dan foto tetap tersimpan aman di memori lokal HP dengan status <em>Belum Terverifikasi</em>.</p>
+       <h3 class="font-extrabold text-amber-600 flex items-center gap-2"><i data-lucide="cloud-off" class="w-4 h-4"></i> 3. Mode Offline, IndexedDB &amp; Sinkron Cloud</h3>
+       <p class="text-slate-600 text-xs leading-relaxed">Saat di area tanpa sinyal, data dan foto kualitas penuh tersimpan aman di database lokal (*IndexedDB*) HP. Saat kembali online, petugas dapat melakukan sinkronisasi langsung ke Google Sheets, Google Drive, dan Google Docs pusat melalui tombol sinkron.</p>
       </div>
 
       <div class="section-card p-5 bg-white space-y-2">
        <h3 class="font-extrabold text-blue-600 flex items-center gap-2"><i data-lucide="smartphone" class="w-4 h-4"></i> 4. Navigasi Cepat, FAB &amp; Mode Gelap</h3>
        <ul class="list-disc pl-5 text-xs text-slate-600 space-y-1">
         <li><strong>Tombol Mengambang (FAB):</strong> Ketuk tombol bulat plus (`+`) di pojok kanan bawah untuk membuka form baru secara instan.</li>
-        <li><strong>Menu Laci (Drawer Menu):</strong> Ketuk ikon garis tiga di pojok kanan atas untuk menu pendukung.</li>
+        <li><strong>Menu Laci (Drawer Menu):</strong> Ketuk ikon garis tiga di pojok kanan atas untuk menu pendukung (Statistik, Sinkron, SOP, Regulasi, Pengaturan).</li>
         <li><strong>Mode Gelap (Dark Mode):</strong> Gunakan tombol ikon bulan/matahari di header atas.</li>
        </ul>
       </div>
@@ -826,7 +823,7 @@
       </div>
       <div class="section-card p-5 bg-white space-y-2">
        <h3 class="font-bold text-sm text-slate-800 flex items-center gap-2"><i data-lucide="info" class="w-4 h-4 text-blue-600"></i> Tentang Aplikasi</h3>
-       <p class="text-xs text-slate-500">PAGAR PKTN Versi 2026.0 — Sistem Pengawasan Barang Beredar &amp; SNI Terintegrasi.</p>
+       <p class="text-xs text-slate-500">PAGAR PKTN Versi 2026.0 — Sistem Pengawasan Barang Beredar &amp; SNI Terintegrasi (IndexedDB).</p>
       </div>
      </div>
     </section>
@@ -921,8 +918,85 @@
   </div>
 
   <script>
-    let reports = JSON.parse(localStorage.getItem('pagar_pktn_reports') || '[]');
+    // INISIALISASI INDEXEDDB
+    let db = null;
+    let reports = [];
     let isOnline = navigator.onLine;
+
+    const DB_NAME = 'PagarPKTNDB';
+    const STORE_NAME = 'reports';
+
+    function initDB() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, 1);
+        request.onerror = e => reject(e.target.error);
+        request.onsuccess = e => {
+          db = e.target.result;
+          loadReportsFromDB().then(() => resolve(db));
+        };
+        request.onupgradeneeded = e => {
+          const database = e.target.result;
+          if (!database.objectStoreNames.contains(STORE_NAME)) {
+            database.createObjectStore(STORE_NAME, { keyPath: 'id' });
+          }
+        };
+      });
+    }
+
+    function loadReportsFromDB() {
+      return new Promise((resolve) => {
+        if (!db) { resolve([]); return; }
+        const transaction = db.transaction([STORE_NAME], 'readonly');
+        const store = transaction.objectStore(STORE_NAME);
+        const request = store.getAll();
+        request.onsuccess = e => {
+          reports = e.target.result.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+          renderHistory();
+          renderAnalytics();
+          resolve(reports);
+        };
+        request.onerror = () => resolve([]);
+      });
+    }
+
+    function saveReportToDB(reportData) {
+      return new Promise((resolve, reject) => {
+        const transaction = db.transaction([STORE_NAME], 'readwrite');
+        const store = transaction.objectStore(STORE_NAME);
+        const request = store.put(reportData);
+        request.onsuccess = () => {
+          loadReportsFromDB().then(() => resolve());
+        };
+        request.onerror = e => reject(e.target.error);
+      });
+    }
+
+    function deleteReportFromDB(id) {
+      return new Promise((resolve, reject) => {
+        const transaction = db.transaction([STORE_NAME], 'readwrite');
+        const store = transaction.objectStore(STORE_NAME);
+        const request = store.delete(id);
+        request.onsuccess = () => {
+          loadReportsFromDB().then(() => resolve());
+        };
+        request.onerror = e => reject(e.target.error);
+      });
+    }
+
+    function clearAllReportsDB() {
+      return new Promise((resolve, reject) => {
+        const transaction = db.transaction([STORE_NAME], 'readwrite');
+        const store = transaction.objectStore(STORE_NAME);
+        const request = store.clear();
+        request.onsuccess = () => {
+          reports = [];
+          renderHistory();
+          renderAnalytics();
+          resolve();
+        };
+        request.onerror = e => reject(e.target.error);
+      });
+    }
 
     // TEMA DARK/LIGHT
     const currentTheme = localStorage.getItem('pagar_pktn_theme') || 'light';
@@ -1314,43 +1388,12 @@
       });
     });
 
-    // FUNGSI SARAN 3: KOMPRESI FOTO OTOMATIS (Maks lebar 1000px, kualitas 75%)
-    function compressImage(file) {
-      return new Promise((resolve) => {
+    function readFileAsBase64(file) {
+      return new Promise((resolve, reject) => {
         if (!file) { resolve(null); return; }
         const reader = new FileReader();
-        reader.onload = event => {
-          const img = new Image();
-          img.onload = () => {
-            const canvas = document.createElement('canvas');
-            let width = img.width;
-            let height = img.height;
-            const maxWidth = 1000;
-            const maxHeight = 1000;
-
-            if (width > height) {
-              if (width > maxWidth) {
-                height = Math.round((height * maxWidth) / width);
-                width = maxWidth;
-              }
-            } else {
-              if (height > maxHeight) {
-                width = Math.round((width * maxHeight) / height);
-                height = maxHeight;
-              }
-            }
-
-            canvas.width = width;
-            canvas.height = height;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, width, height);
-            
-            // Kompres ke format JPEG dengan kualitas 75%
-            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.75);
-            resolve({ name: file.name, data: compressedDataUrl });
-          };
-          img.src = event.target.result;
-        };
+        reader.onload = () => resolve({ name: file.name, data: reader.result });
+        reader.onerror = error => reject(error);
         reader.readAsDataURL(file);
       });
     }
@@ -1453,17 +1496,16 @@
 
       errBox.classList.add('hidden');
       submitBtn.disabled = true;
-      submitBtnText.textContent = "Mengompres Foto & Menyimpan...";
-      showToast('Memproses Data', 'Mengompres foto lapangan agar ukuran ringan...', 'info');
+      submitBtnText.textContent = "Membaca Foto Resolusi Penuh...";
+      showToast('Memproses Data', 'Membaca arsip foto resolusi penuh...', 'info');
 
       try {
-        // Kompresi foto secara paralel
         const [specData, snibarwData, snikemData, usageData, warrantyData] = await Promise.all([
-          compressImage(document.getElementById('photo-spec').files[0]),
-          compressImage(document.getElementById('photo-snibarw').files[0]),
-          compressImage(document.getElementById('photo-snikem').files[0]),
-          compressImage(document.getElementById('photo-usage').files[0]),
-          compressImage(document.getElementById('photo-warranty').files[0])
+          readFileAsBase64(document.getElementById('photo-spec').files[0]),
+          readFileAsBase64(document.getElementById('photo-snibarw').files[0]),
+          readFileAsBase64(document.getElementById('photo-snikem').files[0]),
+          readFileAsBase64(document.getElementById('photo-usage').files[0]),
+          readFileAsBase64(document.getElementById('photo-warranty').files[0])
         ]);
 
         const formData = {
@@ -1481,10 +1523,9 @@
           synced: false
         };
 
-        reports.unshift(formData);
-        localStorage.setItem('pagar_pktn_reports', JSON.stringify(reports));
+        await saveReportToDB(formData);
 
-        showToast('Berhasil', 'Laporan dan arsip foto terkompres tersimpan.', 'success');
+        showToast('Berhasil', 'Laporan dan arsip foto tersimpan di IndexedDB.', 'success');
         form.reset();
         
         document.getElementById('agency').value = "Dinas Perindustrian dan Perdagangan Pemerintah Provinsi NTT";
@@ -1502,19 +1543,14 @@
       }
     });
 
-    // FUNGSI SARAN 2: SINKRONISASI KE GOOGLE APPS SCRIPT (GAS)
+    // FUNGSI SINKRONISASI OTOMATIS KE CLOUD (SHEETS, DRIVE, DOCS)
     document.getElementById('btn-sync-now').addEventListener('click', async () => {
-      const endpointUrl = document.getElementById('gas-endpoint-url').value.trim();
+      // URL Web App Google Apps Script yang sudah ditanamkan secara permanen
+      const endpointUrl = "https://script.google.com/macros/s/AKfycbycZ1Dn-oWfbhlrIuqE5PfdWVnEouyYsS3WXt4LACNbw1x9YfDFx2HQYd0QAvGzj2ah/exec";
       const unsynced = reports.filter(r => !r.synced);
 
       if (unsynced.length === 0) {
         showToast('Info', 'Semua laporan sudah tersinkronisasi.', 'info');
-        return;
-      }
-
-      if (!endpointUrl) {
-        showToast('Perhatian', 'URL Web App GAS belum diisi di menu Sinkron.', 'error');
-        switchPage('page-sync');
         return;
       }
 
@@ -1523,28 +1559,28 @@
         return;
       }
 
-      showToast('Sinkronisasi', `Mengirim ${unsynced.length} laporan ke server pusat...`, 'info');
+      showToast('Sinkronisasi', `Mengirim ${unsynced.length} laporan ke Cloud (Sheets & Drive)...`, 'info');
       
       let successCount = 0;
       for (let r of unsynced) {
         try {
-          const response = await fetch(endpointUrl, {
+          await fetch(endpointUrl, {
             method: 'POST',
-            mode: 'no-cors', // Diperlukan untuk Google Apps Script Web App
+            mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(r)
           });
           r.synced = true;
+          await saveReportToDB(r);
           successCount++;
         } catch (err) {
           console.error('Gagal sync ID:', r.id, err);
         }
       }
 
-      localStorage.setItem('pagar_pktn_reports', JSON.stringify(reports));
       renderHistory();
       updateSyncStatusDesc();
-      showToast('Sinkronisasi Selesai', `${successCount} dari ${unsynced.length} laporan berhasil dikirim ke cloud.`, 'success');
+      showToast('Sinkronisasi Selesai', `${successCount} dari ${unsynced.length} laporan berhasil dikirim ke Cloud pusat.`, 'success');
     });
 
     function updateSyncStatusDesc() {
@@ -1565,14 +1601,14 @@
       document.getElementById('stat-synced').textContent = reports.filter(r => r.synced).length;
       list.innerHTML = reports.length === 0 ? `<div class="empty-state"><p class="text-xs">Belum ada data laporan.</p></div>` : reports.map((r, i) => `
         <div class="history-card ${r.sniStatus.includes('Legal') ? 'legal' : (r.sniStatus.includes('Temuan') ? 'temuan' : 'pending-status')} flex justify-between items-center gap-3">
-          <div class="min-w-0 flex-1 cursor-pointer" onclick="openDetail(${i})">
+          <div class="min-w-0 flex-1 cursor-pointer" onclick="openDetail('${r.id}')">
             <span class="text-xs font-bold text-blue-600">${r.id}</span>
             <h4 class="font-bold text-sm truncate">${r.businessName}</h4>
             <p class="text-xs text-slate-500">${r.productType} • Status: ${r.sniStatus}</p>
           </div>
           <div class="flex gap-1 shrink-0">
-            <button type="button" class="secondary-btn px-3 py-2 text-xs font-bold" onclick="openDetail(${i})">Detail</button>
-            <button type="button" class="danger-btn w-9 h-9 p-0 flex items-center justify-center rounded-lg" onclick="deleteReport(${i})" title="Hapus Laporan"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+            <button type="button" class="secondary-btn px-3 py-2 text-xs font-bold" onclick="openDetail('${r.id}')">Detail</button>
+            <button type="button" class="danger-btn w-9 h-9 p-0 flex items-center justify-center rounded-lg" onclick="deleteReportItem('${r.id}')" title="Hapus Laporan"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
           </div>
         </div>
       `).join('');
@@ -1594,8 +1630,9 @@
       document.getElementById('bar-notspec').style.width = total ? `${(notspec / total) * 100}%` : '0%';
     }
 
-    window.openDetail = function(index) {
-      const r = reports[index];
+    window.openDetail = function(id) {
+      const r = reports.find(item => item.id === id);
+      if (!r) return;
       const modal = document.getElementById('detail-modal');
       document.getElementById('modal-title').textContent = `Detail Laporan: ${r.id}`;
       document.getElementById('modal-content').innerHTML = `
@@ -1608,13 +1645,13 @@
             <p class="text-xs font-semibold text-slate-700 dark:text-slate-300">Status Validasi: ${r.sniStatus}</p>
           </div>
           <div class="flex flex-col sm:flex-row gap-2">
-            <button type="button" class="primary-btn flex-1 py-2.5 text-xs font-bold" onclick="openEditReport(${index})">
+            <button type="button" class="primary-btn flex-1 py-2.5 text-xs font-bold" onclick="openEditReport('${r.id}')">
               <i data-lucide="edit-3" class="w-4 h-4"></i> Edit &amp; Perbarui
             </button>
-            <button type="button" class="secondary-btn px-4 py-2.5 text-xs font-bold bg-emerald-50 text-emerald-700 hover:bg-emerald-100" onclick="downloadWordReport(${index})">
+            <button type="button" class="secondary-btn px-4 py-2.5 text-xs font-bold bg-emerald-50 text-emerald-700 hover:bg-emerald-100" onclick="downloadWordReport('${r.id}')">
               Unduh .docx
             </button>
-            <button type="button" class="danger-btn px-4 py-2.5 text-xs font-bold" onclick="deleteReport(${index}); document.getElementById('detail-modal').classList.remove('open');">
+            <button type="button" class="danger-btn px-4 py-2.5 text-xs font-bold" onclick="deleteReportItem('${r.id}'); document.getElementById('detail-modal').classList.remove('open');">
               <i data-lucide="trash-2" class="w-4 h-4"></i> Hapus
             </button>
           </div>
@@ -1624,8 +1661,9 @@
       lucide.createIcons();
     };
 
-    window.openEditReport = function(index) {
-      const r = reports[index];
+    window.openEditReport = function(id) {
+      const r = reports.find(item => item.id === id);
+      if (!r) return;
       const modalContent = document.getElementById('modal-content');
       document.getElementById('modal-title').textContent = `Edit Laporan: ${r.id}`;
 
@@ -1656,7 +1694,7 @@
               <option value="Terdaftar namun Tidak Sesuai Spesifikasinya" ${r.sniStatus === 'Terdaftar namun Tidak Sesuai Spesifikasinya' ? 'selected' : ''}>Terdaftar namun Tidak Sesuai Spesifikasinya</option>
             </select>
           </div>
-          <button type="button" class="primary-btn w-full py-3 text-xs font-bold bg-emerald-600 hover:bg-emerald-700" onclick="saveEditedReport(${index})">
+          <button type="button" class="primary-btn w-full py-3 text-xs font-bold bg-emerald-600 hover:bg-emerald-700" onclick="saveEditedReport('${r.id}')">
             Simpan Perubahan
           </button>
         </form>
@@ -1664,7 +1702,10 @@
       lucide.createIcons();
     };
 
-    window.saveEditedReport = function(index) {
+    window.saveEditedReport = async function(id) {
+      const r = reports.find(item => item.id === id);
+      if (!r) return;
+
       const biz = document.getElementById('edit-business').value.trim();
       const prod = document.getElementById('edit-product').value.trim();
       const psni = document.getElementById('edit-prodsni').value.trim();
@@ -1676,21 +1717,22 @@
         return;
       }
 
-      reports[index].businessName = biz;
-      reports[index].productType = prod;
-      reports[index].productSni = psni;
-      reports[index].packageSni = ksni;
-      reports[index].sniStatus = stat;
-      reports[index].synced = isOnline;
+      r.businessName = biz;
+      r.productType = prod;
+      r.productSni = psni;
+      r.packageSni = ksni;
+      r.sniStatus = stat;
+      r.synced = isOnline;
 
-      localStorage.setItem('pagar_pktn_reports', JSON.stringify(reports));
+      await saveReportToDB(r);
       document.getElementById('detail-modal').classList.remove('open');
       renderHistory();
       showToast('Berhasil', 'Laporan berhasil diperbarui!', 'success');
     };
 
-    window.downloadWordReport = function(index) {
-      const r = reports[index];
+    window.downloadWordReport = function(id) {
+      const r = reports.find(item => item.id === id);
+      if (!r) return;
       showToast('Dokumen Word', 'Membuat file Word (.docx)...', 'info');
       if (typeof google !== 'undefined' && google.script && google.script.run) {
         google.script.run.withSuccessHandler(res => {
@@ -1702,26 +1744,20 @@
       }
     };
 
-    window.deleteReport = function(index) {
-      if (confirm('Hapus laporan ini dari perangkat?')) {
-        reports.splice(index, 1);
-        localStorage.setItem('pagar_pktn_reports', JSON.stringify(reports));
-        renderHistory();
-        renderAnalytics();
+    window.deleteReportItem = async function(id) {
+      if (confirm('Hapus laporan ini dari database?')) {
+        await deleteReportFromDB(id);
         showToast('Dihapus', 'Laporan berhasil dihapus.', 'info');
       }
     };
 
-    function clearAllReports() {
+    async function clearAllReports() {
       if (reports.length === 0) {
         showToast('Info', 'Tidak ada data laporan untuk dihapus.', 'info');
         return;
       }
-      if (confirm('PERINGATAN: Apakah Anda yakin ingin menghapus SELURUH riwayat laporan? Tindakan ini berguna untuk membersihkan data uji coba.')) {
-        reports = [];
-        localStorage.removeItem('pagar_pktn_reports');
-        renderHistory();
-        renderAnalytics();
+      if (confirm('PERINGATAN: Apakah Anda yakin ingin menghapus SELURUH riwayat laporan dari IndexedDB? Tindakan ini berguna untuk membersihkan data uji coba.')) {
+        await clearAllReportsDB();
         showToast('Dibersihkan', 'Semua riwayat laporan telah dihapus.', 'success');
       }
     }
@@ -1750,10 +1786,14 @@
       showToast('Backup', 'File cadangan JSON diunduh.', 'success');
     });
 
-    checkSession();
-    updateNetworkStatus();
-    updateSyncStatusDesc();
-    lucide.createIcons();
+    initDB().then(() => {
+      checkSession();
+      updateNetworkStatus();
+      updateSyncStatusDesc();
+      lucide.createIcons();
+    }).catch(err => {
+      console.error('Gagal menginisialisasi IndexedDB:', err);
+    });
   </script>
  </body>
 </html>
