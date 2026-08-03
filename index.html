@@ -6,6 +6,9 @@
   <title>PAGAR PKTN — Pengawasan Barang SNI</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <!-- Leaflet CSS & JS untuk Peta Visual Ringan -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
   <style>
     :root {
@@ -219,6 +222,7 @@
       background: linear-gradient(90deg, #1a73e8 0 33%, #ea4335 33% 66%, #fbbc05 66% 100%);
     }
     .hidden { display: none !important; }
+    #leaflet-map { width: 100%; height: 280px; border-radius: 12px; border: 1px solid var(--line); z-index: 10; }
     @media (min-width: 640px) {
       .app-shell { padding-bottom: 104px; }
       .page-content { padding-left: 24px; padding-right: 24px; }
@@ -265,7 +269,7 @@
      <div class="mb-5">
       <p class="font-bold uppercase tracking-wider text-[11px] text-blue-600">Formulir Pengawasan Lapangan</p>
       <h2 id="form-page-title" class="font-extrabold mt-0.5 text-2xl tracking-tight">Input Laporan Pengawasan</h2>
-      <p class="mt-1 text-sm text-slate-500">Isi data secara berurutan. Saat offline, status validasi otomatis tersimpan sebagai Belum Terverifikasi.</p>
+      <p class="mt-1 text-sm text-slate-500">Kolom bertanda bintang ( <span class="text-rose-600 font-bold">*</span> ) wajib diisi lengkap.</p>
      </div>
      
      <form id="inspection-form" class="space-y-4" novalidate>
@@ -274,16 +278,16 @@
         <div class="section-icon"><i data-lucide="users"></i></div>
         <div class="flex-1">
          <h3 class="font-bold text-base">1. Tim Pengawas</h3>
-         <p class="text-xs text-slate-500">Nama instansi dan petugas pengawas yang bertugas.</p>
+         <p class="text-xs text-slate-500">Instansi dan nama petugas pengawas yang bertugas.</p>
         </div>
        </div>
        <div>
-        <label class="field-label" for="agency">Instansi / Unit Kerja *</label> 
-        <input class="field-control" id="agency" name="agency" required placeholder="Contoh: Direktorat Tertib Niaga">
+        <label class="field-label" for="agency">Instansi / Unit Kerja <span class="text-rose-600">*</span></label> 
+        <input class="field-control" id="agency" name="agency" required value="Dinas Perindustrian dan Perdagangan Pemerintah Provinsi NTT" placeholder="Contoh: Dinas Perindustrian dan Perdagangan Pemerintah Provinsi NTT">
        </div>
        <div class="mt-4">
         <div class="flex items-center justify-between gap-3 mb-2">
-         <label class="field-label mb-0" for="officer-0">Nama Petugas Pengawas *</label> 
+         <label class="field-label mb-0" for="officer-0">Nama Petugas Pengawas <span class="text-rose-600">*</span></label> 
          <button id="add-officer" class="secondary-btn px-3 py-1.5 text-xs font-semibold" type="button"><i data-lucide="plus" class="w-3.5 h-3.5"></i> Tambah Petugas</button>
         </div>
         <div id="officer-list" class="space-y-2">
@@ -304,16 +308,16 @@
        </div>
        <div class="grid sm:grid-cols-2 gap-4">
         <div class="sm:col-span-2">
-         <label class="field-label" for="business-name">Nama Toko / Perusahaan *</label> 
+         <label class="field-label" for="business-name">Nama Toko / Perusahaan <span class="text-rose-600">*</span></label> 
          <input class="field-control" id="business-name" name="business_name" required placeholder="Contoh: Toko Maju Jaya">
         </div>
         <div>
-         <label class="field-label" for="owner-name">Nama Pemilik / Penanggung Jawab *</label> 
+         <label class="field-label" for="owner-name">Nama Pemilik / Penanggung Jawab <span class="text-rose-600">*</span></label> 
          <input class="field-control" id="owner-name" name="owner_name" required placeholder="Nama lengkap">
         </div>
         <div>
-         <label class="field-label" for="phone">Nomor Telepon / WhatsApp</label> 
-         <input class="field-control" id="phone" name="phone" type="tel" inputmode="tel" placeholder="08123456789">
+         <label class="field-label" for="phone">Nomor Telepon / WhatsApp <span class="text-rose-600">*</span> (9-15 digit)</label> 
+         <input class="field-control" id="phone" name="phone" type="tel" inputmode="numeric" required placeholder="08123456789">
         </div>
         <div class="sm:col-span-2">
          <label class="field-label" for="coordinates">Koordinat Lokasi (GPS)</label>
@@ -337,15 +341,15 @@
        </div>
        <div class="grid sm:grid-cols-2 gap-4">
         <div class="sm:col-span-2">
-         <label class="field-label" for="product-type">Jenis Produk / Komoditas *</label> 
+         <label class="field-label" for="product-type">Jenis Produk / Komoditas <span class="text-rose-600">*</span></label> 
          <input class="field-control" id="product-type" name="product_type" required placeholder="Contoh: Elektronik / Mainan Anak">
         </div>
         <div>
-         <label class="field-label" for="brand">Merek / Brand *</label> 
+         <label class="field-label" for="brand">Merek / Brand <span class="text-rose-600">*</span></label> 
          <input class="field-control" id="brand" name="brand" required placeholder="Merek barang">
         </div>
         <div>
-         <label class="field-label" for="country">Negara Asal *</label> 
+         <label class="field-label" for="country">Negara Asal <span class="text-rose-600">*</span></label> 
          <select class="field-control" id="country" name="country" required>
           <option value="Indonesia">Indonesia</option>
           <option value="China">China</option>
@@ -358,16 +362,22 @@
          </select>
         </div>
 
+        <!-- KONDISIONAL NEGARA LAINNYA -->
+        <div id="other-country-section" class="hidden sm:col-span-2">
+         <label class="field-label" for="other-country-name">Nama Negara Asal (Lainnya) <span class="text-rose-600">*</span></label>
+         <input class="field-control" id="other-country-name" name="other_country_name" placeholder="Contoh: India / Jerman / Taiwan">
+        </div>
+
         <div id="producer-section" class="sm:col-span-2 grid sm:grid-cols-2 gap-4 p-4 bg-slate-50/50 rounded-xl border border-slate-200">
          <div class="sm:col-span-2">
           <p class="text-xs font-bold text-blue-600 uppercase tracking-wider">Informasi Produsen Lokal</p>
          </div>
          <div>
-          <label class="field-label" for="producer-name">Nama Produsen *</label>
+          <label class="field-label" for="producer-name">Nama Produsen <span class="text-rose-600">*</span></label>
           <input class="field-control" id="producer-name" name="producer_name" placeholder="Nama perusahaan produsen">
          </div>
          <div>
-          <label class="field-label" for="producer-address">Alamat Produsen *</label>
+          <label class="field-label" for="producer-address">Alamat Produsen <span class="text-rose-600">*</span></label>
           <input class="field-control" id="producer-address" name="producer_address" placeholder="Alamat pabrik / produsen">
          </div>
         </div>
@@ -377,27 +387,60 @@
           <p class="text-xs font-bold text-blue-600 uppercase tracking-wider">Informasi Importir / Perwakilan</p>
          </div>
          <div>
-          <label class="field-label" for="importer-name">Nama Importir *</label>
+          <label class="field-label" for="importer-name">Nama Importir <span class="text-rose-600">*</span></label>
           <input class="field-control" id="importer-name" name="importer_name" placeholder="Nama perusahaan importir">
          </div>
          <div>
-          <label class="field-label" for="importer-address">Alamat Importir *</label>
+          <label class="field-label" for="importer-address">Alamat Importir <span class="text-rose-600">*</span></label>
           <input class="field-control" id="importer-address" name="importer_address" placeholder="Alamat kantor importir">
          </div>
         </div>
 
-        <div class="sm:col-span-2">
-         <label class="field-label" id="label-npb" for="npb-number">Nomor NPB (Nomor Pendaftaran Barang)</label> 
-         <input class="field-control" id="npb-number" name="npb_number" placeholder="Masukkan Nomor NPB jika ada">
+        <!-- NPB DROPDOWN KETERSEDIAAN -->
+        <div class="sm:col-span-2 grid sm:grid-cols-2 gap-4">
+         <div>
+          <label class="field-label" for="npb-availability">Ketersediaan Nomor NPB</label>
+          <select id="npb-availability" class="field-control">
+           <option value="Tersedia">Tersedia</option>
+           <option value="Tidak Ada" selected>Tidak Ada</option>
+          </select>
+         </div>
+         <div id="npb-input-container" class="hidden">
+          <label class="field-label" for="npb-number">Nomor NPB</label> 
+          <input class="field-control" id="npb-number" name="npb_number" placeholder="Masukkan Nomor NPB">
+         </div>
         </div>
-        <div>
-         <label class="field-label" id="label-product-sni" for="product-sni">Nomor SNI / No. LSPro pada Produk</label> 
-         <input class="field-control" id="product-sni" name="product_sni" placeholder="No. SNI Barang">
+
+        <!-- NO SNI PRODUK DROPDOWN KETERSEDIAAN -->
+        <div class="grid sm:grid-cols-2 gap-4 sm:col-span-2">
+         <div>
+          <label class="field-label" for="prod-sni-availability">No. SNI pada Produk <span class="text-rose-600">*</span></label>
+          <select id="prod-sni-availability" class="field-control">
+           <option value="Tersedia">Tersedia</option>
+           <option value="Tidak Ada">Tidak Ada</option>
+          </select>
+         </div>
+         <div id="prod-sni-input-container">
+          <label class="field-label" for="product-sni">Nomor SNI / LSPro Produk <span class="text-rose-600">*</span></label> 
+          <input class="field-control" id="product-sni" name="product_sni" placeholder="No. SNI Barang">
+         </div>
         </div>
-        <div>
-         <label class="field-label" for="package-sni">Nomor SNI / No. LSPro pada Kemasan</label> 
-         <input class="field-control" id="package-sni" name="package_sni" placeholder="No. SNI Kemasan">
+
+        <!-- NO SNI KEMASAN DROPDOWN KETERSEDIAAN -->
+        <div class="grid sm:grid-cols-2 gap-4 sm:col-span-2">
+         <div>
+          <label class="field-label" for="pkg-sni-availability">No. SNI pada Kemasan <span class="text-rose-600">*</span></label>
+          <select id="pkg-sni-availability" class="field-control">
+           <option value="Tersedia">Tersedia</option>
+           <option value="Tidak Ada">Tidak Ada</option>
+          </select>
+         </div>
+         <div id="pkg-sni-input-container">
+          <label class="field-label" for="package-sni">Nomor SNI / LSPro Kemasan <span class="text-rose-600">*</span></label> 
+          <input class="field-control" id="package-sni" name="package_sni" placeholder="No. SNI Kemasan">
+         </div>
         </div>
+
        </div>
       </article>
 
@@ -406,7 +449,7 @@
         <div class="section-icon"><i data-lucide="badge-check"></i></div>
         <div>
          <h3 class="font-bold text-base">4. Kriteria Status Validasi SNI</h3>
-         <p class="text-xs text-slate-500">Validasi nomor SNI via Link Bang Beni (Online) atau Simpan Belum Terverifikasi (Offline).</p>
+         <p class="text-xs text-slate-500">Status otomatis menjadi "Tidak Terdaftar (Temuan)" jika nomor SNI tidak ada.</p>
         </div>
        </div>
        <div class="space-y-4">
@@ -427,8 +470,8 @@
 
         <div id="sni-selector-wrapper">
          <label class="field-label flex items-center gap-2" for="sni-status">
-          <span>Hasil Pengecekan Validasi SNI *</span>
-          <span id="validation-hint" class="text-[11px] font-medium text-amber-600">(Perlu konfirmasi/validasi)</span>
+          <span>Hasil Pengecekan Validasi SNI <span class="text-rose-600">*</span></span>
+          <span id="validation-hint" class="text-[11px] font-medium text-amber-600">(Otomatis menyesuaikan ketersediaan SNI)</span>
          </label> 
          <select id="sni-status" name="sni_status" class="field-control" required> 
           <option value="Belum Terverifikasi">Belum Terverifikasi (Default Offline / Menunggu Cek)</option> 
@@ -478,7 +521,7 @@
         <div class="section-icon"><i data-lucide="camera"></i></div>
         <div>
          <h3 class="font-bold text-base">6. Dokumentasi Foto Lapangan</h3>
-         <p class="text-xs text-slate-500">Ambil foto langsung menggunakan kamera perangkat HP Anda (5 Kategori).</p>
+         <p class="text-xs text-slate-500">Ambil foto langsung menggunakan kamera perangkat HP Anda (5 Kategori, Otomatis Terkompres).</p>
         </div>
        </div>
        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -529,13 +572,16 @@
 
     <!-- 2. HALAMAN RIWAYAT -->
     <section id="page-history" class="page" aria-labelledby="history-page-title">
-     <div class="mb-5 flex items-center justify-between gap-4">
+     <div class="mb-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div>
        <p class="text-xs font-bold uppercase tracking-wider text-blue-600">Arsip Inspeksi</p>
        <h2 id="history-page-title" class="text-xl font-extrabold mt-0.5 tracking-tight">Riwayat &amp; Verifikasi Data</h2>
        <p class="text-xs text-slate-500 mt-0.5">Ubah status "Belum Terverifikasi" saat online lalu kirim ke server pusat.</p>
       </div>
-      <button id="export-all" type="button" class="secondary-btn px-3.5 py-2.5 text-xs font-semibold"><i data-lucide="download" class="w-4 h-4"></i> Ekspor CSV</button>
+      <div class="flex gap-2 w-full sm:w-auto">
+       <button id="export-all" type="button" class="secondary-btn px-3.5 py-2.5 text-xs font-semibold flex-1 sm:flex-none"><i data-lucide="download" class="w-4 h-4"></i> Ekspor CSV</button>
+       <button id="btn-clear-all" type="button" class="danger-btn px-3.5 py-2.5 text-xs font-semibold flex-1 sm:flex-none"><i data-lucide="trash-2" class="w-4 h-4"></i> Hapus Semua</button>
+      </div>
      </div>
      <div class="grid grid-cols-2 gap-3 mb-4">
       <div class="stat-card">
@@ -581,20 +627,25 @@
     <section id="page-sync" class="page" aria-labelledby="sync-page-title">
      <div class="mb-5">
       <p class="text-xs font-bold uppercase tracking-wider text-blue-600">Manajemen Data</p>
-      <h2 id="sync-page-title" class="text-xl font-extrabold mt-0.5 tracking-tight">Penyinkronan &amp; Backup</h2>
+      <h2 id="sync-page-title" class="text-xl font-extrabold mt-0.5 tracking-tight">Penyinkronan &amp; Backup Cloud</h2>
      </div>
      <div class="space-y-4">
       <div class="section-card p-5 bg-white space-y-4">
        <div class="flex items-center gap-3">
         <div class="section-icon"><i data-lucide="cloud-cog" class="w-5 h-5"></i></div>
         <div>
-         <h3 class="font-bold text-base">Status Koneksi &amp; Antrean</h3>
-         <p id="sync-status-desc" class="text-xs text-slate-500">Semua laporan tersinkron.</p>
+         <h3 class="font-bold text-base">Sinkronisasi ke Cloud (GAS)</h3>
+         <p id="sync-status-desc" class="text-xs text-slate-500">Kirim antrean laporan lokal ke server pusat.</p>
         </div>
        </div>
+       <div>
+        <label class="field-label" for="gas-endpoint-url">URL Web App Google Apps Script</label>
+        <input id="gas-endpoint-url" class="field-control text-xs" placeholder="https://script.google.com/macros/s/.../exec">
+        <p class="text-[11px] text-slate-500 mt-1">Masukkan URL Web App GAS Anda agar tombol sinkron otomatis mengirim data ke Google Sheets.</p>
+       </div>
        <div class="flex flex-col sm:flex-row gap-2 pt-2">
-        <button id="btn-sync-now" type="button" class="primary-btn px-4 py-3 flex-1"><i data-lucide="cloud-upload" class="w-4 h-4"></i> Sinkronkan Antrean</button> 
-        <button id="btn-backup" type="button" class="secondary-btn px-4 py-3 font-semibold"><i data-lucide="download" class="w-4 h-4"></i> Unduh Backup JSON</button>
+        <button id="btn-sync-now" type="button" class="primary-btn px-4 py-3 flex-1"><i data-lucide="cloud-upload" class="w-4 h-4"></i> Sinkronkan Antrean ke Cloud</button> 
+        <button id="btn-backup" type="button" class="secondary-btn px-4 py-3 font-semibold"><i data-lucide="download" class="w-4 h-4"></i> Backup JSON</button>
        </div>
       </div>
       <div class="section-card p-5 bg-white space-y-4 border-rose-100">
@@ -602,7 +653,7 @@
         <div class="section-icon bg-rose-50 text-rose-600"><i data-lucide="alert-triangle" class="w-5 h-5"></i></div>
         <div>
          <h3 class="font-bold text-rose-900 text-base">Zona Berbahaya</h3>
-         <p class="text-xs text-slate-500">Hapus seluruh riwayat tersimpan di perangkat ini.</p>
+         <p class="text-xs text-slate-500">Hapus seluruh riwayat tersimpan di perangkat ini untuk keperluan uji coba.</p>
         </div>
        </div>
        <button id="btn-reset-data" type="button" class="danger-btn w-full py-3 text-xs font-bold"><i data-lucide="trash-2" class="w-4 h-4"></i> Hapus Semua Data Lokal</button>
@@ -621,58 +672,44 @@
      <div class="space-y-4 text-sm">
       <div class="section-card p-5 bg-white space-y-2">
        <h3 class="font-extrabold text-blue-600 flex items-center gap-2"><i data-lucide="user-plus" class="w-4 h-4"></i> 1. Otentikasi, Akun &amp; Sesi Petugas</h3>
-       <p class="text-slate-600 text-xs leading-relaxed">Pengguna wajib masuk menggunakan akun Gmail resmi. Akun baru berstatus <em>Pending</em> sampai disetujui Admin pusat. Centang opsi <strong>Ingat Saya</strong> agar sesi login tetap tersimpan di perangkat. Informasi kartu identitas akun dapat dilihat melalui menu <strong>Profil</strong>.</p>
+       <p class="text-slate-600 text-xs leading-relaxed">Pengguna wajib masuk menggunakan akun Gmail resmi. Nama petugas pertama pada formulir otomatis terisi nama akun yang sedang aktif.</p>
       </div>
 
       <div class="section-card p-5 bg-white space-y-2">
-       <h3 class="font-extrabold text-blue-600 flex items-center gap-2"><i data-lucide="file-text" class="w-4 h-4"></i> 2. Pengisian Formulir &amp; Fitur Dinamis Lapangan</h3>
+       <h3 class="font-extrabold text-blue-600 flex items-center gap-2"><i data-lucide="file-text" class="w-4 h-4"></i> 2. Kompresi Foto Otomatis &amp; Sinkron Cloud</h3>
        <ul class="list-disc pl-5 text-xs text-slate-600 space-y-1">
-        <li><strong>Tim &amp; Toko:</strong> Masukkan instansi, nama petugas (dapat ditambah via tombol *Tambah Petugas*), identitas toko, dan nomor WhatsApp.</li>
-        <li><strong>Pengambilan GPS:</strong> Tombol <em>Ambil GPS</em> membaca koordinat lintang/bujur secara akurat **bahkan dalam keadaan offline tanpa sinyal internet**.</li>
-        <li><strong>Negara Asal &amp; Produsen/Importir Dinamis:</strong> Memilih <em>Indonesia</em> otomatis memunculkan kolom **Nama &amp; Alamat Produsen**. Memilih negara lain memunculkan kolom **Nama &amp; Alamat Importir**.</li>
-        <li><strong>Validasi SNI &amp; Bang Beni:</strong> Lakukan pengecekan keaslian nomor SNI melalui portal resmi **Bang Beni** (`https://bangbeni.bsn.go.id`).</li>
-        <li><strong>Foto Lapangan:</strong> Unggah 5 kategori foto wajib langsung dari kamera perangkat HP.</li>
+        <li><strong>Kompresi Foto:</strong> Setiap foto kamera otomatis dioptimalkan ukurannya agar hemat memori HP dan cepat saat dikirim.</li>
+        <li><strong>Sinkronisasi Cloud:</strong> Petugas dapat memasukkan URL Google Apps Script di menu *Sinkron & Backup* untuk langsung mengirim laporan ke database pusat saat online.</li>
+        <li><strong>Hapus Laporan:</strong> Gunakan tombol hapus untuk membersihkan data uji coba sebelum turun ke lapangan.</li>
        </ul>
       </div>
 
       <div class="section-card p-5 bg-white space-y-2">
        <h3 class="font-extrabold text-amber-600 flex items-center gap-2"><i data-lucide="cloud-off" class="w-4 h-4"></i> 3. Mode Offline &amp; Reminder Notifikasi</h3>
-       <p class="text-slate-600 text-xs leading-relaxed">Saat di area tanpa sinyal, data dan foto tetap tersimpan aman di memori lokal HP dengan status <em>Belum Terverifikasi</em>. Notifikasi pengingat akan muncul begitu koneksi internet pulih.</p>
+       <p class="text-slate-600 text-xs leading-relaxed">Saat di area tanpa sinyal, data dan foto tetap tersimpan aman di memori lokal HP dengan status <em>Belum Terverifikasi</em>.</p>
       </div>
 
       <div class="section-card p-5 bg-white space-y-2">
-       <h3 class="font-extrabold text-blue-600 flex items-center gap-2"><i data-lucide="smartphone" class="w-4 h-4"></i> 4. Navigasi Cepat, FAB &amp; Mode Gelap (*Dark Mode*)</h3>
+       <h3 class="font-extrabold text-blue-600 flex items-center gap-2"><i data-lucide="smartphone" class="w-4 h-4"></i> 4. Navigasi Cepat, FAB &amp; Mode Gelap</h3>
        <ul class="list-disc pl-5 text-xs text-slate-600 space-y-1">
-        <li><strong>Tombol Mengambang (FAB):</strong> Ketuk tombol bulat plus (`+`) di pojok kanan bawah dari halaman mana pun untuk langsung membuka formulir laporan baru secara instan.</li>
-        <li><strong>Menu Laci (Drawer Menu):</strong> Ketuk ikon garis tiga di pojok kanan atas untuk mengakses menu pendukung (*Statistik, Sinkron, SOP, UU/SNI, dan Atur*).</li>
-        <li><strong>Mode Gelap (Dark Mode):</strong> Gunakan tombol ikon bulan/matahari di header atas untuk mengaktifkan tema gelap guna mengurangi silau di bawah terik matahari.</li>
+        <li><strong>Tombol Mengambang (FAB):</strong> Ketuk tombol bulat plus (`+`) di pojok kanan bawah untuk membuka form baru secara instan.</li>
+        <li><strong>Menu Laci (Drawer Menu):</strong> Ketuk ikon garis tiga di pojok kanan atas untuk menu pendukung.</li>
+        <li><strong>Mode Gelap (Dark Mode):</strong> Gunakan tombol ikon bulan/matahari di header atas.</li>
        </ul>
       </div>
 
       <div class="section-card p-5 bg-white space-y-2">
-       <h3 class="font-extrabold text-emerald-600 flex items-center gap-2"><i data-lucide="palette" class="w-4 h-4"></i> 5. Panduan Membaca Indikator Warna Status</h3>
-       <p class="text-slate-600 text-xs leading-relaxed mb-1">Garis tepi tebal pada kartu laporan menunjukkan status:</p>
+       <h3 class="font-extrabold text-emerald-600 flex items-center gap-2"><i data-lucide="palette" class="w-4 h-4"></i> 5. Indikator Warna Status Laporan</h3>
        <ul class="list-disc pl-5 text-xs text-slate-600 space-y-1">
         <li><strong class="text-emerald-600">Garis Hijau (Legal):</strong> Produk terdaftar dan sesuai SNI.</li>
         <li><strong class="text-rose-600">Garis Merah (Temuan):</strong> Produk merupakan temuan pelanggaran.</li>
-        <li><strong class="text-amber-600">Garis Kuning (Pending):</strong> Produk belum diverifikasi atau spesifikasinya tidak sesuai.</li>
+        <li><strong class="text-amber-600">Garis Kuning (Pending):</strong> Produk belum diverifikasi.</li>
        </ul>
       </div>
 
       <div class="section-card p-5 bg-white space-y-2">
-       <h3 class="font-extrabold text-blue-600 flex items-center gap-2"><i data-lucide="layout-grid" class="w-4 h-4"></i> 6. Panduan 10 Menu Utama Aplikasi</h3>
-       <ul class="list-disc pl-5 text-xs text-slate-600 space-y-1">
-        <li><strong>Form:</strong> Mengisi dan mengirim laporan pengawasan baru.</li>
-        <li><strong>Riwayat:</strong> Memantau status, ekspor CSV, unduh **Word (.docx)**, dan verifikasi ulang.</li>
-        <li><strong>Statistik:</strong> Grafik visual tingkat kepatuhan SNI.</li>
-        <li><strong>Sinkron:</strong> Mengirim antrean offline dan *backup* JSON.</li>
-        <li><strong>SOP:</strong> Petunjuk teknis operasional aplikasi (halaman ini).</li>
-        <li><strong>UU/SNI:</strong> Direktori dasar hukum resmi (UU Perlindungan Konsumen, UU Standardisasi, Permendag).</li>
-        <li><strong>Profil:</strong> Kartu identitas akun petugas yang aktif.</li>
-        <li><strong>Cari:</strong> Pencarian cepat laporan.</li>
-        <li><strong>Peta:</strong> Daftar titik koordinat toko dan navigasi **Google Maps**.</li>
-        <li><strong>Atur:</strong> Pusat bantuan (*helpdesk* IT Kementerian Perdagangan).</li>
-       </ul>
+       <h3 class="font-extrabold text-blue-600 flex items-center gap-2"><i data-lucide="layout-grid" class="w-4 h-4"></i> 6. 10 Menu Utama Aplikasi</h3>
+       <p class="text-xs text-slate-600 leading-relaxed">Form, Riwayat, Statistik, Sinkron, SOP, UU/SNI, Profil, Cari, Peta, dan Atur.</p>
       </div>
      </div>
     </section>
@@ -762,9 +799,14 @@
      <div class="mb-5">
       <p class="text-xs font-bold uppercase tracking-wider text-blue-600">Visualisasi Lokasi</p>
       <h2 id="maps-page-title" class="text-xl font-extrabold mt-0.5 tracking-tight">Peta Titik Koordinat Toko</h2>
-      <p class="text-xs text-slate-500 mt-0.5">Daftar lokasi toko yang telah terekam koordinat GPS-nya.</p>
+      <p class="text-xs text-slate-500 mt-0.5">Daftar lokasi toko yang telah terekam koordinat GPS-nya pada peta visual.</p>
      </div>
-     <div id="maps-list" class="space-y-3"></div>
+     <div class="space-y-4">
+      <div class="section-card p-4 bg-white">
+       <div id="leaflet-map"></div>
+      </div>
+      <div id="maps-list" class="space-y-3"></div>
+     </div>
     </section>
 
     <!-- 10. MENU PENGATURAN & BANTUAN -->
@@ -778,8 +820,8 @@
        <h3 class="font-bold text-sm text-slate-800 flex items-center gap-2"><i data-lucide="help-circle" class="w-4 h-4 text-blue-600"></i> Pusat Bantuan &amp; Helpdesk</h3>
        <p class="text-xs text-slate-600 leading-relaxed">Jika mengalami kendala teknis saat pengawasan di lapangan, silakan hubungi tim IT Pusat.</p>
        <div class="p-3 bg-blue-50 border border-blue-100 rounded-xl text-xs space-y-1">
-        <p class="font-bold text-blue-900">Email Helpdesk: it.pktn@kemendag.go.id</p>
-        <p class="text-blue-700">WhatsApp Layanan: 0811-999-PKTN</p>
+        <p class="font-bold text-blue-900">Email Helpdesk: huaneryzon@gmail.com</p>
+        <p class="text-blue-700">WhatsApp Layanan: 082147650625</p>
        </div>
       </div>
       <div class="section-card p-5 bg-white space-y-2">
@@ -807,7 +849,7 @@
    </nav>
   </div>
 
-  <!-- MENU LACI (DRAWER) DENGAN PERBAIKAN STRUKTUR TEKS -->
+  <!-- MENU LACI (DRAWER) -->
   <div id="drawer-backdrop" class="drawer-backdrop"></div>
   <div id="drawer-panel" class="drawer-panel">
    <div class="flex items-center justify-between border-b pb-3">
@@ -882,6 +924,7 @@
     let reports = JSON.parse(localStorage.getItem('pagar_pktn_reports') || '[]');
     let isOnline = navigator.onLine;
 
+    // TEMA DARK/LIGHT
     const currentTheme = localStorage.getItem('pagar_pktn_theme') || 'light';
     document.documentElement.setAttribute('data-theme', currentTheme);
 
@@ -897,12 +940,14 @@
       document.getElementById('btn-theme-toggle').innerHTML = `<i data-lucide="sun" class="w-4 h-4"></i>`;
     }
 
+    // DRAWER MENU
     const drawer = document.getElementById('drawer-panel');
     const backdrop = document.getElementById('drawer-backdrop');
     document.getElementById('btn-open-menu').addEventListener('click', () => { drawer.classList.add('open'); backdrop.classList.add('open'); });
     document.getElementById('btn-close-drawer').addEventListener('click', () => { drawer.classList.remove('open'); backdrop.classList.remove('open'); });
     backdrop.addEventListener('click', () => { drawer.classList.remove('open'); backdrop.classList.remove('open'); });
 
+    // FAB FORM
     document.getElementById('fab-form').addEventListener('click', () => {
       switchPage('page-form');
     });
@@ -930,11 +975,20 @@
         document.getElementById('profile-nip').textContent = currentInspector.nip;
         document.getElementById('profile-email').textContent = currentInspector.email;
         document.getElementById('profile-role').textContent = currentInspector.role === 'admin' ? 'Administrator Pusat' : 'Petugas Lapangan';
+        
+        const firstOfficerInput = document.getElementById('officer-0');
+        if (firstOfficerInput && !firstOfficerInput.value) {
+          firstOfficerInput.value = currentInspector.name;
+        }
+
+        requestNotificationPermission();
         if (currentInspector.role === 'admin') renderPendingUsers();
       }
     }
 
     const countrySelect = document.getElementById('country');
+    const otherCountrySection = document.getElementById('other-country-section');
+    const otherCountryInput = document.getElementById('other-country-name');
     const producerSection = document.getElementById('producer-section');
     const importerSection = document.getElementById('importer-section');
     const producerNameInput = document.getElementById('producer-name');
@@ -945,17 +999,100 @@
     function handleCountryChange() {
       const val = countrySelect.value;
       if (val === 'Indonesia') {
-        producerSection.classList.remove('hidden'); importerSection.classList.add('hidden');
-        producerNameInput.required = true; producerAddressInput.required = true;
-        importerNameInput.required = false; importerAddressInput.required = false;
+        otherCountrySection.classList.add('hidden');
+        otherCountryInput.required = false;
+        otherCountryInput.value = '';
+
+        producerSection.classList.remove('hidden'); 
+        importerSection.classList.add('hidden');
+        producerNameInput.required = true; 
+        producerAddressInput.required = true;
+        importerNameInput.required = false; 
+        importerAddressInput.required = false;
+      } else if (val === 'Lainnya (Impor)') {
+        otherCountrySection.classList.remove('hidden');
+        otherCountryInput.required = true;
+
+        producerSection.classList.add('hidden'); 
+        importerSection.classList.remove('hidden');
+        producerNameInput.required = false; 
+        producerAddressInput.required = false;
+        importerNameInput.required = true; 
+        importerAddressInput.required = true;
       } else {
-        producerSection.classList.add('hidden'); importerSection.classList.remove('hidden');
-        producerNameInput.required = false; producerAddressInput.required = false;
-        importerNameInput.required = true; importerAddressInput.required = true;
+        otherCountrySection.classList.add('hidden');
+        otherCountryInput.required = false;
+        otherCountryInput.value = '';
+
+        producerSection.classList.add('hidden'); 
+        importerSection.classList.remove('hidden');
+        producerNameInput.required = false; 
+        producerAddressInput.required = false;
+        importerNameInput.required = true; 
+        importerAddressInput.required = true;
       }
     }
     countrySelect.addEventListener('change', handleCountryChange);
     handleCountryChange();
+
+    // LOGIKA KONDISIONAL DROPDOWN NPB & SNI
+    const npbAvail = document.getElementById('npb-availability');
+    const npbContainer = document.getElementById('npb-input-container');
+    const npbInput = document.getElementById('npb-number');
+
+    npbAvail.addEventListener('change', () => {
+      if (npbAvail.value === 'Tersedia') {
+        npbContainer.classList.remove('hidden');
+        npbInput.required = true;
+      } else {
+        npbContainer.classList.add('hidden');
+        npbInput.value = '';
+        npbInput.required = false;
+      }
+    });
+
+    const prodSniAvail = document.getElementById('prod-sni-availability');
+    const prodSniContainer = document.getElementById('prod-sni-input-container');
+    const prodSniInput = document.getElementById('product-sni');
+
+    const pkgSniAvail = document.getElementById('pkg-sni-availability');
+    const pkgSniContainer = document.getElementById('pkg-sni-input-container');
+    const pkgSniInput = document.getElementById('package-sni');
+    const sniStatusSelect = document.getElementById('sni-status');
+
+    function checkSniAvailability() {
+      const prodVal = prodSniAvail.value;
+      const pkgVal = pkgSniAvail.value;
+
+      if (prodVal === 'Tersedia') {
+        prodSniContainer.classList.remove('hidden');
+        prodSniInput.required = true;
+      } else {
+        prodSniContainer.classList.add('hidden');
+        prodSniInput.value = 'TIDAK ADA';
+        prodSniInput.required = false;
+      }
+
+      if (pkgVal === 'Tersedia') {
+        pkgSniContainer.classList.remove('hidden');
+        pkgSniInput.required = true;
+      } else {
+        pkgSniContainer.classList.add('hidden');
+        pkgSniInput.value = 'TIDAK ADA';
+        pkgSniInput.required = false;
+      }
+
+      if (prodVal === 'Tidak Ada' || pkgVal === 'Tidak Ada') {
+        sniStatusSelect.value = 'Tidak Terdaftar (Temuan)';
+        sniStatusSelect.style.background = 'rgba(217, 48, 37, 0.08)';
+      } else {
+        sniStatusSelect.style.background = '';
+      }
+    }
+
+    prodSniAvail.addEventListener('change', checkSniAvailability);
+    pkgSniAvail.addEventListener('change', checkSniAvailability);
+    checkSniAvailability();
 
     document.getElementById('to-register-btn').addEventListener('click', () => {
       document.getElementById('login-form').classList.add('hidden'); document.getElementById('register-form').classList.remove('hidden');
@@ -1026,14 +1163,33 @@
       }
     });
 
-    function showToast(title, message, type = 'info') {
+    function requestNotificationPermission() {
+      if ("Notification" in window && Notification.permission !== "granted") Notification.requestPermission();
+    }
+
+    function showToast(title, message, type = 'info', duration = 3500) {
       const container = document.getElementById('toast-container');
       const card = document.createElement('div');
       card.className = `toast-card ${type}`;
       card.innerHTML = `<div class="toast-content"><div class="toast-title">${title}</div><div>${message}</div></div>`;
       container.appendChild(card); container.classList.add('show');
-      setTimeout(() => { card.remove(); container.classList.remove('show'); }, 3500);
+      setTimeout(() => { card.remove(); container.classList.remove('show'); }, duration);
     }
+
+    function updateNetworkStatus() {
+      isOnline = navigator.onLine;
+      const el = document.getElementById('network-status');
+      const lbl = document.getElementById('network-label');
+      if (isOnline) {
+        el.className = 'network-pill online';
+        lbl.textContent = 'Online';
+      } else {
+        el.className = 'network-pill offline';
+        lbl.textContent = 'Offline';
+      }
+    }
+    window.addEventListener('online', updateNetworkStatus);
+    window.addEventListener('offline', updateNetworkStatus);
 
     function switchPage(target) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1045,6 +1201,7 @@
       if (target === 'page-history') renderHistory();
       if (target === 'page-analytics') renderAnalytics();
       if (target === 'page-maps') renderMapsList();
+      if (target === 'page-sync') updateSyncStatusDesc();
     }
 
     document.querySelectorAll('.nav-btn, .drawer-menu-item').forEach(btn => {
@@ -1068,15 +1225,56 @@
       `).join('');
     });
 
+    // INISIALISASI PETA LEAFLET
+    let leafletMap = null;
+    let markersLayer = null;
+
     function renderMapsList() {
       const container = document.getElementById('maps-list');
       const withGps = reports.filter(r => r.coordinates && r.coordinates.includes(','));
-      container.innerHTML = withGps.length === 0 ? `<div class="empty-state"><p class="text-xs">Belum ada titik GPS.</p></div>` : withGps.map(r => `
+      
+      container.innerHTML = withGps.length === 0 ? `<div class="empty-state"><p class="text-xs">Belum ada titik GPS yang terekam.</p></div>` : withGps.map(r => `
         <div class="section-card p-4 flex items-center justify-between gap-3">
           <div><span class="text-xs font-bold text-blue-600">${r.businessName}</span><p class="text-xs font-bold mt-0.5">GPS: ${r.coordinates}</p></div>
           <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.coordinates)}" target="_blank" class="secondary-btn px-3 py-2 text-xs font-bold">Buka Maps</a>
         </div>
       `).join('');
+
+      setTimeout(() => {
+        const mapContainer = document.getElementById('leaflet-map');
+        if (!mapContainer) return;
+
+        if (!leafletMap) {
+          leafletMap = L.map('leaflet-map').setView([-10.1789, 123.6070], 13);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+          }).addTo(leafletMap);
+          markersLayer = L.layerGroup().addTo(leafletMap);
+        } else {
+          leafletMap.invalidateSize();
+        }
+
+        markersLayer.clearLayers();
+
+        if (withGps.length > 0) {
+          const bounds = [];
+          withGps.forEach(r => {
+            const parts = r.coordinates.split(',');
+            const lat = parseFloat(parts[0].trim());
+            const lng = parseFloat(parts[1].trim());
+            if (!isNaN(lat) && !isNaN(lng)) {
+              const marker = L.marker([lat, lng]).bindPopup(`<b>${r.businessName}</b><br>${r.productType}`);
+              markersLayer.addLayer(marker);
+              bounds.push([lat, lng]);
+            }
+          });
+          if (bounds.length > 0) {
+            leafletMap.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 });
+          }
+        }
+      }, 250);
+
       lucide.createIcons();
     }
 
@@ -1101,55 +1299,324 @@
       list.appendChild(row); lucide.createIcons();
     });
 
+    const photoInputs = ['photo-spec', 'photo-snibarw', 'photo-snikem', 'photo-usage', 'photo-warranty'];
+    photoInputs.forEach(id => {
+      const input = document.getElementById(id);
+      input.addEventListener('change', e => {
+        const span = document.getElementById(id + '-name');
+        if (e.target.files && e.target.files[0]) {
+          span.textContent = e.target.files[0].name;
+          span.className = 'text-[11px] font-bold text-emerald-600 truncate max-w-full';
+        } else {
+          span.textContent = 'Ketuk untuk buka kamera';
+          span.className = 'text-[11px] text-slate-500';
+        }
+      });
+    });
+
+    // FUNGSI SARAN 3: KOMPRESI FOTO OTOMATIS (Maks lebar 1000px, kualitas 75%)
+    function compressImage(file) {
+      return new Promise((resolve) => {
+        if (!file) { resolve(null); return; }
+        const reader = new FileReader();
+        reader.onload = event => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
+            const maxWidth = 1000;
+            const maxHeight = 1000;
+
+            if (width > height) {
+              if (width > maxWidth) {
+                height = Math.round((height * maxWidth) / width);
+                width = maxWidth;
+              }
+            } else {
+              if (height > maxHeight) {
+                width = Math.round((width * maxHeight) / height);
+                height = maxHeight;
+              }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            // Kompres ke format JPEG dengan kualitas 75%
+            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.75);
+            resolve({ name: file.name, data: compressedDataUrl });
+          };
+          img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
     document.getElementById('inspection-form').addEventListener('submit', async e => {
       e.preventDefault();
       if (!currentInspector) { checkSession(); return; }
+
       const form = e.target;
-      const formData = {
-        id: 'INS-' + Date.now().toString(36).toUpperCase(),
-        timestamp: new Date().toISOString(),
-        agency: form.agency.value.trim(),
-        businessName: form.business_name.value.trim(),
-        ownerName: form.owner_name.value.trim(),
-        productType: form.product_type.value.trim(),
-        brand: form.brand.value.trim(),
-        country: form.country.value.trim(),
-        sniStatus: isOnline ? form.sni_status.value : "Belum Terverifikasi",
-        coordinates: form.coordinates.value.trim(),
-        synced: false
-      };
-      reports.unshift(formData);
-      localStorage.setItem('pagar_pktn_reports', JSON.stringify(reports));
-      showToast('Sukses', 'Laporan tersimpan.', 'success');
-      form.reset(); switchPage('page-history');
+      const errBox = document.getElementById('form-error');
+      const submitBtn = document.getElementById('submit-btn');
+      const submitBtnText = document.getElementById('submit-btn-text');
+
+      const agency = (form.agency.value || '').trim();
+      const businessName = (form.business_name.value || '').trim();
+      const ownerName = (form.owner_name.value || '').trim();
+      const productType = (form.product_type.value || '').trim();
+      const brand = (form.brand.value || '').trim();
+      
+      const countryBase = (form.country.value || '').trim();
+      const otherCountry = (form.other_country_name.value || '').trim();
+      const country = countryBase === 'Lainnya (Impor)' ? (otherCountry ? `Lainnya: ${otherCountry}` : '') : countryBase;
+
+      const phone = (form.phone.value || '').trim();
+      
+      const npbAvailVal = npbAvail.value;
+      const npbNumber = npbAvailVal === 'Tersedia' ? (form.npb_number.value || '').trim() : 'TIDAK ADA';
+
+      const prodSniVal = prodSniAvail.value;
+      const productSni = prodSniVal === 'Tersedia' ? (form.product_sni.value || '').trim() : 'TIDAK ADA';
+
+      const pkgSniVal = pkgSniAvail.value;
+      const packageSni = pkgSniVal === 'Tersedia' ? (form.package_sni.value || '').trim() : 'TIDAK ADA';
+      
+      const isIndo = countryBase === 'Indonesia';
+      const producerName = isIndo ? (form.producer_name.value || '').trim() : '';
+      const producerAddress = isIndo ? (form.producer_address.value || '').trim() : '';
+      const importerName = !isIndo ? (form.importer_name.value || '').trim() : '';
+      const importerAddress = !isIndo ? (form.importer_address.value || '').trim() : '';
+
+      const sniStatus = isOnline ? form.sni_status.value : "Belum Terverifikasi";
+      const officers = Array.from(form.querySelectorAll('.officer-input')).map(i => (i.value || '').trim()).filter(Boolean);
+
+      if (!agency || officers.length === 0 || !businessName || !ownerName || !phone || !productType || !brand || !countryBase || !sniStatus) {
+        errBox.textContent = '⚠️ Gagal Kirim: Mohon lengkapi seluruh kolom wajib yang bertanda bintang (*).';
+        errBox.classList.remove('hidden');
+        errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
+      if (countryBase === 'Lainnya (Impor)' && !otherCountry) {
+        errBox.textContent = '⚠️ Gagal Kirim: Nama negara asal (Lainnya) wajib diisi.';
+        errBox.classList.remove('hidden');
+        errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
+      if (npbAvailVal === 'Tersedia' && !npbNumber) {
+        errBox.textContent = '⚠️ Gagal Kirim: Nomor NPB wajib diisi karena dipilih Tersedia.';
+        errBox.classList.remove('hidden');
+        errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
+      if (prodSniVal === 'Tersedia' && !productSni) {
+        errBox.textContent = '⚠️ Gagal Kirim: Nomor SNI Produk wajib diisi karena dipilih Tersedia.';
+        errBox.classList.remove('hidden');
+        errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
+      if (pkgSniVal === 'Tersedia' && !packageSni) {
+        errBox.textContent = '⚠️ Gagal Kirim: Nomor SNI Kemasan wajib diisi karena dipilih Tersedia.';
+        errBox.classList.remove('hidden');
+        errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
+      if (isIndo && (!producerName || !producerAddress)) {
+        errBox.textContent = '⚠️ Gagal Kirim: Nama dan Alamat Produsen wajib diisi untuk barang lokal Indonesia.';
+        errBox.classList.remove('hidden');
+        errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
+      if (!isIndo && (!importerName || !importerAddress)) {
+        errBox.textContent = '⚠️ Gagal Kirim: Nama dan Alamat Importir wajib diisi untuk barang impor.';
+        errBox.classList.remove('hidden');
+        errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
+      const phoneRegex = /^[0-9]{9,15}$/;
+      if (!phoneRegex.test(phone)) {
+        errBox.textContent = '⚠️ Nomor Telepon / WhatsApp tidak valid! Harap masukkan angka saja antara 9 sampai 15 digit.';
+        errBox.classList.remove('hidden');
+        errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
+      errBox.classList.add('hidden');
+      submitBtn.disabled = true;
+      submitBtnText.textContent = "Mengompres Foto & Menyimpan...";
+      showToast('Memproses Data', 'Mengompres foto lapangan agar ukuran ringan...', 'info');
+
+      try {
+        // Kompresi foto secara paralel
+        const [specData, snibarwData, snikemData, usageData, warrantyData] = await Promise.all([
+          compressImage(document.getElementById('photo-spec').files[0]),
+          compressImage(document.getElementById('photo-snibarw').files[0]),
+          compressImage(document.getElementById('photo-snikem').files[0]),
+          compressImage(document.getElementById('photo-usage').files[0]),
+          compressImage(document.getElementById('photo-warranty').files[0])
+        ]);
+
+        const formData = {
+          id: 'INS-' + Date.now().toString(36).toUpperCase(),
+          timestamp: new Date().toISOString(),
+          agency, officers, businessName, ownerName, phone,
+          coordinates: (form.coordinates.value || '').trim(),
+          productType, brand, country,
+          producerName, producerAddress, importerName, importerAddress,
+          npbNumber, productSni, packageSni, sniStatus,
+          usage: form.usage.value, maintenance: form.maintenance.value,
+          clause: form.clause.value, warranty: form.warranty.value,
+          inspectorAccount: `${currentInspector.name} (NIP: ${currentInspector.nip})`,
+          photos: { spec: specData, snibarw: snibarwData, snikem: snikemData, usage: usageData, warranty: warrantyData },
+          synced: false
+        };
+
+        reports.unshift(formData);
+        localStorage.setItem('pagar_pktn_reports', JSON.stringify(reports));
+
+        showToast('Berhasil', 'Laporan dan arsip foto terkompres tersimpan.', 'success');
+        form.reset();
+        
+        document.getElementById('agency').value = "Dinas Perindustrian dan Perdagangan Pemerintah Provinsi NTT";
+        document.getElementById('officer-0').value = currentInspector ? currentInspector.name : '';
+        handleCountryChange();
+
+        submitBtn.disabled = false;
+        submitBtnText.textContent = "Kirim Data";
+        switchPage('page-history');
+
+      } catch (err) {
+        showToast('Gagal Proses', err.message, 'error');
+        submitBtn.disabled = false;
+        submitBtnText.textContent = "Kirim Data";
+      }
     });
+
+    // FUNGSI SARAN 2: SINKRONISASI KE GOOGLE APPS SCRIPT (GAS)
+    document.getElementById('btn-sync-now').addEventListener('click', async () => {
+      const endpointUrl = document.getElementById('gas-endpoint-url').value.trim();
+      const unsynced = reports.filter(r => !r.synced);
+
+      if (unsynced.length === 0) {
+        showToast('Info', 'Semua laporan sudah tersinkronisasi.', 'info');
+        return;
+      }
+
+      if (!endpointUrl) {
+        showToast('Perhatian', 'URL Web App GAS belum diisi di menu Sinkron.', 'error');
+        switchPage('page-sync');
+        return;
+      }
+
+      if (!isOnline) {
+        showToast('Offline', 'Perangkat sedang offline. Sambungkan internet untuk sinkronisasi cloud.', 'error');
+        return;
+      }
+
+      showToast('Sinkronisasi', `Mengirim ${unsynced.length} laporan ke server pusat...`, 'info');
+      
+      let successCount = 0;
+      for (let r of unsynced) {
+        try {
+          const response = await fetch(endpointUrl, {
+            method: 'POST',
+            mode: 'no-cors', // Diperlukan untuk Google Apps Script Web App
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(r)
+          });
+          r.synced = true;
+          successCount++;
+        } catch (err) {
+          console.error('Gagal sync ID:', r.id, err);
+        }
+      }
+
+      localStorage.setItem('pagar_pktn_reports', JSON.stringify(reports));
+      renderHistory();
+      updateSyncStatusDesc();
+      showToast('Sinkronisasi Selesai', `${successCount} dari ${unsynced.length} laporan berhasil dikirim ke cloud.`, 'success');
+    });
+
+    function updateSyncStatusDesc() {
+      const unsyncedCount = reports.filter(r => !r.synced).length;
+      const desc = document.getElementById('sync-status-desc');
+      if (unsyncedCount > 0) {
+        desc.textContent = `Terdapat ${unsyncedCount} laporan belum tersinkron ke cloud.`;
+        desc.className = 'text-xs text-amber-600 font-bold';
+      } else {
+        desc.textContent = 'Semua laporan telah tersinkron ke cloud pusat.';
+        desc.className = 'text-xs text-emerald-600 font-bold';
+      }
+    }
 
     function renderHistory() {
       const list = document.getElementById('history-list');
       document.getElementById('stat-total').textContent = reports.length;
       document.getElementById('stat-synced').textContent = reports.filter(r => r.synced).length;
-      list.innerHTML = reports.length === 0 ? `<div class="empty-state"><p class="text-xs">Belum ada data.</p></div>` : reports.map((r, i) => `
+      list.innerHTML = reports.length === 0 ? `<div class="empty-state"><p class="text-xs">Belum ada data laporan.</p></div>` : reports.map((r, i) => `
         <div class="history-card ${r.sniStatus.includes('Legal') ? 'legal' : (r.sniStatus.includes('Temuan') ? 'temuan' : 'pending-status')} flex justify-between items-center gap-3">
           <div class="min-w-0 flex-1 cursor-pointer" onclick="openDetail(${i})">
             <span class="text-xs font-bold text-blue-600">${r.id}</span>
             <h4 class="font-bold text-sm truncate">${r.businessName}</h4>
             <p class="text-xs text-slate-500">${r.productType} • Status: ${r.sniStatus}</p>
           </div>
-          <button type="button" class="secondary-btn px-3 py-2 text-xs font-bold" onclick="openDetail(${i})">Detail</button>
+          <div class="flex gap-1 shrink-0">
+            <button type="button" class="secondary-btn px-3 py-2 text-xs font-bold" onclick="openDetail(${i})">Detail</button>
+            <button type="button" class="danger-btn w-9 h-9 p-0 flex items-center justify-center rounded-lg" onclick="deleteReport(${i})" title="Hapus Laporan"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+          </div>
         </div>
       `).join('');
       lucide.createIcons();
     }
 
+    function renderAnalytics() {
+      const total = reports.length;
+      const legal = reports.filter(r => r.sniStatus === 'Terdaftar dan Sesuai (Legal)').length;
+      const temuan = reports.filter(r => r.sniStatus === 'Tidak Terdaftar (Temuan)').length;
+      const notspec = reports.filter(r => r.sniStatus.includes('Tidak Sesuai') || r.sniStatus === 'Belum Terverifikasi').length;
+
+      document.getElementById('count-legal').textContent = `${legal} laporan`;
+      document.getElementById('count-temuan').textContent = `${temuan} laporan`;
+      document.getElementById('count-notspec').textContent = `${notspec} laporan`;
+
+      document.getElementById('bar-legal').style.width = total ? `${(legal / total) * 100}%` : '0%';
+      document.getElementById('bar-temuan').style.width = total ? `${(temuan / total) * 100}%` : '0%';
+      document.getElementById('bar-notspec').style.width = total ? `${(notspec / total) * 100}%` : '0%';
+    }
+
     window.openDetail = function(index) {
       const r = reports[index];
       const modal = document.getElementById('detail-modal');
+      document.getElementById('modal-title').textContent = `Detail Laporan: ${r.id}`;
       document.getElementById('modal-content').innerHTML = `
         <div class="space-y-3">
-          <div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl">
+          <div class="p-3.5 bg-slate-50 dark:bg-slate-800 rounded-xl space-y-1">
+            <span class="text-xs font-bold text-blue-600">ID: ${r.id}</span>
             <h4 class="font-bold text-base">${r.businessName}</h4>
-            <p class="text-xs">Produk: ${r.productType} (${r.brand})</p>
-            <p class="text-xs font-semibold mt-1">Status Validasi: ${r.sniStatus}</p>
+            <p class="text-xs text-slate-500">Produk: ${r.productType} (${r.brand}) • Negara: ${r.country}</p>
+            <p class="text-xs text-slate-500">No. SNI Produk: ${r.productSni} | Kemasan: ${r.packageSni}</p>
+            <p class="text-xs font-semibold text-slate-700 dark:text-slate-300">Status Validasi: ${r.sniStatus}</p>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-2">
+            <button type="button" class="primary-btn flex-1 py-2.5 text-xs font-bold" onclick="openEditReport(${index})">
+              <i data-lucide="edit-3" class="w-4 h-4"></i> Edit &amp; Perbarui
+            </button>
+            <button type="button" class="secondary-btn px-4 py-2.5 text-xs font-bold bg-emerald-50 text-emerald-700 hover:bg-emerald-100" onclick="downloadWordReport(${index})">
+              Unduh .docx
+            </button>
+            <button type="button" class="danger-btn px-4 py-2.5 text-xs font-bold" onclick="deleteReport(${index}); document.getElementById('detail-modal').classList.remove('open');">
+              <i data-lucide="trash-2" class="w-4 h-4"></i> Hapus
+            </button>
           </div>
         </div>
       `;
@@ -1157,17 +1624,135 @@
       lucide.createIcons();
     };
 
+    window.openEditReport = function(index) {
+      const r = reports[index];
+      const modalContent = document.getElementById('modal-content');
+      document.getElementById('modal-title').textContent = `Edit Laporan: ${r.id}`;
+
+      modalContent.innerHTML = `
+        <form id="edit-report-form" class="space-y-3">
+          <div>
+            <label class="field-label">Nama Toko / Perusahaan *</label>
+            <input id="edit-business" class="field-control text-xs" value="${r.businessName}" required>
+          </div>
+          <div>
+            <label class="field-label">Jenis Produk / Komoditas *</label>
+            <input id="edit-product" class="field-control text-xs" value="${r.productType}" required>
+          </div>
+          <div>
+            <label class="field-label">No. SNI pada Produk *</label>
+            <input id="edit-prodsni" class="field-control text-xs" value="${r.productSni}" required>
+          </div>
+          <div>
+            <label class="field-label">No. SNI pada Kemasan *</label>
+            <input id="edit-pkgsni" class="field-control text-xs" value="${r.packageSni}" required>
+          </div>
+          <div>
+            <label class="field-label">Status Validasi SNI *</label>
+            <select id="edit-status" class="field-control text-xs">
+              <option value="Belum Terverifikasi" ${r.sniStatus === 'Belum Terverifikasi' ? 'selected' : ''}>Belum Terverifikasi</option>
+              <option value="Terdaftar dan Sesuai (Legal)" ${r.sniStatus === 'Terdaftar dan Sesuai (Legal)' ? 'selected' : ''}>Terdaftar dan Sesuai (Legal)</option>
+              <option value="Tidak Terdaftar (Temuan)" ${r.sniStatus === 'Tidak Terdaftar (Temuan)' ? 'selected' : ''}>Tidak Terdaftar (Temuan)</option>
+              <option value="Terdaftar namun Tidak Sesuai Spesifikasinya" ${r.sniStatus === 'Terdaftar namun Tidak Sesuai Spesifikasinya' ? 'selected' : ''}>Terdaftar namun Tidak Sesuai Spesifikasinya</option>
+            </select>
+          </div>
+          <button type="button" class="primary-btn w-full py-3 text-xs font-bold bg-emerald-600 hover:bg-emerald-700" onclick="saveEditedReport(${index})">
+            Simpan Perubahan
+          </button>
+        </form>
+      `;
+      lucide.createIcons();
+    };
+
+    window.saveEditedReport = function(index) {
+      const biz = document.getElementById('edit-business').value.trim();
+      const prod = document.getElementById('edit-product').value.trim();
+      const psni = document.getElementById('edit-prodsni').value.trim();
+      const ksni = document.getElementById('edit-pkgsni').value.trim();
+      const stat = document.getElementById('edit-status').value;
+
+      if (!biz || !prod || !psni || !ksni) {
+        showToast('Gagal Edit', 'Mohon lengkapi data toko, produk, dan nomor SNI.', 'error');
+        return;
+      }
+
+      reports[index].businessName = biz;
+      reports[index].productType = prod;
+      reports[index].productSni = psni;
+      reports[index].packageSni = ksni;
+      reports[index].sniStatus = stat;
+      reports[index].synced = isOnline;
+
+      localStorage.setItem('pagar_pktn_reports', JSON.stringify(reports));
+      document.getElementById('detail-modal').classList.remove('open');
+      renderHistory();
+      showToast('Berhasil', 'Laporan berhasil diperbarui!', 'success');
+    };
+
+    window.downloadWordReport = function(index) {
+      const r = reports[index];
+      showToast('Dokumen Word', 'Membuat file Word (.docx)...', 'info');
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run.withSuccessHandler(res => {
+          if (res.success) window.open(res.url, '_blank');
+          else showToast('Gagal', res.message, 'error');
+        }).generateDocxReport(r);
+      } else {
+        setTimeout(() => { showToast('Simulasi Berhasil', 'Fitur Word (.docx) siap diintegrasikan dengan Google Apps Script.', 'success'); }, 800);
+      }
+    };
+
+    window.deleteReport = function(index) {
+      if (confirm('Hapus laporan ini dari perangkat?')) {
+        reports.splice(index, 1);
+        localStorage.setItem('pagar_pktn_reports', JSON.stringify(reports));
+        renderHistory();
+        renderAnalytics();
+        showToast('Dihapus', 'Laporan berhasil dihapus.', 'info');
+      }
+    };
+
+    function clearAllReports() {
+      if (reports.length === 0) {
+        showToast('Info', 'Tidak ada data laporan untuk dihapus.', 'info');
+        return;
+      }
+      if (confirm('PERINGATAN: Apakah Anda yakin ingin menghapus SELURUH riwayat laporan? Tindakan ini berguna untuk membersihkan data uji coba.')) {
+        reports = [];
+        localStorage.removeItem('pagar_pktn_reports');
+        renderHistory();
+        renderAnalytics();
+        showToast('Dibersihkan', 'Semua riwayat laporan telah dihapus.', 'success');
+      }
+    }
+
+    document.getElementById('btn-clear-all').addEventListener('click', clearAllReports);
+    document.getElementById('btn-reset-data').addEventListener('click', clearAllReports);
+
     document.getElementById('close-modal').addEventListener('click', () => { document.getElementById('detail-modal').classList.remove('open'); });
 
     document.getElementById('export-all').addEventListener('click', () => {
-      if (reports.length === 0) return;
-      const csvContent = 'data:text/csv;charset=utf-8,' + ['ID,Toko,Produk,Status'].map(e=>e).join('\n') + '\n' + reports.map(r => `"${r.id}","${r.businessName}","${r.productType}","${r.sniStatus}"`).join('\n');
-      const link = document.createElement('a'); link.setAttribute('href', encodeURI(csvContent)); link.setAttribute('download', `laporan_${Date.now()}.csv`);
+      if (reports.length === 0) { showToast('Kosong', 'Tidak ada data.', 'info'); return; }
+      const headers = ['ID', 'Tanggal', 'Toko', 'Negara Asal', 'No SNI Produk', 'No SNI Kemasan', 'Status Validasi'];
+      const rows = reports.map(r => `"${r.id}","${r.timestamp}","${r.businessName}","${r.country}","${r.productSni}","${r.packageSni}","${r.sniStatus}"`);
+      const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows].join('\n');
+      const link = document.createElement('a'); link.setAttribute('href', encodeURI(csvContent));
+      link.setAttribute('download', `laporan_pktn_${Date.now()}.csv`);
       document.body.appendChild(link); link.click(); link.remove();
-      showToast('Ekspor', 'File CSV diunduh.', 'success');
+      showToast('Ekspor CSV', 'File berhasil diunduh.', 'success');
+    });
+
+    document.getElementById('btn-backup').addEventListener('click', () => {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(reports, null, 2));
+      const downloadAnchor = document.createElement('a'); downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `backup_pagar_pktn_${Date.now()}.json`);
+      document.body.appendChild(downloadAnchor); downloadAnchor.click(); downloadAnchor.remove();
+      showToast('Backup', 'File cadangan JSON diunduh.', 'success');
     });
 
     checkSession();
+    updateNetworkStatus();
+    updateSyncStatusDesc();
     lucide.createIcons();
   </script>
  </body>
