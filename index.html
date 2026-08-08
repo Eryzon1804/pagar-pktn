@@ -106,11 +106,11 @@
     <form id="login-form" class="space-y-3">
      <div>
       <label class="field-label text-xs">Email Petugas / Admin</label>
-      <input id="login-email" type="email" class="field-control text-xs" required placeholder="email@domain.com">
+      <input id="login-email" type="email" class="field-control text-xs" required value="huaneryzon@gmail.com">
      </div>
      <div>
       <label class="field-label text-xs">Kata Sandi / NIP</label>
-      <input id="login-password" type="password" class="field-control text-xs" required placeholder="Kata sandi">
+      <input id="login-password" type="password" class="field-control text-xs" required value="adminpagarpktn2026">
      </div>
      <div class="flex items-center justify-between text-xs">
       <label class="flex items-center gap-2 cursor-pointer">
@@ -119,24 +119,25 @@
       <button type="button" class="text-blue-600 font-semibold hover:underline" onclick="showForgotPassword()">Lupa Password?</button>
      </div>
      <button type="submit" class="primary-btn w-full py-3 text-xs font-bold">Masuk Sesi</button>
+     <p class="text-[10px] text-slate-400 text-center mt-1">Admin: huaneryzon@gmail.com | Pass: adminpagarpktn2026</p>
     </form>
 
     <form id="register-form" class="space-y-3 hidden">
      <div>
       <label class="field-label text-xs">Nama Lengkap <span class="text-rose-600">*</span></label>
-      <input id="reg-name" class="field-control text-xs" required placeholder="Contoh: Eryzon Arifandy Huan">
+      <input id="reg-name" class="field-control text-xs" required placeholder="Eryzon Arifandy Huan, S.Mat">
      </div>
      <div>
       <label class="field-label text-xs">Alamat Email <span class="text-rose-600">*</span></label>
-      <input id="reg-email" type="email" class="field-control text-xs" required placeholder="email@domain.com">
+      <input id="reg-email" type="email" class="field-control text-xs" required placeholder="huaneryzon@gmail.com">
      </div>
      <div>
       <label class="field-label text-xs">NIP / ID Petugas <span class="text-rose-600">*</span></label>
-      <input id="reg-nip" class="field-control text-xs" required placeholder="Nomor Induk Pegawai">
+      <input id="reg-nip" class="field-control text-xs" required placeholder="199904182025061006">
      </div>
      <div>
       <label class="field-label text-xs">Kata Sandi <span class="text-rose-600">*</span></label>
-      <input id="reg-pass" type="password" class="field-control text-xs" required placeholder="Kata sandi baru">
+      <input id="reg-pass" type="password" class="field-control text-xs" required placeholder="adminpagarpktn2026">
      </div>
      <button type="submit" class="primary-btn w-full py-3 text-xs font-bold bg-emerald-600 hover:bg-emerald-700">Daftarkan Akun (Menunggu Verifikasi Admin)</button>
     </form>
@@ -223,7 +224,7 @@
          <label class="field-label">Nama Petugas Pengawas <span class="text-rose-600">*</span></label>
          <div id="officer-container" class="space-y-2">
           <div class="flex gap-2">
-           <input id="officer-0" class="field-control text-xs flex-1 officer-input" required placeholder="Nama petugas utama">
+           <input id="officer-0" class="field-control text-xs flex-1 officer-input" required value="Eryzon Arifandy Huan, S.Mat">
           </div>
          </div>
          <button type="button" class="secondary-btn text-xs py-2 px-3 font-semibold mt-1" onclick="addOfficerField()">
@@ -265,7 +266,7 @@
        <button type="button" class="primary-btn w-full py-3.5 font-bold" onclick="nextStep(1)">Selanjutnya: Produk & Bagian A &rarr;</button>
       </div>
 
-      <!-- STEP 2: Produk & Bagian A (Tanpa Negara Asal) -->
+      <!-- STEP 2: Produk & Bagian A -->
       <div class="wizard-step" data-step="2">
        <article class="section-card space-y-4">
         <div class="section-heading">
@@ -643,8 +644,8 @@
         <p id="profile-nip" class="font-medium text-slate-700">-</p>
        </div>
        <div>
-        <label class="field-label text-[11px] text-slate-400 uppercase">Peran Sistem</label>
-        <p class="font-bold text-blue-600">Petugas Pengawas Barang Beredar & SNI</p>
+        <label class="field-label text-[11px] text-slate-400 uppercase">Jabatan / Peran Sistem</label>
+        <p class="font-bold text-blue-600">Pengawas Perdagangan Ahli Pertama</p>
        </div>
       </div>
      </div>
@@ -682,8 +683,8 @@
      <div class="mb-5"><p class="text-xs font-bold uppercase text-blue-600">Panduan Teknis</p><h2 class="text-xl font-extrabold">SOP & Petunjuk Operasional PAGAR PKTN</h2></div>
      <div class="section-card text-xs space-y-4 leading-relaxed">
       <div class="p-3 bg-blue-50 rounded-xl border border-blue-200">
-       <h3 class="font-bold text-sm text-blue-900 mb-1">1. Pengaturan Negara Asal & Produsen/Importir</h3>
-       <p class="text-slate-700">Di Bagian B (Kemasan), jika dipilih "Ada" pada label negara pembuat dan diisi <b>"Indonesia"</b>, sistem menampilkan kolom Produsen. Jika diisi selain Indonesia, sistem menampilkan kolom Importir.</p>
+       <h3 class="font-bold text-sm text-blue-900 mb-1">Pengaturan Produsen & Importir</h3>
+       <p class="text-slate-700">Di Bagian B, jika negara pembuat diisi "Indonesia", sistem menampilkan kolom Produsen. Jika selain Indonesia, sistem menampilkan kolom Importir.</p>
       </div>
      </div>
     </section>
@@ -694,7 +695,6 @@
      <div class="section-card text-xs space-y-3 leading-relaxed">
       <h3 class="font-bold text-sm text-blue-600">Dasar Hukum Pengawasan</h3>
       <p>• Undang-Undang No. 8 Tahun 1999 tentang Perlindungan Konsumen.</p>
-      <p>• Peraturan Menteri Perdagangan No. 69 Tahun 2018 tentang Pengawasan Barang Beredar.</p>
      </div>
     </section>
 
@@ -807,7 +807,7 @@
     });
 
     // --- SESI, LOGIN, REMEMBER ME & RECOVERY ---
-    const ADMIN_CREDENTIALS = { email: "admin.pagar@pktn.go.id", pass: "adminpktn2026", name: "Administrator Pusat", nip: "ADMIN-001" };
+    const ADMIN_CREDENTIALS = { email: "huaneryzon@gmail.com", pass: "adminpagarpktn2026", name: "Eryzon Arifandy Huan, S.Mat", nip: "199904182025061006" };
     let currentInspector = JSON.parse(localStorage.getItem('pagar_pktn_user')) || null;
 
     window.addEventListener('DOMContentLoaded', () => {
@@ -905,6 +905,12 @@
     window.showForgotPassword = function() {
       const nipInput = prompt("Masukkan NIP / ID Petugas Anda yang terdaftar untuk memulihkan akun:");
       if (!nipInput) return;
+      if (nipInput === ADMIN_CREDENTIALS.nip) {
+        alert(`AKUN ADMIN DITEMUKAN!\n\nEmail: ${ADMIN_CREDENTIALS.email}\nKata Sandi: ${ADMIN_CREDENTIALS.pass}`);
+        document.getElementById('login-email').value = ADMIN_CREDENTIALS.email;
+        document.getElementById('login-password').value = ADMIN_CREDENTIALS.pass;
+        return;
+      }
       let users = JSON.parse(localStorage.getItem('pagar_pktn_users') || '[]');
       let found = users.find(u => u.nip === nipInput);
       if (found) {
