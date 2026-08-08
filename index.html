@@ -677,7 +677,7 @@
      </div>
     </section>
 
-    <!-- 5. PROFIL PETUGAS (DENGAN PERBAIKAN UPLOAD/GANTI/HAPUS FOTO PROFIL) -->
+    <!-- 5. PROFIL PETUGAS -->
     <section id="page-profile" class="page">
      <div class="mb-5"><p class="text-xs font-bold uppercase text-blue-600">Akun</p><h2 class="text-xl font-extrabold">Profil Petugas Lapangan</h2></div>
      <div class="section-card space-y-4 text-xs">
@@ -750,38 +750,146 @@
      </div>
     </section>
 
-    <!-- 8. PANDUAN SOP -->
+    <!-- 8. PANDUAN SOP (SANGAT LENGKAP & RINCI) -->
     <section id="page-guide" class="page">
-     <div class="mb-5"><p class="text-xs font-bold uppercase text-blue-600">Panduan Teknis</p><h2 class="text-xl font-extrabold">SOP & Petunjuk Operasional PAGAR PKTN</h2></div>
-     <div class="section-card text-xs space-y-4 leading-relaxed">
-      <div class="p-3 bg-blue-50 rounded-xl border border-blue-200">
-       <h3 class="font-bold text-sm text-blue-900 mb-1">Manajemen Foto Profil</h3>
-       <p class="text-slate-700">Di menu Profil, Anda dapat menggunakan tombol "Ganti Foto" atau "Hapus" kapan saja untuk memperbarui foto profil Anda tanpa batasan.</p>
+     <div class="mb-5">
+      <p class="text-xs font-bold uppercase text-blue-600">Standar Operasional Prosedur</p>
+      <h2 class="text-xl font-extrabold">Panduan Teknis Pengawasan PAGAR PKTN</h2>
+     </div>
+     
+     <div class="space-y-4 text-xs">
+      
+      <!-- Bab 1 -->
+      <div class="section-card space-y-2">
+       <div class="flex items-center gap-2 text-blue-600 font-bold text-sm">
+        <i data-lucide="book-open" class="w-4 h-4"></i> BAB I: Ketentuan Umum & Tujuan Pengawasan
+       </div>
+       <p class="text-slate-600 leading-relaxed">
+        Sistem **PAGAR PKTN** (Pengawasan Barang Beredar dan Jasa Tertib Niaga) adalah platform digital berbasis mobile-web yang dirancang khusus untuk Pengawas Perdagangan dalam melaksanakan pengawasan *post-market* terhadap barang beredar wajib Standar Nasional Indonesia (SNI), pemenuhan ketentuan label dalam bahasa Indonesia, petunjuk penggunaan, serta jaminan layanan purna jual (garansi).
+       </p>
       </div>
+
+      <!-- Bab 2 -->
+      <div class="section-card space-y-2">
+       <div class="flex items-center gap-2 text-blue-600 font-bold text-sm">
+        <i data-lucide="user-check" class="w-4 h-4"></i> BAB II: Manajemen Akun, Login, & Keamanan Kredensial
+       </div>
+       <ul class="list-disc pl-4 space-y-1.5 text-slate-600 leading-relaxed">
+        <li><b>Registrasi Petugas:</b> Petugas lapangan melakukan pendaftaran akun baru dengan memasukkan Nama Lengkap (misal: <i>Eryzon Arifandy Huan, S.Mat</i>), Email, NIP (`199904182025061006`), dan kata sandi. Akun memerlukan persetujuan Administrator pusat.</li>
+        <li><b>Fitur "Ingat Saya":</b> Centang kotak *Ingat Saya* saat login untuk menyimpan sesi otomatis di perangkat lokal.</li>
+        <li><b>Pemulihan Lupa Sandi:</b> Jika lupa kata sandi, tekan tombol *Lupa Password?* pada modal login dan masukkan NIP Anda untuk mencocokkan data akun secara instan.</li>
+        <li><b>Manajemen Profil:</b> Anda dapat melihat kata sandi secara transparan (fitur *Lihat*), mengganti foto profil interaktif, atau menghapus foto profil langsung melalui menu **Profil**.</li>
+       </ul>
+      </div>
+
+      <!-- Bab 3 -->
+      <div class="section-card space-y-2">
+       <div class="flex items-center gap-2 text-blue-600 font-bold text-sm">
+        <i data-lucide="file-text" class="w-4 h-4"></i> BAB III: Prosedur Pengisian Formulir 5 Langkah
+       </div>
+       <div class="space-y-2 text-slate-600 leading-relaxed">
+        <p><b>1. Langkah 1 (Tim & Toko):</b> Masukkan instansi, nama petugas (gunakan tombol <i>Tambah Petugas</i> jika pengawasan dilakukan secara tim), kode sampel, nomor telepon/WhatsApp pengecer, nama toko, alamat, pemilik, serta ambil titik koordinat GPS secara akurat. <i>Sistem memvalidasi nomor telepon minimal 10 digit angka.</i></p>
+        <p><b>2. Langkah 2 (Produk & Bagian A):</b> Input jenis komoditas dan merek. Periksa dan catat nomor registrasi standar (SNI, LSpro, NPB) pada barang dan kemasan. Manfaatkan tombol resmi **Portal Bang Beni (BSN)** untuk mengecek keaslian nomor. *Catatan:* Jika status dipilih "Ada" namun nomor dikosongkan, sistem akan otomatis menolak pengiriman dan memperingatkan pengawas.</p>
+        <p><b>3. Langkah 3 (Bagian B - Label Bahasa Indonesia):</b> Cek pencantuman merek, spesifikasi kelistrikan (Voltase & Frekuensi) beserta lampiran foto, serta negara pembuat. <i>Fitur Dinamis:</i> Jika negara pembuat diisi <b>"Indonesia"</b>, formulir otomatis menampilkan kolom **Nama & Alamat Produsen**. Jika diisi selain Indonesia (impor), formulir menampilkan kolom **Nama & Alamat Importir**.</p>
+        <p><b>4. Langkah 4 (Bagian C & D - Petunjuk & Garansi):</b> Evaluasi ketersediaan buku petunjuk penggunaan serta 10 poin persyaratan jaminan purna jual (kartu garansi).</p>
+        <p><b>5. Langkah 5 (Dokumentasi Lapangan):</b> Ambil foto penunjang etalase toko serta foto pelaksanaan di lapangan (aktivitas wawancara/pemeriksaan fisik yang bersifat opsional).</p>
+       </div>
+      </div>
+
+      <!-- Bab 4 -->
+      <div class="section-card space-y-2">
+       <div class="flex items-center gap-2 text-blue-600 font-bold text-sm">
+        <i data-lucide="cloud" class="w-4 h-4"></i> BAB IV: Mode Offline-First & Sinkronisasi Cloud
+       </div>
+       <p class="text-slate-600 leading-relaxed">
+        Aplikasi menggunakan teknologi <i>IndexedDB</i> sehingga seluruh laporan tetap dapat disimpan saat perangkat berada di area tanpa sinyal (*offline*). Ketika tombol simpan ditekan:
+       </p>
+       <ul class="list-disc pl-4 space-y-1 text-slate-600 mt-1">
+        <li>Jika perangkat <b>Online</b>, data langsung terkirim ke server pusat dengan notifikasi sukses yang meriah.</li>
+        <li>Jika perangkat <b>Offline</b>, data disimpan aman secara lokal dengan peringatan agar petugas segera melakukan verifikasi ke Portal Bang Beni dan melakukan sinkronisasi begitu jaringan internet pulih.</li>
+       </ul>
+      </div>
+
      </div>
     </section>
 
-    <!-- 9. DIREKTORI REGULASI -->
+    <!-- 9. DIREKTORI REGULASI LENGKAP DENGAN TOMBOL AKSES FULL -->
     <section id="page-regulasi" class="page">
      <div class="mb-5">
-      <p class="text-xs font-bold uppercase text-blue-600">Regulasi</p>
-      <h2 class="text-xl font-extrabold">Direktori Dasar Hukum & Regulasi Teknis</h2>
+      <p class="text-xs font-bold uppercase text-blue-600">Regulasi & Hukum</p>
+      <h2 class="text-xl font-extrabold">Direktori Dasar Hukum & Regulasi Teknis Pengawasan</h2>
      </div>
      
      <div class="space-y-3 text-xs">
+      
+      <!-- Regulasi 1 -->
       <div class="section-card space-y-2">
        <div class="flex items-center justify-between">
-        <span class="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700 font-bold text-[10px]">Undang-Undang</span>
-        <span class="text-slate-400">UU No. 8 Tahun 1999</span>
+        <span class="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700 font-bold text-[10px]">Undang-Undang Republik Indonesia</span>
+        <span class="text-slate-400 font-mono">UU No. 8 Tahun 1999</span>
        </div>
        <h3 class="font-bold text-sm text-slate-800">Undang-Undang tentang Perlindungan Konsumen</h3>
-       <p class="text-slate-600 leading-relaxed">Mengatur hak dan kewajiban konsumen serta pelaku usaha, termasuk tanggung jawab atas mutu dan standar barang.</p>
+       <p class="text-slate-600 leading-relaxed">
+        Mengatur asas, tujuan, dan perlindungan hukum bagi konsumen, hak atas kenyamanan, keamanan, dan keselamatan dalam mengonsumsi barang dan/atau jasa, serta kewajiban pelaku usaha untuk mematuhi standar mutu yang berlaku (termasuk kewajiban pencantuman label dan SNI).
+       </p>
        <div class="pt-2">
         <a href="https://jdih.kemendag.go.id" target="_blank" class="secondary-btn text-xs py-2 px-3 w-full justify-center">
-         <i data-lucide="external-link" class="w-4 h-4"></i> Buka Dokumen Resmi (Full Text)
+         <i data-lucide="external-link" class="w-4 h-4"></i> Buka Dokumen Resmi (Full Text JDIH Kemendag)
         </a>
        </div>
       </div>
+
+      <!-- Regulasi 2 -->
+      <div class="section-card space-y-2">
+       <div class="flex items-center justify-between">
+        <span class="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700 font-bold text-[10px]">Undang-Undang Republik Indonesia</span>
+        <span class="text-slate-400 font-mono">UU No. 7 Tahun 2014</span>
+       </div>
+       <h3 class="font-bold text-sm text-slate-800">Undang-Undang tentang Perdagangan</h3>
+       <p class="text-slate-600 leading-relaxed">
+        Mengatur pembinaan, pengaturan, dan pengawasan kegiatan perdagangan dalam negeri maupun luar negeri. Mencakup ketentuan tata niaga barang, pengendalian impor, standardisasi barang perdagangan, serta instrumen perlindungan konsumen dan tertib niaga.
+       </p>
+       <div class="pt-2">
+        <a href="https://jdih.kemendag.go.id" target="_blank" class="secondary-btn text-xs py-2 px-3 w-full justify-center">
+         <i data-lucide="external-link" class="w-4 h-4"></i> Buka Dokumen Resmi (Full Text JDIH Kemendag)
+        </a>
+       </div>
+      </div>
+
+      <!-- Regulasi 3 -->
+      <div class="section-card space-y-2">
+       <div class="flex items-center justify-between">
+        <span class="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700 font-bold text-[10px]">Undang-Undang Republik Indonesia</span>
+        <span class="text-slate-400 font-mono">UU No. 20 Tahun 2014</span>
+       </div>
+       <h3 class="font-bold text-sm text-slate-800">Undang-Undang tentang Standardisasi dan Penilaian Kesesuaian</h3>
+       <p class="text-slate-600 leading-relaxed">
+        Landasan hukum utama penyelenggaraan standardisasi nasional, penetapan Standar Nasional Indonesia (SNI), pengakuan lembaga sertifikasi (LSpro), serta pengawasan pemenuhan standar dan penilaian kesesuaian terhadap produk yang beredar di pasar domestik.
+       </p>
+       <div class="pt-2">
+        <a href="https://www.bsn.go.id" target="_blank" class="secondary-btn text-xs py-2 px-3 w-full justify-center">
+         <i data-lucide="external-link" class="w-4 h-4"></i> Buka Dokumen Resmi (Full Text BSN)
+        </a>
+       </div>
+      </div>
+
+      <!-- Regulasi 4 -->
+      <div class="section-card space-y-2">
+       <div class="flex items-center justify-between">
+        <span class="px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-700 font-bold text-[10px]">Peraturan Menteri Perdagangan</span>
+        <span class="text-slate-400 font-mono">Permendag No. 69 Tahun 2018</span>
+       </div>
+       <h3 class="font-bold text-sm text-slate-800">Peraturan Menteri Perdagangan tentang Pengawasan Barang Beredar dan/atau Jasa</h3>
+       <p class="text-slate-600 leading-relaxed">
+        Pedoman operasional bagi Pejabat Pengawas Perdagangan dalam melaksanakan pengawasan <i>pre-market</i> dan <i>post-market</i> terhadap pemenuhan ketentuan teknis, kelayakan edar, label berbahasa Indonesia, manual petunjuk, serta kartu jaminan purna jual.
+       </p>
+       <div class="pt-2">
+        <a href="https://jdih.kemendag.go.id" target="_blank" class="secondary-btn text-xs py-2 px-3 w-full justify-center">
+         <i data-lucide="external-link" class="w-4 h-4"></i> Buka Dokumen Resmi (Full Text JDIH Kemendag)
+        </a>
+       </div>
+      </div>
+
      </div>
     </section>
 
