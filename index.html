@@ -541,18 +541,26 @@
        </div>
       </div>
 
-      <!-- STEP 5: Dokumentasi Utama & Kirim -->
+      <!-- STEP 5: Dokumentasi Utama & Lapangan Opsional -->
       <div class="wizard-step" data-step="5">
        <article class="section-card space-y-4">
         <div class="section-heading">
          <div class="section-icon"><i data-lucide="camera"></i></div>
-         <div class="flex-1"><h3 class="font-bold text-base">Dokumentasi Foto Utama Lapangan</h3></div>
+         <div class="flex-1"><h3 class="font-bold text-base">Dokumentasi Foto Umum & Lapangan</h3></div>
         </div>
-        <div class="grid grid-cols-2 gap-3">
-         <label class="doc-box" for="photo-spec"><input id="photo-spec" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)"><div class="icon-state"><i data-lucide="camera" class="w-6 h-6"></i></div><span class="file-info">Spesifikasi</span></label>
-         <label class="doc-box" for="photo-snibarw"><input id="photo-snibarw" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)"><div class="icon-state"><i data-lucide="camera" class="w-6 h-6"></i></div><span class="file-info">SNI Barang</span></label>
-         <label class="doc-box" for="photo-snikem"><input id="photo-snikem" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)"><div class="icon-state"><i data-lucide="camera" class="w-6 h-6"></i></div><span class="file-info">SNI Kemasan</span></label>
-         <label class="doc-box" for="photo-usage"><input id="photo-usage" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)"><div class="icon-state"><i data-lucide="camera" class="w-6 h-6"></i></div><span class="file-info">Petunjuk</span></label>
+        <p class="text-xs text-slate-500 mb-2">Unggah foto umum penunjang lokasi dan produk.</p>
+        <div class="grid grid-cols-2 gap-3 mb-4">
+         <label class="doc-box" for="photo-toko"><input id="photo-toko" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)"><div class="icon-state"><i data-lucide="camera" class="w-6 h-6"></i></div><span class="file-info">Tampak Depan Toko</span></label>
+         <label class="doc-box" for="photo-etalase"><input id="photo-etalase" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)"><div class="icon-state"><i data-lucide="camera" class="w-6 h-6"></i></div><span class="file-info">Produk di Rak / Etalase</span></label>
+        </div>
+
+        <div class="border-t pt-3 mt-3">
+         <h4 class="font-bold text-xs uppercase text-blue-700 mb-2">Dokumentasi Pelaksanaan di Lapangan (Opsional)</h4>
+         <p class="text-[11px] text-slate-500 mb-3">Foto aktivitas saat wawancara atau pemeriksaan fisik di tempat (bersifat opsional, dapat dikosongkan).</p>
+         <div class="grid grid-cols-2 gap-3">
+          <label class="doc-box" for="photo-pelaksanaan-1"><input id="photo-pelaksanaan-1" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)"><div class="icon-state"><i data-lucide="camera" class="w-6 h-6"></i></div><span class="file-info">Aktivitas Pengawasan (Opsional)</span></label>
+          <label class="doc-box" for="photo-pelaksanaan-2"><input id="photo-pelaksanaan-2" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)"><div class="icon-state"><i data-lucide="camera" class="w-6 h-6"></i></div><span class="file-info">Wawancara Pemilik (Opsional)</span></label>
+         </div>
         </div>
        </article>
        <div class="flex gap-2">
@@ -582,19 +590,80 @@
 
     <!-- 3. HALAMAN STATISTIK -->
     <section id="page-analytics" class="page">
-     <div class="mb-5"><p class="text-xs font-bold uppercase text-blue-600">Analisis</p><h2 class="text-xl font-extrabold">Statistik Kepatuhan SNI</h2></div>
-     <div class="section-card space-y-4">
-      <div>
-       <div class="flex justify-between text-xs font-bold mb-1"><span>Terdaftar dan Sesuai (Legal)</span> <span id="count-legal">0</span></div>
-       <div class="w-full bg-slate-200 h-2 rounded-full"><div id="bar-legal" class="bg-emerald-500 h-full" style="width:0%"></div></div>
+     <div class="mb-5">
+      <p class="text-xs font-bold uppercase text-blue-600">Analisis Kinerja</p>
+      <h2 class="text-xl font-extrabold">Statistik Kepatuhan SNI Barang Beredar</h2>
+     </div>
+     
+     <div class="grid grid-cols-3 gap-3 mb-4">
+      <div class="p-4 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-white shadow-md">
+       <div class="flex items-center justify-between mb-2">
+        <span class="text-[10px] font-bold uppercase tracking-wider bg-emerald-400/30 px-2 py-0.5 rounded-full">Legal</span>
+        <i data-lucide="shield-check" class="w-5 h-5 text-emerald-200"></i>
+       </div>
+       <div id="stat-card-legal" class="text-2xl font-black">0</div>
+       <p class="text-[11px] text-emerald-100 mt-1 font-medium">Terdaftar & Sesuai</p>
       </div>
-      <div>
-       <div class="flex justify-between text-xs font-bold mb-1"><span>Tidak Terdaftar (Temuan)</span> <span id="count-temuan">0</span></div>
-       <div class="w-full bg-slate-200 h-2 rounded-full"><div id="bar-temuan" class="bg-rose-500 h-full" style="width:0%"></div></div>
+
+      <div class="p-4 rounded-2xl bg-gradient-to-br from-rose-500 to-rose-700 text-white shadow-md">
+       <div class="flex items-center justify-between mb-2">
+        <span class="text-[10px] font-bold uppercase tracking-wider bg-rose-400/30 px-2 py-0.5 rounded-full">Temuan</span>
+        <i data-lucide="shield-alert" class="w-5 h-5 text-rose-200"></i>
+       </div>
+       <div id="stat-card-temuan" class="text-2xl font-black">0</div>
+       <p class="text-[11px] text-rose-100 mt-1 font-medium">Tidak Terdaftar</p>
       </div>
-      <div>
-       <div class="flex justify-between text-xs font-bold mb-1"><span>Terdaftar namun Tidak Sesuai Spesifikasi</span> <span id="count-pending">0</span></div>
-       <div class="w-full bg-slate-200 h-2 rounded-full"><div id="bar-pending" class="bg-amber-500 h-full" style="width:0%"></div></div>
+
+      <div class="p-4 rounded-2xl bg-gradient-to-br from-amber-500 to-amber-700 text-white shadow-md">
+       <div class="flex items-center justify-between mb-2">
+        <span class="text-[10px] font-bold uppercase tracking-wider bg-amber-400/30 px-2 py-0.5 rounded-full">Spesifikasi</span>
+        <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-200"></i>
+       </div>
+       <div id="stat-card-pending" class="text-2xl font-black">0</div>
+       <p class="text-[11px] text-amber-100 mt-1 font-medium">Tidak Sesuai</p>
+      </div>
+     </div>
+
+     <div class="section-card space-y-5">
+      <div class="flex items-center justify-between border-b pb-3">
+       <h3 class="font-bold text-sm text-slate-800">Distribusi Kepatuhan Pengawasan</h3>
+       <span id="stat-total-badge" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-50 text-blue-600">Total: 0 Sampel</span>
+      </div>
+
+      <div class="space-y-4">
+       <div>
+        <div class="flex justify-between text-xs font-bold mb-1">
+         <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span> Terdaftar dan Sesuai (Legal)</span> 
+         <span id="count-legal" class="text-emerald-600 font-black">0 (0%)</span>
+        </div>
+        <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden p-0.5 border border-slate-200">
+         <div id="bar-legal" class="bg-gradient-to-r from-emerald-400 to-emerald-600 h-full rounded-full transition-all duration-500" style="width:0%"></div>
+        </div>
+       </div>
+
+       <div>
+        <div class="flex justify-between text-xs font-bold mb-1">
+         <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span> Tidak Terdaftar (Temuan Pelanggaran)</span> 
+         <span id="count-temuan" class="text-rose-600 font-black">0 (0%)</span>
+        </div>
+        <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden p-0.5 border border-slate-200">
+         <div id="bar-temuan" class="bg-gradient-to-r from-rose-400 to-rose-600 h-full rounded-full transition-all duration-500" style="width:0%"></div>
+        </div>
+       </div>
+
+       <div>
+        <div class="flex justify-between text-xs font-bold mb-1">
+         <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span> Terdaftar namun Tidak Sesuai Spesifikasi</span> 
+         <span id="count-pending" class="text-amber-600 font-black">0 (0%)</span>
+        </div>
+        <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden p-0.5 border border-slate-200">
+         <div id="bar-pending" class="bg-gradient-to-r from-amber-400 to-amber-600 h-full rounded-full transition-all duration-500" style="width:0%"></div>
+        </div>
+       </div>
+      </div>
+
+      <div id="analytics-summary-text" class="p-3 bg-blue-50 text-blue-900 rounded-xl text-xs font-medium border border-blue-200">
+       Belum ada data laporan yang direkam untuk dianalisis.
       </div>
      </div>
     </section>
@@ -678,23 +747,103 @@
      </div>
     </section>
 
-    <!-- 8. PANDUAN SOP -->
+    <!-- 8. PANDUAN SOP (LENGKAP) -->
     <section id="page-guide" class="page">
      <div class="mb-5"><p class="text-xs font-bold uppercase text-blue-600">Panduan Teknis</p><h2 class="text-xl font-extrabold">SOP & Petunjuk Operasional PAGAR PKTN</h2></div>
      <div class="section-card text-xs space-y-4 leading-relaxed">
+      
       <div class="p-3 bg-blue-50 rounded-xl border border-blue-200">
-       <h3 class="font-bold text-sm text-blue-900 mb-1">Pengaturan Produsen & Importir</h3>
-       <p class="text-slate-700">Di Bagian B, jika negara pembuat diisi "Indonesia", sistem menampilkan kolom Produsen. Jika selain Indonesia, sistem menampilkan kolom Importir.</p>
+       <h3 class="font-bold text-sm text-blue-900 mb-1">1. Manajemen Akun & Verifikasi Admin</h3>
+       <p class="text-slate-700">Setiap petugas lapangan wajib mendaftarkan diri melalui tab <b>"Daftar Akun Baru"</b>. Akun baru berstatus <i>Pending</i> hingga disetujui oleh Administrator pusat (Eryzon Arifandy Huan, S.Mat).</p>
       </div>
+
+      <div class="p-3 bg-slate-50 rounded-xl border">
+       <h3 class="font-bold text-sm text-slate-800 mb-1">2. Fitur "Ingat Saya" & Pemulihan Kata Sandi</h3>
+       <p class="text-slate-600">Centang opsi <b>"Ingat Saya"</b> saat login. Jika lupa sandi, gunakan menu <b>"Lupa Password?"</b> dengan memasukkan NIP Anda (`199904182025061006`).</p>
+      </div>
+
+      <div class="p-3 bg-slate-50 rounded-xl border">
+       <h3 class="font-bold text-sm text-slate-800 mb-1">3. Mode Offline-First & Penyimpanan Lokal</h3>
+       <p class="text-slate-600">Aplikasi bekerja tanpa koneksi internet. Semua data disimpan di IndexedDB secara aman.</p>
+      </div>
+
+      <div class="p-3 bg-slate-50 rounded-xl border">
+       <h3 class="font-bold text-sm text-slate-800 mb-1">4. Alur Pengisian Formulir (5 Langkah & Validasi)</h3>
+       <ul class="list-disc pl-4 space-y-1 text-slate-600 mt-1">
+        <li><b>Langkah 1:</b> Masukkan instansi, nama petugas (gunakan tombol <b>"Tambah Petugas"</b> untuk tim ganda), kode sampel, telepon/WA, toko, alamat, pemilik, dan GPS.</li>
+        <li><b>Langkah 2:</b> Isi jenis komoditas, merek, dan parameter Bagian A (Nomor SNI, LSpro, NPB). Gunakan <b>"Portal Bang Beni"</b> untuk verifikasi.</li>
+        <li><b>Langkah 3:</b> Isi Bagian B (Label Bahasa Indonesia). Jika negara pembuat diisi "Indonesia", form menampilkan input Produsen. Jika selain Indonesia, form menampilkan input Importir.</li>
+        <li><b>Langkah 4:</b> Lengkapi Bagian C (Petunjuk) dan Bagian D (Garansi 10 Poin).</li>
+        <li><b>Langkah 5:</b> Lampirkan foto dokumentasi umum lapangan serta dokumentasi pelaksanaan lapangan (opsional).</li>
+       </ul>
+      </div>
+
      </div>
     </section>
 
-    <!-- 9. DIREKTORI REGULASI -->
+    <!-- 9. DIREKTORI REGULASI LENGKAP DENGAN TOMBOL AKSES FULL -->
     <section id="page-regulasi" class="page">
-     <div class="mb-5"><p class="text-xs font-bold uppercase text-blue-600">Regulasi</p><h2 class="text-xl font-extrabold">Direktori Dasar Hukum</h2></div>
-     <div class="section-card text-xs space-y-3 leading-relaxed">
-      <h3 class="font-bold text-sm text-blue-600">Dasar Hukum Pengawasan</h3>
-      <p>• Undang-Undang No. 8 Tahun 1999 tentang Perlindungan Konsumen.</p>
+     <div class="mb-5">
+      <p class="text-xs font-bold uppercase text-blue-600">Regulasi</p>
+      <h2 class="text-xl font-extrabold">Direktori Dasar Hukum & Regulasi Teknis</h2>
+     </div>
+     
+     <div class="space-y-3 text-xs">
+      <div class="section-card space-y-2">
+       <div class="flex items-center justify-between">
+        <span class="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700 font-bold text-[10px]">Undang-Undang</span>
+        <span class="text-slate-400">UU No. 8 Tahun 1999</span>
+       </div>
+       <h3 class="font-bold text-sm text-slate-800">Undang-Undang tentang Perlindungan Konsumen</h3>
+       <p class="text-slate-600 leading-relaxed">Mengatur hak dan kewajiban konsumen serta pelaku usaha, termasuk tanggung jawab atas mutu dan standar barang yang diedarkan.</p>
+       <div class="pt-2">
+        <a href="https://jdih.kemendag.go.id" target="_blank" class="secondary-btn text-xs py-2 px-3 w-full justify-center">
+         <i data-lucide="external-link" class="w-4 h-4"></i> Buka Dokumen Resmi (Full Text)
+        </a>
+       </div>
+      </div>
+
+      <div class="section-card space-y-2">
+       <div class="flex items-center justify-between">
+        <span class="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700 font-bold text-[10px]">Undang-Undang</span>
+        <span class="text-slate-400">UU No. 7 Tahun 2014</span>
+       </div>
+       <h3 class="font-bold text-sm text-slate-800">Undang-Undang tentang Perdagangan</h3>
+       <p class="text-slate-600 leading-relaxed">Mengatur tata niaga dalam negeri, ekspor, impor, standardisasi barang perdagangan, serta pengawasan peredaran barang.</p>
+       <div class="pt-2">
+        <a href="https://jdih.kemendag.go.id" target="_blank" class="secondary-btn text-xs py-2 px-3 w-full justify-center">
+         <i data-lucide="external-link" class="w-4 h-4"></i> Buka Dokumen Resmi (Full Text)
+        </a>
+       </div>
+      </div>
+
+      <div class="section-card space-y-2">
+       <div class="flex items-center justify-between">
+        <span class="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700 font-bold text-[10px]">Undang-Undang</span>
+        <span class="text-slate-400">UU No. 20 Tahun 2014</span>
+       </div>
+       <h3 class="font-bold text-sm text-slate-800">Undang-Undang tentang Standardisasi dan Penilaian Kesesuaian</h3>
+       <p class="text-slate-600 leading-relaxed">Landasan hukum penerapan Standar Nasional Indonesia (SNI), akreditasi lembaga penilaian kesesuaian, serta pengawasan SNI wajib.</p>
+       <div class="pt-2">
+        <a href="https://www.bsn.go.id" target="_blank" class="secondary-btn text-xs py-2 px-3 w-full justify-center">
+         <i data-lucide="external-link" class="w-4 h-4"></i> Buka Dokumen Resmi (Full Text)
+        </a>
+       </div>
+      </div>
+
+      <div class="section-card space-y-2">
+       <div class="flex items-center justify-between">
+        <span class="px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-700 font-bold text-[10px]">Permendag</span>
+        <span class="text-slate-400">Permendag No. 69 Tahun 2018</span>
+       </div>
+       <h3 class="font-bold text-sm text-slate-800">Peraturan Menteri Perdagangan tentang Pengawasan Barang Beredar dan/atau Jasa</h3>
+       <p class="text-slate-600 leading-relaxed">Pedoman teknis pelaksanaan pengawasan pre-market dan post-market oleh pengawas perdagangan terhadap pemenuhan ketentuan teknis dan SNI.</p>
+       <div class="pt-2">
+        <a href="https://jdih.kemendag.go.id" target="_blank" class="secondary-btn text-xs py-2 px-3 w-full justify-center">
+         <i data-lucide="external-link" class="w-4 h-4"></i> Buka Dokumen Resmi (Full Text)
+        </a>
+       </div>
+      </div>
      </div>
     </section>
 
@@ -1271,11 +1420,11 @@
       const officerInputs = document.querySelectorAll('.officer-input');
       const officersList = Array.from(officerInputs).map(i => i.value.trim()).filter(v => v !== '');
 
-      const [spec, snibarw, snikem, usage, docSniBrg, docSniKem, docLsproBrg, docLsproKem, docNpbBrg, docNpbKem, docLabelListrik, docPetunjuk, docGaransi] = await Promise.all([
-        compressImage(document.getElementById('photo-spec')?.files[0]),
-        compressImage(document.getElementById('photo-snibarw')?.files[0]),
-        compressImage(document.getElementById('photo-snikem')?.files[0]),
-        compressImage(document.getElementById('photo-usage')?.files[0]),
+      const [toko, etalase, pel1, pel2, docSniBrg, docSniKem, docLsproBrg, docLsproKem, docNpbBrg, docNpbKem, docLabelListrik, docPetunjuk, docGaransi] = await Promise.all([
+        compressImage(document.getElementById('photo-toko')?.files[0]),
+        compressImage(document.getElementById('photo-etalase')?.files[0]),
+        compressImage(document.getElementById('photo-pelaksanaan-1')?.files[0]),
+        compressImage(document.getElementById('photo-pelaksanaan-2')?.files[0]),
         compressImage(document.getElementById('doc-sni-barang')?.files[0]),
         compressImage(document.getElementById('doc-sni-kemasan')?.files[0]),
         compressImage(document.getElementById('doc-lspro-barang')?.files[0]),
@@ -1360,7 +1509,7 @@
           regOpt: document.getElementById('g-reg-opt').value,
           regVal: document.getElementById('g-reg-val').value,
         },
-        photos: { spec, snibarw, snikem, usage, docSniBrg, docSniKem, docLsproBrg, docLsproKem, docNpbBrg, docNpbKem, docLabelListrik, docPetunjuk, docGaransi },
+        photos: { toko, etalase, pel1, pel2, docSniBrg, docSniKem, docLsproBrg, docLsproKem, docNpbBrg, docNpbKem, docLabelListrik, docPetunjuk, docGaransi },
         synced: false,
         docUrl: '', folderUrl: ''
       };
@@ -1403,13 +1552,29 @@
       const temuan = reports.filter(r => r.sniStatus.includes('Temuan')).length;
       const pending = total - legal - temuan;
 
-      document.getElementById('count-legal').textContent = legal;
-      document.getElementById('count-temuan').textContent = temuan;
-      document.getElementById('count-pending').textContent = pending;
+      document.getElementById('stat-card-legal').textContent = legal;
+      document.getElementById('stat-card-temuan').textContent = temuan;
+      document.getElementById('stat-card-pending').textContent = pending;
+      document.getElementById('stat-total-badge').textContent = `Total: ${total} Sampel`;
 
-      document.getElementById('bar-legal').style.width = total ? `${(legal / total) * 100}%` : '0%';
-      document.getElementById('bar-temuan').style.width = total ? `${(temuan / total) * 100}%` : '0%';
-      document.getElementById('bar-pending').style.width = total ? `${(pending / total) * 100}%` : '0%';
+      const pctLegal = total ? Math.round((legal / total) * 100) : 0;
+      const pctTemuan = total ? Math.round((temuan / total) * 100) : 0;
+      const pctPending = total ? Math.round((pending / total) * 100) : 0;
+
+      document.getElementById('count-legal').textContent = `${legal} (${pctLegal}%)`;
+      document.getElementById('count-temuan').textContent = `${temuan} (${pctTemuan}%)`;
+      document.getElementById('count-pending').textContent = `${pending} (${pctPending}%)`;
+
+      document.getElementById('bar-legal').style.width = `${pctLegal}%`;
+      document.getElementById('bar-temuan').style.width = `${pctTemuan}%`;
+      document.getElementById('bar-pending').style.width = `${pctPending}%`;
+
+      const summaryBox = document.getElementById('analytics-summary-text');
+      if (total === 0) {
+        summaryBox.textContent = "Belum ada data laporan yang direkam untuk dianalisis.";
+      } else {
+        summaryBox.innerHTML = `<b>Analisis Ringkas:</b> Dari total <b>${total}</b> sampel pengawasan, tingkat kepatuhan legal mencapai <b>${pctLegal}%</b> (${legal} sampel). Temuan ketidaksesuaian/pelanggaran tercatat sebanyak <b>${temuan + pending}</b> sampel.`;
+      }
     }
 
     // --- PENCARIAN ---
