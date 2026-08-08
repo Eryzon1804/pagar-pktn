@@ -218,7 +218,7 @@
          <input class="field-control text-xs" id="agency" required value="Dinas Perindustrian dan Perdagangan Pemerintah Provinsi NTT">
         </div>
 
-        <!-- TIM PETUGAS (DENGAN TOMBOL TAMBAH PETUGAS) -->
+        <!-- TIM PETUGAS -->
         <div class="space-y-2">
          <label class="field-label">Nama Petugas Pengawas <span class="text-rose-600">*</span></label>
          <div id="officer-container" class="space-y-2">
@@ -265,7 +265,7 @@
        <button type="button" class="primary-btn w-full py-3.5 font-bold" onclick="nextStep(1)">Selanjutnya: Produk & Bagian A &rarr;</button>
       </div>
 
-      <!-- STEP 2: Produk & Bagian A -->
+      <!-- STEP 2: Produk & Bagian A (Tanpa Negara Asal) -->
       <div class="wizard-step" data-step="2">
        <article class="section-card space-y-4">
         <div class="section-heading">
@@ -276,29 +276,9 @@
          <label class="field-label">Jenis Produk / Komoditas <span class="text-rose-600">*</span></label>
          <input class="field-control text-xs" id="product-type" placeholder="Contoh: Pompa Air Listrik">
         </div>
-        <div class="grid sm:grid-cols-2 gap-4">
-         <div>
-          <label class="field-label">Merek / Brand <span class="text-rose-600">*</span></label>
-          <input class="field-control text-xs" id="brand" placeholder="Contoh: Shimizu">
-         </div>
-         <div>
-          <label class="field-label">Negara Asal <span class="text-rose-600">*</span></label>
-          <select class="field-control text-xs" id="country">
-           <option value="Indonesia">Indonesia</option>
-           <option value="China">China</option>
-           <option value="Japan">Japan</option>
-           <option value="Lainnya (Impor)">Lainnya (Impor)</option>
-          </select>
-         </div>
-        </div>
-
-        <div id="producer-section" class="grid sm:grid-cols-2 gap-4 p-4 bg-slate-50 rounded-xl border">
-         <div><label class="field-label text-xs">Nama Produsen</label><input class="field-control text-xs" id="producer-name" placeholder="Nama produsen"></div>
-         <div><label class="field-label text-xs">Alamat Produsen</label><input class="field-control text-xs" id="producer-address" placeholder="Alamat pabrik"></div>
-        </div>
-        <div id="importer-section" class="hidden grid sm:grid-cols-2 gap-4 p-4 bg-slate-50 rounded-xl border">
-         <div><label class="field-label text-xs">Nama Importir</label><input class="field-control text-xs" id="importer-name" placeholder="Nama importir"></div>
-         <div><label class="field-label text-xs">Alamat Importir</label><input class="field-control text-xs" id="importer-address" placeholder="Alamat kantor importir"></div>
+        <div>
+         <label class="field-label">Merek / Brand <span class="text-rose-600">*</span></label>
+         <input class="field-control text-xs" id="brand" placeholder="Contoh: Shimizu">
         </div>
 
         <hr class="my-2">
@@ -393,7 +373,7 @@
        </div>
       </div>
 
-      <!-- STEP 3: Bagian B -->
+      <!-- STEP 3: Bagian B (Label Lengkap + Dinamis Produsen / Importir) -->
       <div class="wizard-step" data-step="3">
        <article class="section-card space-y-4">
         <div class="section-heading">
@@ -407,6 +387,7 @@
         </div>
 
         <div class="space-y-4">
+         <!-- 1. Tercantum Pada Barang -->
          <div class="p-4 bg-slate-50 rounded-xl border space-y-3">
           <h4 class="font-bold text-xs uppercase text-blue-700">1. Tercantum Pada Barang</h4>
           <div>
@@ -430,6 +411,7 @@
           </div>
          </div>
 
+         <!-- 2. Tercantum Pada Kemasan (Dinamis: Produsen jika Indonesia, Importir jika Lainnya) -->
          <div class="p-4 bg-slate-50 rounded-xl border space-y-3">
           <h4 class="font-bold text-xs uppercase text-blue-700">2. Tercantum Pada Kemasan</h4>
           <div>
@@ -444,9 +426,25 @@
           </div>
           <div>
            <label class="field-label text-xs">Negara pembuat atau Made in</label>
-           <select id="label-kem-negara-opt" class="field-control text-xs mb-1"><option value="Ada dan sama pada barang">Ada dan sama pada barang</option><option value="Ada dan berbeda pada barang">Ada dan berbeda pada barang</option><option value="Tidak ada" selected>Tidak ada</option></select>
-           <input id="label-kem-negara-val" class="field-control text-xs hidden" placeholder="Tuliskan negara kemasan...">
+           <select id="label-kem-negara-opt" class="field-control text-xs mb-1" onchange="checkCountryMadeIn(this)"><option value="Ada">Ada</option><option value="Tidak ada" selected>Tidak ada</option></select>
+           <input id="label-kem-negara-val" class="field-control text-xs hidden mt-1" placeholder="Tuliskan negara (Contoh: Indonesia)" oninput="checkCountryMadeIn(this)">
           </div>
+
+          <!-- Bagian Dinamis Produsen / Importir -->
+          <div id="dynamic-entity-section" class="hidden space-y-3 pt-2 border-t border-slate-200">
+           <div id="producer-dynamic-box" class="hidden space-y-2 p-3 bg-white rounded-lg border">
+            <p class="text-[11px] font-bold text-emerald-700 uppercase">Barang Buatan Dalam Negeri (Indonesia)</p>
+            <div><label class="field-label text-xs">Nama Produsen</label><input id="dyn-producer-name" class="field-control text-xs" placeholder="Nama perusahaan produsen"></div>
+            <div><label class="field-label text-xs">Alamat Lengkap Produsen</label><input id="dyn-producer-addr" class="field-control text-xs" placeholder="Alamat pabrik produsen"></div>
+           </div>
+
+           <div id="importer-dynamic-box" class="hidden space-y-2 p-3 bg-white rounded-lg border">
+            <p class="text-[11px] font-bold text-blue-700 uppercase">Barang Impor (Selain Indonesia)</p>
+            <div><label class="field-label text-xs">Nama Importir</label><input id="dyn-importer-name" class="field-control text-xs" placeholder="Nama perusahaan importir"></div>
+            <div><label class="field-label text-xs">Alamat Lengkap Importir</label><input id="dyn-importer-addr" class="field-control text-xs" placeholder="Alamat kantor importir"></div>
+           </div>
+          </div>
+
          </div>
         </div>
        </article>
@@ -684,12 +682,8 @@
      <div class="mb-5"><p class="text-xs font-bold uppercase text-blue-600">Panduan Teknis</p><h2 class="text-xl font-extrabold">SOP & Petunjuk Operasional PAGAR PKTN</h2></div>
      <div class="section-card text-xs space-y-4 leading-relaxed">
       <div class="p-3 bg-blue-50 rounded-xl border border-blue-200">
-       <h3 class="font-bold text-sm text-blue-900 mb-1">1. Tambah Petugas & Kredensial</h3>
-       <p class="text-slate-700">Gunakan tombol <b>"Tambah Petugas"</b> di Langkah 1 untuk memasukkan lebih dari satu nama petugas pengawas. Anda juga dapat menggunakan fitur <b>"Ingat Saya"</b> saat login dan melihat kata sandi Anda melalui menu Profil.</p>
-      </div>
-      <div class="p-3 bg-slate-50 rounded-xl border">
-       <h3 class="font-bold text-sm text-slate-800 mb-1">2. Validasi Nomor Standar</h3>
-       <p class="text-slate-600">Sistem otomatis memeriksa format nomor HP/WhatsApp dan nomor registrasi (SNI, LSpro, NPB) sebelum laporan disimpan.</p>
+       <h3 class="font-bold text-sm text-blue-900 mb-1">1. Pengaturan Negara Asal & Produsen/Importir</h3>
+       <p class="text-slate-700">Di Bagian B (Kemasan), jika dipilih "Ada" pada label negara pembuat dan diisi <b>"Indonesia"</b>, sistem menampilkan kolom Produsen. Jika diisi selain Indonesia, sistem menampilkan kolom Importir.</p>
       </div>
      </div>
     </section>
@@ -1093,14 +1087,6 @@
       }
     });
 
-    document.getElementById('country').addEventListener('change', e => {
-      if (e.target.value === 'Indonesia') {
-        document.getElementById('producer-section').classList.remove('hidden'); document.getElementById('importer-section').classList.add('hidden');
-      } else {
-        document.getElementById('producer-section').classList.add('hidden'); document.getElementById('importer-section').classList.remove('hidden');
-      }
-    });
-
     ['brg-merek', 'brg-listrik', 'brg-negara', 'kem-merek', 'kem-listrik', 'kem-negara'].forEach(item => {
       const [sec, sub] = item.split('-');
       const el = document.getElementById(`label-${sec}-${sub}-opt`);
@@ -1112,6 +1098,37 @@
         });
       }
     });
+
+    // --- DETEKSI NEGARA PEMBUAT (PRODUSEN VS IMPORTIR) ---
+    window.checkCountryMadeIn = function(el) {
+      const opt = document.getElementById('label-kem-negara-opt').value;
+      const valInput = document.getElementById('label-kem-negara-val');
+      const entitySection = document.getElementById('dynamic-entity-section');
+      const prodBox = document.getElementById('producer-dynamic-box');
+      const impBox = document.getElementById('importer-dynamic-box');
+
+      if (opt === 'Ada') {
+        valInput.classList.remove('hidden');
+        entitySection.classList.remove('hidden');
+        const countryVal = valInput.value.trim().toLowerCase();
+
+        if (countryVal === 'indonesia' || countryVal === 'ri') {
+          prodBox.classList.remove('hidden');
+          impBox.classList.add('hidden');
+        } else if (countryVal !== '') {
+          prodBox.classList.add('hidden');
+          impBox.classList.remove('hidden');
+        } else {
+          prodBox.classList.add('hidden');
+          impBox.classList.add('hidden');
+        }
+      } else {
+        valInput.classList.add('hidden');
+        entitySection.classList.add('hidden');
+        prodBox.classList.add('hidden');
+        impBox.classList.add('hidden');
+      }
+    };
 
     document.getElementById('petunjuk-opt').addEventListener('change', e => {
       if (e.target.value === 'Ada') document.getElementById('petunjuk-sub-box').classList.remove('hidden'); else document.getElementById('petunjuk-sub-box').classList.add('hidden');
@@ -1165,6 +1182,7 @@
         document.getElementById('label-kem-listrik-val').value = ld.kemListrikVal;
         document.getElementById('label-kem-negara-opt').value = ld.kemNegaraOpt;
         document.getElementById('label-kem-negara-val').value = ld.kemNegaraVal;
+        checkCountryMadeIn();
         alert("Data Bagian B berhasil dimuat dari riwayat!");
       }
     });
@@ -1244,7 +1262,6 @@
         return;
       }
 
-      // Kumpulkan semua nama petugas dari input dinamis
       const officerInputs = document.querySelectorAll('.officer-input');
       const officersList = Array.from(officerInputs).map(i => i.value.trim()).filter(v => v !== '');
 
@@ -1277,6 +1294,10 @@
         kemListrikVal: document.getElementById('label-kem-listrik-val').value,
         kemNegaraOpt: document.getElementById('label-kem-negara-opt').value,
         kemNegaraVal: document.getElementById('label-kem-negara-val').value,
+        producerName: document.getElementById('dyn-producer-name')?.value || '',
+        producerAddr: document.getElementById('dyn-producer-addr')?.value || '',
+        importerName: document.getElementById('dyn-importer-name')?.value || '',
+        importerAddr: document.getElementById('dyn-importer-addr')?.value || '',
       };
 
       const data = {
@@ -1293,7 +1314,6 @@
         coordinates: document.getElementById('coordinates').value,
         productType: document.getElementById('product-type').value,
         brand: document.getElementById('brand').value,
-        country: document.getElementById('country').value,
         sniStatus: document.getElementById('sni-status').value,
         bagianA: {
           sniBarangOpt: sniBrgOpt,
