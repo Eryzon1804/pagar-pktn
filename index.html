@@ -677,7 +677,7 @@
      </div>
     </section>
 
-    <!-- 5. PROFIL PETUGAS -->
+    <!-- 5. PROFIL PETUGAS (DENGAN PERBAIKAN UPLOAD/GANTI/HAPUS FOTO PROFIL) -->
     <section id="page-profile" class="page">
      <div class="mb-5"><p class="text-xs font-bold uppercase text-blue-600">Akun</p><h2 class="text-xl font-extrabold">Profil Petugas Lapangan</h2></div>
      <div class="section-card space-y-4 text-xs">
@@ -686,10 +686,13 @@
         <img id="profile-avatar-img" src="" class="w-full h-full object-cover hidden" alt="Foto Profil">
         <div id="profile-avatar-placeholder" class="text-slate-400"><i data-lucide="user" class="w-12 h-12"></i></div>
        </div>
-       <label for="profile-avatar-input" class="secondary-btn text-xs py-1.5 px-3 cursor-pointer shadow-sm">
-        <i data-lucide="camera" class="w-4 h-4"></i> Tambah / Ubah Foto Profil
-       </label>
-       <input id="profile-avatar-input" type="file" accept="image/*" class="hidden" onchange="updateProfileAvatar(this)">
+       <div class="flex gap-2">
+        <label for="profile-avatar-input" class="secondary-btn text-xs py-1.5 px-3 cursor-pointer shadow-sm">
+         <i data-lucide="camera" class="w-4 h-4"></i> Ganti Foto
+        </label>
+        <button type="button" class="danger-btn text-xs py-1.5 px-3" onclick="removeProfileAvatar()" title="Hapus Foto">Hapus</button>
+       </div>
+       <input id="profile-avatar-input" type="file" accept="image/*" class="hidden" onchange="uploadProfileAvatar(this)">
       </div>
 
       <div class="space-y-3">
@@ -752,8 +755,8 @@
      <div class="mb-5"><p class="text-xs font-bold uppercase text-blue-600">Panduan Teknis</p><h2 class="text-xl font-extrabold">SOP & Petunjuk Operasional PAGAR PKTN</h2></div>
      <div class="section-card text-xs space-y-4 leading-relaxed">
       <div class="p-3 bg-blue-50 rounded-xl border border-blue-200">
-       <h3 class="font-bold text-sm text-blue-900 mb-1">Status Sinkronisasi Online & Offline</h3>
-       <p class="text-slate-700">Jika perangkat terhubung ke internet saat menyimpan, laporan langsung terkirim dengan ucapan sukses. Jika offline, data tersimpan sementara di perangkat dan Anda diingatkan untuk segera melakukan pengecekan portal Bang Beni dan sinkronisasi begitu online.</p>
+       <h3 class="font-bold text-sm text-blue-900 mb-1">Manajemen Foto Profil</h3>
+       <p class="text-slate-700">Di menu Profil, Anda dapat menggunakan tombol "Ganti Foto" atau "Hapus" kapan saja untuk memperbarui foto profil Anda tanpa batasan.</p>
       </div>
      </div>
     </section>
@@ -917,12 +920,16 @@
       document.getElementById('welcome-greeting').textContent = `Selamat Datang, ${currentInspector.name}!`;
       document.getElementById('login-modal').classList.remove('open');
 
-      if (currentInspector.avatar) {
-        const img = document.getElementById('profile-avatar-img');
-        const placeholder = document.getElementById('profile-avatar-placeholder');
+      const img = document.getElementById('profile-avatar-img');
+      const placeholder = document.getElementById('profile-avatar-placeholder');
+      if (currentInspector.avatar && currentInspector.avatar.trim() !== '') {
         img.src = currentInspector.avatar;
         img.classList.remove('hidden');
         placeholder.classList.add('hidden');
+      } else {
+        img.src = '';
+        img.classList.add('hidden');
+        placeholder.classList.remove('hidden');
       }
 
       const adminBtn = document.getElementById('drawer-admin-btn');
@@ -951,13 +958,29 @@
         reader.onload = function(e) {
           currentInspector.avatar = e.target.result;
           localStorage.setItem('pagar_pktn_user', JSON.stringify(currentInspector));
+          
           let users = JSON.parse(localStorage.getItem('pagar_pktn_users') || '[]');
           users = users.map(u => { if(u.email === currentInspector.email) u.avatar = currentInspector.avatar; return u; });
           localStorage.setItem('pagar_pktn_users', JSON.stringify(users));
+
           updateSessionUI();
           alert("Foto profil berhasil diperbarui!");
         };
         reader.readAsDataURL(input.files[0]);
+      }
+    };
+
+    window.removeProfileAvatar = function() {
+      if (confirm("Apakah Anda ingin menghapus foto profil?")) {
+        currentInspector.avatar = '';
+        localStorage.setItem('pagar_pktn_user', JSON.stringify(currentInspector));
+        
+        let users = JSON.parse(localStorage.getItem('pagar_pktn_users') || '[]');
+        users = users.map(u => { if(u.email === currentInspector.email) u.avatar = ''; return u; });
+        localStorage.setItem('pagar_pktn_users', JSON.stringify(users));
+
+        updateSessionUI();
+        alert("Foto profil berhasil dihapus.");
       }
     };
 
@@ -1311,7 +1334,7 @@
       });
     }
 
-    // --- SUBMIT FORM DENGAN STATUS ONLINE / OFFLINE DINAMIS ---
+    // --- SUBMIT FORM DENGAN VALIDASI NOMOR RESMI & PETUGAS GANDA ---
     document.getElementById('inspection-form').addEventListener('submit', async e => {
       e.preventDefault();
       const form = e.target;
@@ -1453,11 +1476,10 @@
       form.reset(); currentStep = 1; updateWizard();
       switchPage('page-history');
 
-      // PERINGATAN / UCAPAN BERDASARKAN STATUS JARINGAN ONLINE / OFFLINE
       if (navigator.onLine) {
-        alert("🚀 SELAMAT! DATA BERHASIL DIKIRIM\n\nLaporan pengawasan telah sukses diproses dan dikirim secara online ke server pusat (Google Sheets & Drive).");
+        alert("🚀 SELAMAT! DATA BERHASIL DIKIRIM\n\nLaporan pengawasan telah sukses diproses dan dikirim secara online ke server pusat.");
       } else {
-        alert("⏳ PERHATIAN: DATA DISIMPAN SEMENTARA (OFFLINE)\n\nPerangkat Anda sedang tidak terhubung ke internet. Data berhasil disimpan secara lokal di perangkat.\n\nSaran Tindakan:\n1. Segera lakukan pengecekan validitas nomor ke Portal Bang Beni setelah mendapat jaringan.\n2. Buka menu 'Sinkronisasi & Backup' untuk segera mengirimkan data ke Cloud begitu ada jaringan.");
+        alert("⏳ PERHATIAN: DATA DISIMPAN SEMENTARA (OFFLINE)\n\nPerangkat Anda sedang offline. Data disimpan secara lokal di perangkat.\n\nSaran Tindakan:\n1. Segera lakukan pengecekan validitas nomor ke Portal Bang Beni setelah terhubung internet.\n2. Buka menu 'Sinkronisasi & Backup' untuk segera mengirimkan data ke Cloud begitu online.");
       }
     });
 
@@ -1648,7 +1670,7 @@
         } catch (err) { console.error(err); }
       }
       renderHistory();
-      alert("🚀 Sinkronisasi Cloud Berhasil!\nSeluruh antrean laporan telah dikirimkan ke server pusat.");
+      alert("Sinkronisasi Cloud Selesai!");
     });
 
     // --- PETA LEAFLET ---
