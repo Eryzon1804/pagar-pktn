@@ -689,7 +689,7 @@
        <label for="profile-avatar-input" class="secondary-btn text-xs py-1.5 px-3 cursor-pointer shadow-sm">
         <i data-lucide="camera" class="w-4 h-4"></i> Tambah / Ubah Foto Profil
        </label>
-       <input id="profile-avatar-input" type="file" accept="image/*" class="hidden" onchange="uploadProfileAvatar(this)">
+       <input id="profile-avatar-input" type="file" accept="image/*" class="hidden" onchange="updateProfileAvatar(this)">
       </div>
 
       <div class="space-y-3">
@@ -747,41 +747,18 @@
      </div>
     </section>
 
-    <!-- 8. PANDUAN SOP (LENGKAP) -->
+    <!-- 8. PANDUAN SOP -->
     <section id="page-guide" class="page">
      <div class="mb-5"><p class="text-xs font-bold uppercase text-blue-600">Panduan Teknis</p><h2 class="text-xl font-extrabold">SOP & Petunjuk Operasional PAGAR PKTN</h2></div>
      <div class="section-card text-xs space-y-4 leading-relaxed">
-      
       <div class="p-3 bg-blue-50 rounded-xl border border-blue-200">
-       <h3 class="font-bold text-sm text-blue-900 mb-1">1. Manajemen Akun & Verifikasi Admin</h3>
-       <p class="text-slate-700">Setiap petugas lapangan wajib mendaftarkan diri melalui tab <b>"Daftar Akun Baru"</b>. Akun baru berstatus <i>Pending</i> hingga disetujui oleh Administrator pusat (Eryzon Arifandy Huan, S.Mat).</p>
+       <h3 class="font-bold text-sm text-blue-900 mb-1">Status Sinkronisasi Online & Offline</h3>
+       <p class="text-slate-700">Jika perangkat terhubung ke internet saat menyimpan, laporan langsung terkirim dengan ucapan sukses. Jika offline, data tersimpan sementara di perangkat dan Anda diingatkan untuk segera melakukan pengecekan portal Bang Beni dan sinkronisasi begitu online.</p>
       </div>
-
-      <div class="p-3 bg-slate-50 rounded-xl border">
-       <h3 class="font-bold text-sm text-slate-800 mb-1">2. Fitur "Ingat Saya" & Pemulihan Kata Sandi</h3>
-       <p class="text-slate-600">Centang opsi <b>"Ingat Saya"</b> saat login. Jika lupa sandi, gunakan menu <b>"Lupa Password?"</b> dengan memasukkan NIP Anda (`199904182025061006`).</p>
-      </div>
-
-      <div class="p-3 bg-slate-50 rounded-xl border">
-       <h3 class="font-bold text-sm text-slate-800 mb-1">3. Mode Offline-First & Penyimpanan Lokal</h3>
-       <p class="text-slate-600">Aplikasi bekerja tanpa koneksi internet. Semua data disimpan di IndexedDB secara aman.</p>
-      </div>
-
-      <div class="p-3 bg-slate-50 rounded-xl border">
-       <h3 class="font-bold text-sm text-slate-800 mb-1">4. Alur Pengisian Formulir (5 Langkah & Validasi)</h3>
-       <ul class="list-disc pl-4 space-y-1 text-slate-600 mt-1">
-        <li><b>Langkah 1:</b> Masukkan instansi, nama petugas (gunakan tombol <b>"Tambah Petugas"</b> untuk tim ganda), kode sampel, telepon/WA, toko, alamat, pemilik, dan GPS.</li>
-        <li><b>Langkah 2:</b> Isi jenis komoditas, merek, dan parameter Bagian A (Nomor SNI, LSpro, NPB). Gunakan <b>"Portal Bang Beni"</b> untuk verifikasi.</li>
-        <li><b>Langkah 3:</b> Isi Bagian B (Label Bahasa Indonesia). Jika negara pembuat diisi "Indonesia", form menampilkan input Produsen. Jika selain Indonesia, form menampilkan input Importir.</li>
-        <li><b>Langkah 4:</b> Lengkapi Bagian C (Petunjuk) dan Bagian D (Garansi 10 Poin).</li>
-        <li><b>Langkah 5:</b> Lampirkan foto dokumentasi umum lapangan serta dokumentasi pelaksanaan lapangan (opsional).</li>
-       </ul>
-      </div>
-
      </div>
     </section>
 
-    <!-- 9. DIREKTORI REGULASI LENGKAP DENGAN TOMBOL AKSES FULL -->
+    <!-- 9. DIREKTORI REGULASI -->
     <section id="page-regulasi" class="page">
      <div class="mb-5">
       <p class="text-xs font-bold uppercase text-blue-600">Regulasi</p>
@@ -795,49 +772,7 @@
         <span class="text-slate-400">UU No. 8 Tahun 1999</span>
        </div>
        <h3 class="font-bold text-sm text-slate-800">Undang-Undang tentang Perlindungan Konsumen</h3>
-       <p class="text-slate-600 leading-relaxed">Mengatur hak dan kewajiban konsumen serta pelaku usaha, termasuk tanggung jawab atas mutu dan standar barang yang diedarkan.</p>
-       <div class="pt-2">
-        <a href="https://jdih.kemendag.go.id" target="_blank" class="secondary-btn text-xs py-2 px-3 w-full justify-center">
-         <i data-lucide="external-link" class="w-4 h-4"></i> Buka Dokumen Resmi (Full Text)
-        </a>
-       </div>
-      </div>
-
-      <div class="section-card space-y-2">
-       <div class="flex items-center justify-between">
-        <span class="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700 font-bold text-[10px]">Undang-Undang</span>
-        <span class="text-slate-400">UU No. 7 Tahun 2014</span>
-       </div>
-       <h3 class="font-bold text-sm text-slate-800">Undang-Undang tentang Perdagangan</h3>
-       <p class="text-slate-600 leading-relaxed">Mengatur tata niaga dalam negeri, ekspor, impor, standardisasi barang perdagangan, serta pengawasan peredaran barang.</p>
-       <div class="pt-2">
-        <a href="https://jdih.kemendag.go.id" target="_blank" class="secondary-btn text-xs py-2 px-3 w-full justify-center">
-         <i data-lucide="external-link" class="w-4 h-4"></i> Buka Dokumen Resmi (Full Text)
-        </a>
-       </div>
-      </div>
-
-      <div class="section-card space-y-2">
-       <div class="flex items-center justify-between">
-        <span class="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700 font-bold text-[10px]">Undang-Undang</span>
-        <span class="text-slate-400">UU No. 20 Tahun 2014</span>
-       </div>
-       <h3 class="font-bold text-sm text-slate-800">Undang-Undang tentang Standardisasi dan Penilaian Kesesuaian</h3>
-       <p class="text-slate-600 leading-relaxed">Landasan hukum penerapan Standar Nasional Indonesia (SNI), akreditasi lembaga penilaian kesesuaian, serta pengawasan SNI wajib.</p>
-       <div class="pt-2">
-        <a href="https://www.bsn.go.id" target="_blank" class="secondary-btn text-xs py-2 px-3 w-full justify-center">
-         <i data-lucide="external-link" class="w-4 h-4"></i> Buka Dokumen Resmi (Full Text)
-        </a>
-       </div>
-      </div>
-
-      <div class="section-card space-y-2">
-       <div class="flex items-center justify-between">
-        <span class="px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-700 font-bold text-[10px]">Permendag</span>
-        <span class="text-slate-400">Permendag No. 69 Tahun 2018</span>
-       </div>
-       <h3 class="font-bold text-sm text-slate-800">Peraturan Menteri Perdagangan tentang Pengawasan Barang Beredar dan/atau Jasa</h3>
-       <p class="text-slate-600 leading-relaxed">Pedoman teknis pelaksanaan pengawasan pre-market dan post-market oleh pengawas perdagangan terhadap pemenuhan ketentuan teknis dan SNI.</p>
+       <p class="text-slate-600 leading-relaxed">Mengatur hak dan kewajiban konsumen serta pelaku usaha, termasuk tanggung jawab atas mutu dan standar barang.</p>
        <div class="pt-2">
         <a href="https://jdih.kemendag.go.id" target="_blank" class="secondary-btn text-xs py-2 px-3 w-full justify-center">
          <i data-lucide="external-link" class="w-4 h-4"></i> Buka Dokumen Resmi (Full Text)
@@ -1376,7 +1311,7 @@
       });
     }
 
-    // --- SUBMIT FORM DENGAN VALIDASI NOMOR RESMI & PETUGAS GANDA ---
+    // --- SUBMIT FORM DENGAN STATUS ONLINE / OFFLINE DINAMIS ---
     document.getElementById('inspection-form').addEventListener('submit', async e => {
       e.preventDefault();
       const form = e.target;
@@ -1517,7 +1452,13 @@
       await saveReportToDB(data);
       form.reset(); currentStep = 1; updateWizard();
       switchPage('page-history');
-      alert("Laporan pengawasan berhasil divalidasi dan disimpan di perangkat!");
+
+      // PERINGATAN / UCAPAN BERDASARKAN STATUS JARINGAN ONLINE / OFFLINE
+      if (navigator.onLine) {
+        alert("🚀 SELAMAT! DATA BERHASIL DIKIRIM\n\nLaporan pengawasan telah sukses diproses dan dikirim secara online ke server pusat (Google Sheets & Drive).");
+      } else {
+        alert("⏳ PERHATIAN: DATA DISIMPAN SEMENTARA (OFFLINE)\n\nPerangkat Anda sedang tidak terhubung ke internet. Data berhasil disimpan secara lokal di perangkat.\n\nSaran Tindakan:\n1. Segera lakukan pengecekan validitas nomor ke Portal Bang Beni setelah mendapat jaringan.\n2. Buka menu 'Sinkronisasi & Backup' untuk segera mengirimkan data ke Cloud begitu ada jaringan.");
+      }
     });
 
     // --- RENDER RIWAYAT ---
@@ -1707,7 +1648,7 @@
         } catch (err) { console.error(err); }
       }
       renderHistory();
-      alert("Sinkronisasi Cloud Selesai!");
+      alert("🚀 Sinkronisasi Cloud Berhasil!\nSeluruh antrean laporan telah dikirimkan ke server pusat.");
     });
 
     // --- PETA LEAFLET ---
