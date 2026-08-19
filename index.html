@@ -9,7 +9,7 @@
   <!-- Leaflet CSS & JS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --blue: #1a73e8; --blue-dark: #1557b0; --ink: #202124; --muted: #5f6368;
@@ -59,6 +59,8 @@
     .secondary-btn { color: var(--blue); background: rgba(26,115,232,.1); }
     .danger-btn { color: #d93025; background: rgba(217,48,37,.1); }
 
+    .fab-btn { position: fixed; right: 20px; bottom: 88px; z-index: 50; width: 60px; height: 60px; border-radius: 50%; background: var(--blue); color: white; display: flex; align-items: center; justify-content: center; border: 0; cursor: pointer; box-shadow: 0 4px 16px rgba(26,115,232,.4); }
+    
     .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 40; border-top: 1px solid var(--line); background: var(--surface); padding: 8px 10px max(8px, env(safe-area-inset-bottom)); }
     .nav-inner { max-width: 720px; margin: auto; display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; }
     .nav-btn { min-height: 56px; border: 0; border-radius: 10px; background: transparent; color: var(--muted); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 11px; font-weight: 700; cursor: pointer; }
@@ -87,1167 +89,831 @@
  </head>
  <body>
   
- <!-- LOGIN & REGISTRASI MODAL -->
- <div id="login-modal" class="login-backdrop open">
-  <div class="modal-panel max-w-sm w-full space-y-5">
-   <div class="text-center">
-    <div class="brand-mark mx-auto mb-3"><i data-lucide="shield-check" class="w-6 h-6"></i></div>
-    <h3 id="auth-title" class="font-extrabold text-xl">Login Petugas / Admin</h3>
-    <p id="auth-desc" class="text-xs text-slate-500 mt-1">Masukkan akun terdaftar atau daftar akun baru.</p>
-   </div>
+  <!-- LOGIN & REGISTRASI MODAL -->
+  <div id="login-modal" class="login-backdrop open">
+   <div class="modal-panel max-w-sm w-full space-y-5">
+    <div class="text-center">
+     <div class="brand-mark mx-auto mb-3"><i data-lucide="shield-check" class="w-6 h-6"></i></div>
+     <h3 id="auth-title" class="font-extrabold text-xl">Login Petugas / Admin</h3>
+     <p id="auth-desc" class="text-xs text-slate-500 mt-1">Masukkan akun terdaftar atau daftar akun baru.</p>
+    </div>
 
-   <div class="flex rounded-xl bg-slate-100 p-1 text-xs font-bold">
-    <button type="button" id="tab-login" class="flex-1 py-2.5 rounded-lg bg-white shadow text-blue-600" onclick="switchAuthTab('login')">Masuk</button>
-    <button type="button" id="tab-register" class="flex-1 py-2.5 rounded-lg text-slate-600" onclick="switchAuthTab('register')">Daftar Akun Baru</button>
-   </div>
+    <div class="flex rounded-xl bg-slate-100 p-1 text-xs font-bold">
+     <button type="button" id="tab-login" class="flex-1 py-2.5 rounded-lg bg-white shadow text-blue-600" onclick="switchAuthTab('login')">Masuk</button>
+     <button type="button" id="tab-register" class="flex-1 py-2.5 rounded-lg text-slate-600" onclick="switchAuthTab('register')">Daftar Akun Baru</button>
+    </div>
 
-   <form id="login-form" class="space-y-4">
-    <div>
-     <label class="field-label text-xs">Email Petugas / Admin</label>
-     <input id="login-email" type="email" class="field-control text-sm" required placeholder="email@domain.go.id">
-    </div>
-    <div>
-     <label class="field-label text-xs">Kata Sandi / NIP</label>
-     <input id="login-password" type="password" class="field-control text-sm" required placeholder="Masukkan kata sandi">
-    </div>
-    <div class="flex items-center justify-between text-xs font-semibold">
-     <label class="flex items-center gap-2 cursor-pointer">
-      <input type="checkbox" id="remember-me" class="w-4 h-4 rounded text-blue-600"> Ingat Saya
-     </label>
-     <button type="button" class="text-blue-600 font-bold hover:underline" onclick="showForgotPassword()">Lupa Password?</button>
-    </div>
-    <button type="submit" class="primary-btn w-full py-3.5 text-sm font-bold">Masuk Sesi</button>
-   </form>
-
-   <form id="register-form" class="space-y-4 hidden">
-    <div>
-     <label class="field-label text-xs">Nama Lengkap <span class="text-rose-600">*</span></label>
-     <input id="reg-name" class="field-control text-sm" required placeholder="Nama lengkap beserta gelar">
-    </div>
-    <div>
-     <label class="field-label text-xs">Alamat Email <span class="text-rose-600">*</span></label>
-     <input id="reg-email" type="email" class="field-control text-sm" required placeholder="email@domain.go.id">
-    </div>
-    <div>
-     <label class="field-label text-xs">NIP / ID Petugas <span class="text-rose-600">*</span></label>
-     <input id="reg-nip" class="field-control text-sm" required placeholder="Nomor Induk Pegawai">
-    </div>
-    <div>
-     <label class="field-label text-xs">Kata Sandi <span class="text-rose-600">*</span></label>
-     <input id="reg-pass" type="password" class="field-control text-sm" required placeholder="Buat kata sandi">
-    </div>
-    <button type="submit" class="primary-btn w-full py-3.5 text-sm font-bold bg-emerald-600 hover:bg-emerald-700">Daftarkan Akun (Menunggu Verifikasi Admin)</button>
-   </form>
-  </div>
- </div>
-
- <div class="app-shell w-full">
-  <header class="app-header">
-   <div class="decor-stripe" aria-hidden="true"></div>
-   <div class="mobile-frame px-4 py-3 flex items-center justify-between gap-3">
-    <div class="flex items-center gap-3 min-w-0">
-     <div class="brand-mark shrink-0"><i data-lucide="shield-check" class="w-6 h-6"></i></div>
-     <div class="min-w-0">
-      <h1 class="font-extrabold leading-tight text-lg tracking-tight">PAGAR PKTN</h1>
-      <p id="active-user-badge" class="text-xs text-slate-500 font-bold truncate">Sesi: Memuat...</p>
+    <form id="login-form" class="space-y-4">
+     <div>
+      <label class="field-label text-xs">Email Petugas / Admin</label>
+      <input id="login-email" type="email" class="field-control text-sm" required value="huaneryzon@gmail.com">
      </div>
-    </div>
-    <div class="flex items-center gap-2.5 shrink-0">
-     <button id="btn-theme-toggle" type="button" class="secondary-btn w-10 h-10 p-0 flex items-center justify-center rounded-full" title="Alihkan Tema Terang/Gelap" aria-label="Alihkan Tema">
-      <i data-lucide="moon" class="w-5 h-5"></i>
-     </button>
-
-     <div id="network-status" class="network-pill online" role="status">
-      <span class="status-dot"></span><span id="network-label">Online</span>
+     <div>
+      <label class="field-label text-xs">Kata Sandi / NIP</label>
+      <input id="login-password" type="password" class="field-control text-sm" required value="adminpagarpktn2026">
      </div>
-     <button id="btn-open-menu" type="button" class="secondary-btn w-10 h-10 p-0 flex items-center justify-center rounded-full"><i data-lucide="menu" class="w-5 h-5"></i></button>
-     <button id="btn-logout" type="button" class="secondary-btn w-10 h-10 p-0 text-rose-600 bg-rose-50 rounded-full flex items-center justify-center" title="Keluar Sesi"><i data-lucide="log-out" class="w-5 h-5"></i></button>
-    </div>
-   </div>
-  </header>
-
-  <main class="mobile-frame px-4 py-5">
-   
-   <!-- BANNER SELAMAT DATANG -->
-   <div id="welcome-banner" class="mb-5 p-5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl shadow-lg flex items-center justify-between">
-    <div>
-     <p class="text-xs font-bold uppercase tracking-wider text-blue-200">Sistem Pengawasan Aktif</p>
-     <h2 id="welcome-greeting" class="text-lg font-black mt-1">Selamat Datang, Petugas!</h2>
-     <p class="text-sm text-blue-100 mt-1">Siap melaksanakan pengamatan kasat mata barang beredar.</p>
-    </div>
-    <div class="hidden sm:block"><i data-lucide="shield-alert" class="w-12 h-12 text-blue-200 opacity-80"></i></div>
-   </div>
-
-   <!-- ADMIN PANEL KHUSUS -->
-   <section id="page-admin-panel" class="page">
-    <div class="mb-5">
-     <p class="text-xs font-bold uppercase text-amber-600">Administrator</p>
-     <h2 class="text-2xl font-black">Verifikasi Permintaan Akun Baru</h2>
-    </div>
-    <div class="section-card space-y-3">
-     <p class="text-sm text-slate-500 font-medium">Daftar petugas yang mengajukan pembuatan akun baru dan menunggu persetujuan:</p>
-     <div id="admin-pending-list" class="space-y-3"></div>
-    </div>
-   </section>
-
-   <!-- 1. FORMULIR WIZARD 5 LANGKAH -->
-   <section id="page-form" class="page active">
-    <div class="mb-5">
-     <div class="flex justify-between items-center mb-1.5">
-      <p class="font-bold uppercase tracking-wider text-xs text-blue-600" id="wizard-title">Langkah 1 dari 5: Tim & Toko</p>
-      <span id="wizard-progress-text" class="text-sm font-black text-slate-600">20%</span>
+     <div class="flex items-center justify-between text-xs font-semibold">
+      <label class="flex items-center gap-2 cursor-pointer">
+       <input type="checkbox" id="remember-me" class="w-4 h-4 rounded text-blue-600"> Ingat Saya
+      </label>
+      <button type="button" class="text-blue-600 font-bold hover:underline" onclick="showForgotPassword()">Lupa Password?</button>
      </div>
-     <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
-      <div id="wizard-bar" class="bg-blue-600 h-full transition-all duration-300" style="width: 20%;"></div>
-     </div>
-    </div>
-
-    <form id="inspection-form" class="space-y-4" novalidate>
-     
-     <!-- STEP 1: Tim & Identitas Toko -->
-     <div class="wizard-step active-step" data-step="1">
-      <article class="section-card space-y-5">
-       <div class="section-heading">
-        <div class="section-icon"><i data-lucide="store" class="w-5 h-5"></i></div>
-        <div class="flex-1"><h3 class="font-extrabold text-base">Tim Pengawas & Identitas Pengecer</h3></div>
-       </div>
-       <div>
-        <label class="field-label">Instansi / Unit Kerja <span class="text-rose-600">*</span></label>
-        <input class="field-control" id="agency" required value="Dinas Perindustrian dan Perdagangan Pemerintah Provinsi NTT">
-       </div>
-
-       <!-- TIM PETUGAS -->
-       <div class="space-y-3">
-        <label class="field-label">Nama Petugas Pengawas <span class="text-rose-600">*</span></label>
-        <div id="officer-container" class="space-y-3">
-         <div class="flex gap-2">
-          <input id="officer-0" class="field-control flex-1 officer-input" required placeholder="Nama Petugas Pengawas">
-         </div>
-        </div>
-        <button type="button" class="secondary-btn text-xs py-2 px-3 font-bold mt-1" onclick="addOfficerField()">
-         <i data-lucide="user-plus" class="w-4 h-4"></i> Tambah Petugas
-        </button>
-       </div>
-
-       <div class="grid sm:grid-cols-2 gap-4">
-        <div>
-         <label class="field-label">Kode Sampel <span class="text-rose-600">*</span></label>
-         <input class="field-control" id="sample-code" required placeholder="Contoh: 003">
-        </div>
-        <div>
-         <label class="field-label">Nomor Telepon / WhatsApp <span class="text-rose-600">*</span></label>
-         <input class="field-control" id="phone" type="tel" inputmode="numeric" required placeholder="08123456789">
-        </div>
-       </div>
-       <div>
-        <label class="field-label">Nama Toko / Pengecer <span class="text-rose-600">*</span></label>
-        <input class="field-control" id="business-name" required placeholder="Contoh: Toko Maju Jaya">
-       </div>
-       <div>
-        <label class="field-label">Alamat Pengecer <span class="text-rose-600">*</span></label>
-        <input class="field-control" id="retailer-address" required placeholder="Alamat lengkap lokasi">
-       </div>
-       <div>
-        <label class="field-label">Nama Pemilik / Penanggung Jawab <span class="text-rose-600">*</span></label>
-        <input class="field-control" id="owner-name" required placeholder="Nama pemilik toko">
-       </div>
-       <div>
-        <label class="field-label">Koordinat GPS</label>
-        <div class="flex gap-2">
-         <input id="coordinates" class="field-control flex-1" readonly placeholder="Belum mengambil titik GPS">
-         <button id="gps-button" class="secondary-btn px-5 font-bold shrink-0" type="button"><i data-lucide="map-pin" class="w-4 h-4"></i> Ambil GPS</button>
-        </div>
-        <p id="gps-feedback" class="mt-1.5 text-xs font-semibold text-slate-500"></p>
-       </div>
-      </article>
-      <button type="button" class="primary-btn w-full py-4 font-black text-sm" onclick="nextStep(1)">Selanjutnya: Produk & Bagian A &rarr;</button>
-     </div>
-
-     <!-- STEP 2: Produk & Bagian A -->
-     <div class="wizard-step" data-step="2">
-      <article class="section-card space-y-5">
-       <div class="section-heading">
-        <div class="section-icon"><i data-lucide="package-search" class="w-5 h-5"></i></div>
-        <div class="flex-1"><h3 class="font-extrabold text-base">Produk & Bagian A (Nomor Registrasi)</h3></div>
-       </div>
-       <div>
-        <label class="field-label">Jenis Produk / Komoditas <span class="text-rose-600">*</span></label>
-        <input class="field-control" id="product-type" placeholder="Contoh: Pompa Air Listrik">
-       </div>
-       <div>
-        <label class="field-label">Merek / Brand <span class="text-rose-600">*</span></label>
-        <input class="field-control" id="brand" placeholder="Contoh: Shimizu">
-       </div>
-
-       <hr class="my-3">
-       <h4 class="font-black text-xs uppercase text-blue-700 tracking-wider">BAGIAN A: Informasi Nomor Registrasi Standar</h4>
-       
-       <div class="p-4 bg-slate-50 rounded-xl border space-y-3">
-        <label class="field-label font-bold">1. Tanda & Nomor SNI pada Barang</label>
-        <select id="sni-barang-opt" class="field-control"><option value="Ada">Ada</option><option value="Tidak ada" selected>Tidak ada</option></select>
-        <div id="sni-barang-box" class="hidden"><input id="sni-barang-num" class="field-control" placeholder="Format: SNI XXXX:YYYY"></div>
-        <label class="doc-box" for="doc-sni-barang">
-         <input id="doc-sni-barang" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
-         <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto SNI Barang</span>
-        </label>
-       </div>
-
-       <div class="p-4 bg-slate-50 rounded-xl border space-y-3">
-        <label class="field-label font-bold">2. Tanda & Nomor SNI pada Kemasan</label>
-        <select id="sni-kemasan-opt" class="field-control"><option value="Ada dan sama pada barang">Ada dan sama pada barang</option><option value="Ada dan beda pada barang">Ada dan beda pada barang</option><option value="Tidak ada" selected>Tidak ada</option></select>
-        <div id="sni-kemasan-box" class="hidden"><input id="sni-kemasan-num" class="field-control" placeholder="Format: SNI XXXX:YYYY"></div>
-        <label class="doc-box" for="doc-sni-kemasan">
-         <input id="doc-sni-kemasan" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
-         <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto SNI Kemasan</span>
-        </label>
-       </div>
-
-       <div class="p-4 bg-slate-50 rounded-xl border space-y-3">
-        <label class="field-label font-bold">3. Kode LSpro pada Barang</label>
-        <select id="lspro-barang-opt" class="field-control"><option value="Ada">Ada</option><option value="Tidak ada" selected>Tidak ada</option></select>
-        <div id="lspro-barang-box" class="hidden"><input id="lspro-barang-num" class="field-control" placeholder="Format: LSPr-004-IDN"></div>
-        <label class="doc-box" for="doc-lspro-barang">
-         <input id="doc-lspro-barang" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
-         <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto LSpro Barang</span>
-        </label>
-       </div>
-
-       <div class="p-4 bg-slate-50 rounded-xl border space-y-3">
-        <label class="field-label font-bold">4. Kode LSpro pada Kemasan</label>
-        <select id="lspro-kemasan-opt" class="field-control"><option value="Ada dan sama pada barang">Ada dan sama pada barang</option><option value="Ada dan beda pada barang">Ada dan beda pada barang</option><option value="Tidak ada" selected>Tidak ada</option></select>
-        <div id="lspro-kemasan-box" class="hidden"><input id="lspro-kemasan-num" class="field-control" placeholder="Format LSpro..."></div>
-        <label class="doc-box" for="doc-lspro-kemasan">
-         <input id="doc-lspro-kemasan" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
-         <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto LSpro Kemasan</span>
-        </label>
-       </div>
-
-       <div class="p-4 bg-slate-50 rounded-xl border space-y-3">
-        <label class="field-label font-bold">5. Nomor NPB pada Barang</label>
-        <select id="npb-barang-opt" class="field-control"><option value="Ada">Ada</option><option value="Tidak ada" selected>Tidak ada</option></select>
-        <div id="npb-barang-box" class="hidden"><input id="npb-barang-num" class="field-control" placeholder="Format NPB: 123.456/NPB/I/YYYY"></div>
-        <label class="doc-box" for="doc-npb-barang">
-         <input id="doc-npb-barang" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
-         <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto NPB Barang</span>
-        </label>
-       </div>
-
-       <div class="p-4 bg-slate-50 rounded-xl border space-y-3">
-        <label class="field-label font-bold">6. Nomor NPB pada Kemasan</label>
-        <select id="npb-kemasan-opt" class="field-control"><option value="Ada dan sama pada barang">Ada dan sama pada barang</option><option value="Ada dan beda pada barang">Ada dan beda pada barang</option><option value="Tidak ada" selected>Tidak ada</option></select>
-        <div id="npb-kemasan-box" class="hidden"><input id="npb-kemasan-num" class="field-control" placeholder="Format NPB..."></div>
-        <label class="doc-box" for="doc-npb-kemasan">
-         <input id="doc-npb-kemasan" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
-         <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto NPB Kemasan</span>
-        </label>
-       </div>
-
-       <!-- TOMBOL PORTAL BANG BENI -->
-       <div class="p-5 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 rounded-2xl shadow-lg text-white flex flex-col sm:flex-row items-center justify-between gap-4 border border-blue-400/30">
-        <div class="space-y-1 text-center sm:text-left">
-         <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/40 text-xs font-black uppercase tracking-wider text-blue-100 border border-blue-300/30">
-          <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Resmi BSN
-         </div>
-         <h4 class="font-black text-base tracking-tight">Verifikasi Validitas Nomor SNI</h4>
-         <p class="text-xs text-blue-100 leading-relaxed font-medium">Gunakan Portal Bang Beni untuk mengecek keaslian nomor pendaftaran.</p>
-        </div>
-        <a href="https://bangbeni.bsn.go.id" target="_blank" class="shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white text-blue-700 hover:bg-blue-50 font-black text-xs shadow-md transition-transform active:scale-95">
-         <i data-lucide="external-link" class="w-4 h-4 text-blue-600"></i> Buka Portal Bang Beni
-        </a>
-       </div>
-
-       <div>
-        <label class="field-label">Kesimpulan Status Validasi <span class="text-rose-600">*</span></label>
-        <select id="sni-status" class="field-control">
-         <option value="Terdaftar dan Sesuai (Legal)">Terdaftar dan Sesuai (Legal)</option>
-         <option value="Tidak Terdaftar (Temuan)">Tidak Terdaftar (Temuan)</option>
-         <option value="Terdaftar namun Tidak Sesuai Spesifikasinya">Terdaftar namun Tidak Sesuai Spesifikasinya</option>
-        </select>
-       </div>
-      </article>
-      <div class="flex gap-3">
-       <button type="button" class="secondary-btn w-1/2 py-4 font-bold text-sm" onclick="prevStep(2)">&larr; Sebelumnya</button>
-       <button type="button" class="primary-btn w-1/2 py-4 font-bold text-sm" onclick="nextStep(2)">Selanjutnya: Bagian B &rarr;</button>
-      </div>
-     </div>
-
-     <!-- STEP 3: Bagian B (Label Lengkap + Dinamis Produsen / Importir) -->
-     <div class="wizard-step" data-step="3">
-      <article class="section-card space-y-5">
-       <div class="section-heading">
-        <div class="section-icon"><i data-lucide="languages" class="w-5 h-5"></i></div>
-        <div class="flex-1"><h3 class="font-extrabold text-base">Bagian B: Label Dalam Bahasa Indonesia (Lengkap)</h3></div>
-       </div>
-
-       <div class="p-4 bg-blue-50 rounded-xl border border-blue-200 flex items-center justify-between gap-3">
-        <div><p class="text-sm font-bold text-blue-900">Riwayat Auto-Fill</p><p class="text-xs text-blue-700">Pilih riwayat label agar tidak mengetik ulang.</p></div>
-        <select id="auto-fill-history" class="field-control max-w-[200px] text-sm"><option value="">-- Pilih --</option></select>
-       </div>
-
-       <div class="space-y-4">
-        <!-- 1. Tercantum Pada Barang -->
-        <div class="p-5 bg-slate-50 rounded-xl border space-y-3">
-         <h4 class="font-black text-xs uppercase text-blue-700 tracking-wider">1. Tercantum Pada Barang</h4>
-         <div>
-          <label class="field-label text-xs">Merek Barang</label>
-          <select id="label-brg-merek-opt" class="field-control mb-2"><option value="Ada">Ada</option><option value="Tidak ada" selected>Tidak ada</option></select>
-          <input id="label-brg-merek-val" class="field-control hidden" placeholder="Tuliskan merek pada barang...">
-         </div>
-         <div>
-          <label class="field-label text-xs">Penggunaan listrik; tegangan (Volt/V) dan frekuensi (Hz)</label>
-          <select id="label-brg-listrik-opt" class="field-control mb-2"><option value="Ada">Ada</option><option value="Tidak ada" selected>Tidak ada</option></select>
-          <input id="label-brg-listrik-val" class="field-control hidden mb-3" placeholder="Format: 220V ~ 50Hz">
-          <label class="doc-box" for="doc-label-listrik">
-           <input id="doc-label-listrik" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
-           <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto Penggunaan Listrik</span>
-          </label>
-         </div>
-         <div>
-          <label class="field-label text-xs">Negara pembuat atau Made in</label>
-          <select id="label-brg-negara-opt" class="field-control mb-2"><option value="Ada">Ada</option><option value="Tidak ada" selected>Tidak ada</option></select>
-          <input id="label-brg-negara-val" class="field-control hidden" placeholder="Tuliskan negara pembuat...">
-         </div>
-        </div>
-
-        <!-- 2. Tercantum Pada Kemasan (Dinamis: Produsen jika Indonesia, Importir jika Lainnya) -->
-        <div class="p-5 bg-slate-50 rounded-xl border space-y-3">
-         <h4 class="font-black text-xs uppercase text-blue-700 tracking-wider">2. Tercantum Pada Kemasan</h4>
-         <div>
-          <label class="field-label text-xs">Merek Barang</label>
-          <select id="label-kem-merek-opt" class="field-control mb-2"><option value="Ada dan sama pada barang">Ada dan sama pada barang</option><option value="Ada dan berbeda pada barang">Ada dan berbeda pada barang</option><option value="Tidak ada" selected>Tidak ada</option></select>
-          <input id="label-kem-merek-val" class="field-control hidden" placeholder="Tuliskan merek pada kemasan...">
-         </div>
-         <div>
-          <label class="field-label text-xs">Penggunaan listrik; tegangan (Volt/V) dan frekuensi (Hz)</label>
-          <select id="label-kem-listrik-opt" class="field-control mb-2"><option value="Ada dan sama pada barang">Ada dan sama pada barang</option><option value="Ada dan berbeda pada barang">Ada dan berbeda pada barang</option><option value="Tidak ada" selected>Tidak ada</option></select>
-          <input id="label-kem-listrik-val" class="field-control hidden" placeholder="Format: 220V ~ 50Hz">
-         </div>
-         <div>
-          <label class="field-label text-xs">Negara pembuat atau Made in</label>
-          <select id="label-kem-negara-opt" class="field-control mb-2" onchange="checkCountryMadeIn(this)"><option value="Ada">Ada</option><option value="Tidak ada" selected>Tidak ada</option></select>
-          <input id="label-kem-negara-val" class="field-control hidden mt-1" placeholder="Tuliskan negara (Contoh: Indonesia)" oninput="checkCountryMadeIn(this)">
-         </div>
-
-         <!-- Bagian Dinamis Produsen / Importir -->
-         <div id="dynamic-entity-section" class="hidden space-y-3 pt-3 border-t border-slate-200">
-          <div id="producer-dynamic-box" class="hidden space-y-3 p-4 bg-white rounded-xl border">
-           <p class="text-xs font-black text-emerald-700 uppercase tracking-wide">Barang Buatan Dalam Negeri (Indonesia)</p>
-           <div><label class="field-label text-xs">Nama Produsen</label><input id="dyn-producer-name" class="field-control" placeholder="Nama perusahaan produsen"></div>
-           <div><label class="field-label text-xs">Alamat Lengkap Produsen</label><input id="dyn-producer-addr" class="field-control" placeholder="Alamat pabrik produsen"></div>
-          </div>
-
-          <div id="importer-dynamic-box" class="hidden space-y-3 p-4 bg-white rounded-xl border">
-           <p class="text-xs font-black text-blue-700 uppercase tracking-wide">Barang Impor (Selain Indonesia)</p>
-           <div><label class="field-label text-xs">Nama Importir</label><input id="dyn-importer-name" class="field-control" placeholder="Nama perusahaan importir"></div>
-           <div><label class="field-label text-xs">Alamat Lengkap Importir</label><input id="dyn-importer-addr" class="field-control" placeholder="Alamat kantor importir"></div>
-          </div>
-         </div>
-
-        </div>
-       </div>
-      </article>
-      <div class="flex gap-3">
-       <button type="button" class="secondary-btn w-1/2 py-4 font-bold text-sm" onclick="prevStep(3)">&larr; Sebelumnya</button>
-       <button type="button" class="primary-btn w-1/2 py-4 font-bold text-sm" onclick="nextStep(3)">Selanjutnya: Bagian C & D &rarr;</button>
-      </div>
-     </div>
-
-     <!-- STEP 4: Bagian C & D -->
-     <div class="wizard-step" data-step="4">
-      <article class="section-card space-y-5">
-       <div class="section-heading">
-        <div class="section-icon"><i data-lucide="book-open" class="w-5 h-5"></i></div>
-        <div class="flex-1"><h3 class="font-extrabold text-base">Bagian C & D: Manual, Kartu Garansi & Keterangan Lain</h3></div>
-       </div>
-
-       <!-- Bagian C: Manual / Petunjuk Penggunaan -->
-       <div class="p-4 bg-slate-50 rounded-xl border space-y-3">
-        <label class="field-label font-bold">Bagian C: Manual / Petunjuk Penggunaan dalam Bahasa Indonesia</label>
-        <select id="manual-opt" class="field-control">
-         <option value="Ada">Ada</option>
-         <option value="Tidak ada" selected>Tidak ada</option>
-        </select>
-        <div id="manual-box" class="hidden">
-         <input id="manual-desc" class="field-control" placeholder="Keterangan manual...">
-        </div>
-        <label class="doc-box" for="doc-manual">
-         <input id="doc-manual" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
-         <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div>
-         <span class="file-info font-bold">Foto Buku Manual / Petunjuk</span>
-        </label>
-       </div>
-
-       <!-- Bagian D: Kartu Garansi -->
-       <div class="p-4 bg-slate-50 rounded-xl border space-y-3">
-        <label class="field-label font-bold">Bagian D: Kartu Garansi / Layanan Purna Jual</label>
-        <select id="garansi-opt" class="field-control">
-         <option value="Ada">Ada</option>
-         <option value="Tidak ada" selected>Tidak ada</option>
-        </select>
-        <div id="garansi-box" class="hidden">
-         <input id="garansi-desc" class="field-control" placeholder="Keterangan garansi...">
-        </div>
-        <label class="doc-box" for="doc-garansi">
-         <input id="doc-garansi" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
-         <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div>
-         <span class="file-info font-bold">Foto Kartu Garansi</span>
-        </label>
-       </div>
-
-       <!-- Dokumen Pendukung Lainnya -->
-       <div class="p-4 bg-slate-50 rounded-xl border space-y-3">
-        <label class="field-label font-bold">Dokumen Pendukung Tambahan (Opsional)</label>
-        <label class="doc-box" for="doc-tambahan">
-         <input id="doc-tambahan" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
-         <div class="icon-state"><i data-lucide="upload" class="w-7 h-7"></i></div>
-         <span class="file-info font-bold">Unggah Dokumen Lain</span>
-        </label>
-       </div>
-      </article>
-      <div class="flex gap-3">
-       <button type="button" class="secondary-btn w-1/2 py-4 font-bold text-sm" onclick="prevStep(4)">&larr; Sebelumnya</button>
-       <button type="button" class="primary-btn w-1/2 py-4 font-bold text-sm" onclick="nextStep(4)">Selanjutnya: Ringkasan & TTD &rarr;</button>
-      </div>
-     </div>
-
-     <!-- STEP 5: Catatan, Tanda Tangan & Selesai -->
-     <div class="wizard-step" data-step="5">
-      <article class="section-card space-y-5">
-       <div class="section-heading">
-        <div class="section-icon"><i data-lucide="pen-tool" class="w-5 h-5"></i></div>
-        <div class="flex-1"><h3 class="font-extrabold text-base">Catatan Pengawasan & Tanda Tangan Digital</h3></div>
-       </div>
-       <div>
-        <label class="field-label">Catatan Temuan / Rekomendasi Petugas</label>
-        <textarea id="inspection-notes" class="field-control min-h-[100px]" placeholder="Tuliskan catatan hasil pengawasan lapangan..."></textarea>
-       </div>
-       <div>
-        <label class="field-label">Tanda Tangan Pemilik / Penanggung Jawab Toko <span class="text-rose-600">*</span></label>
-        <div class="border-2 border-dashed border-slate-300 rounded-xl bg-white p-2 relative">
-         <canvas id="signature-canvas" class="w-full h-40 cursor-crosshair touch-none bg-slate-50 rounded-lg"></canvas>
-         <button type="button" class="absolute top-4 right-4 secondary-btn text-xs py-1 px-2.5" onclick="clearSignature()">Hapus TTD</button>
-        </div>
-        <p class="text-xs text-slate-500 mt-1">Tandatangani pada area di atas menggunakan jari atau mouse.</p>
-       </div>
-      </article>
-      <div class="flex gap-3">
-       <button type="button" class="secondary-btn w-1/2 py-4 font-bold text-sm" onclick="prevStep(5)">&larr; Sebelumnya</button>
-       <button type="submit" class="primary-btn w-1/2 py-4 font-black text-sm bg-emerald-600 hover:bg-emerald-700">Simpan & Kirim Laporan</button>
-      </div>
-     </div>
-
+     <button type="submit" class="primary-btn w-full py-3.5 text-sm font-bold">Masuk Sesi</button>
+     <p class="text-[11px] text-slate-400 text-center mt-2">Admin: huaneryzon@gmail.com | Pass: adminpagarpktn2026</p>
     </form>
-   </section>
 
-   <!-- 2. RIWAYAT INSPEKSI -->
-   <section id="page-history" class="page">
-    <div class="mb-5 flex justify-between items-center">
+    <form id="register-form" class="space-y-4 hidden">
      <div>
-      <p class="text-xs font-bold uppercase text-blue-600">Arsip Pengawasan</p>
-      <h2 class="text-2xl font-black">Riwayat Laporan</h2>
-     </div>
-     <button type="button" class="secondary-btn text-xs py-2 px-3 font-bold" onclick="exportDataJSON()"><i data-lucide="download" class="w-4 h-4"></i> Ekspor Data</button>
-    </div>
-    <div class="mb-4">
-     <input id="search-history" type="text" class="field-control text-sm" placeholder="Cari nama toko, komoditas, atau nomor sampel..." oninput="filterHistory()">
-    </div>
-    <div id="history-container" class="space-y-3"></div>
-   </section>
-
-   <!-- 3. ANALITIK / STATISTIK -->
-   <section id="page-analytics" class="page">
-    <div class="mb-5">
-     <p class="text-xs font-bold uppercase text-blue-600">Statistik Pengawasan</p>
-     <h2 class="text-2xl font-black">Analitik & Rekapitulasi</h2>
-    </div>
-    <div class="grid grid-cols-2 gap-3 mb-5">
-     <div class="stat-card">
-      <p class="text-xs font-bold text-slate-500">Total Inspeksi</p>
-      <h3 id="stat-total" class="text-2xl font-black mt-1">0</h3>
-     </div>
-     <div class="stat-card">
-      <p class="text-xs font-bold text-slate-500">Legal Sesuai</p>
-      <h3 id="stat-legal" class="text-2xl font-black mt-1 text-emerald-600">0</h3>
-     </div>
-     <div class="stat-card">
-      <p class="text-xs font-bold text-slate-500">Temuan Pelanggaran</p>
-      <h3 id="stat-temuan" class="text-2xl font-black mt-1 text-rose-600">0</h3>
-     </div>
-     <div class="stat-card">
-      <p class="text-xs font-bold text-slate-500">Persentase Kepatuhan</p>
-      <h3 id="stat-compliance" class="text-2xl font-black mt-1 text-blue-600">0%</h3>
-     </div>
-    </div>
-    <div class="section-card">
-     <h3 class="font-extrabold text-base mb-3">Grafik Status Pengawasan SNI</h3>
-     <div class="h-48 flex items-end justify-around gap-4 pt-6 pb-2 border-b border-slate-200" id="analytics-bars">
-      <!-- Bar chart dinamis -->
-     </div>
-    </div>
-   </section>
-
-   <!-- 4. PETA LOKASI -->
-   <section id="page-map" class="page">
-    <div class="mb-5">
-     <p class="text-xs font-bold uppercase text-blue-600">Geospasial</p>
-     <h2 class="text-2xl font-black">Peta Sebaran Toko & Inspeksi</h2>
-    </div>
-    <div class="section-card p-3">
-     <div id="leaflet-map"></div>
-    </div>
-   </section>
-
-   <!-- 5. PENGATURAN APLIKASI -->
-   <section id="page-settings" class="page">
-    <div class="mb-5">
-     <p class="text-xs font-bold uppercase text-blue-600">Konfigurasi</p>
-     <h2 class="text-2xl font-black">Pengaturan Sistem</h2>
-    </div>
-    <div class="section-card space-y-4">
-     <h3 class="font-extrabold text-base border-b pb-2">Profil Pengguna Aktif</h3>
-     <div>
-      <label class="field-label text-xs">Nama Petugas</label>
-      <input id="settings-name" class="field-control text-sm" placeholder="Nama Petugas">
+      <label class="field-label text-xs">Nama Lengkap <span class="text-rose-600">*</span></label>
+      <input id="reg-name" class="field-control text-sm" required placeholder="Eryzon Arifandy Huan, S.Mat">
      </div>
      <div>
-      <label class="field-label text-xs">Instansi</label>
-      <input id="settings-agency" class="field-control text-sm" placeholder="Nama Instansi">
+      <label class="field-label text-xs">Alamat Email <span class="text-rose-600">*</span></label>
+      <input id="reg-email" type="email" class="field-control text-sm" required placeholder="huaneryzon@gmail.com">
      </div>
-     <button type="button" class="primary-btn text-xs py-3 px-4 font-bold" onclick="saveSettings()">Simpan Perubahan Profil</button>
-    </div>
-    <div class="section-card space-y-4">
-     <h3 class="font-extrabold text-base border-b pb-2 text-rose-600">Zona Bahaya Data</h3>
-     <p class="text-xs text-slate-500">Menghapus seluruh riwayat laporan tersimpan pada perangkat ini.</p>
-     <button type="button" class="danger-btn text-xs py-3 px-4 font-bold" onclick="clearAllData()">Hapus Semua Data Lokal</button>
-    </div>
-   </section>
-
-  </main>
- </div>
-
- <!-- BOTTOM NAVIGATION -->
- <nav class="bottom-nav">
-  <div class="nav-inner">
-   <button type="button" class="nav-btn active" data-target="page-form"><i data-lucide="file-text"><span>Formulir</span></i></button>
-   <button type="button" class="nav-btn" data-target="page-history"><i data-lucide="history"><span>Riwayat</span></i></button>
-   <button type="button" class="nav-btn" data-target="page-analytics"><i data-lucide="bar-chart-3"><span>Analitik</span></i></button>
-   <button type="button" class="nav-btn" data-target="page-map"><i data-lucide="map"><span>Peta</span></i></button>
-   <button type="button" class="nav-btn" data-target="page-settings"><i data-lucide="settings"><span>Setelan</span></i></button>
-  </div>
- </nav>
-
- <!-- DRAWER MENU SAMPING -->
- <div id="side-drawer" class="drawer-backdrop" onclick="closeDrawer(event)">
-  <div class="drawer-panel" id="drawer-content">
-   <div class="flex items-center justify-between border-b pb-3">
-    <div class="flex items-center gap-2">
-     <div class="brand-mark w-9 h-9"><i data-lucide="shield-check" class="w-5 h-5"></i></div>
-     <h3 class="font-extrabold text-base">Menu PAGAR PKTN</h3>
-    </div>
-    <button type="button" class="secondary-btn w-8 h-8 p-0 rounded-full" onclick="toggleDrawer()"><i data-lucide="x" class="w-4 h-4"></i></button>
-   </div>
-   <div class="space-y-2 flex-1 overflow-y-auto">
-    <button type="button" class="w-full text-left py-2.5 px-3 rounded-lg font-bold text-sm hover:bg-slate-100 flex items-center gap-2.5" onclick="navigateFromDrawer('page-form')"><i data-lucide="file-text" class="w-4 h-4 text-blue-600"></i> Formulir Pengawasan</button>
-    <button type="button" class="w-full text-left py-2.5 px-3 rounded-lg font-bold text-sm hover:bg-slate-100 flex items-center gap-2.5" onclick="navigateFromDrawer('page-history')"><i data-lucide="history" class="w-4 h-4 text-blue-600"></i> Riwayat Laporan</button>
-    <button type="button" class="w-full text-left py-2.5 px-3 rounded-lg font-bold text-sm hover:bg-slate-100 flex items-center gap-2.5" onclick="navigateFromDrawer('page-analytics')"><i data-lucide="bar-chart-3" class="w-4 h-4 text-blue-600"></i> Analitik Data</button>
-    <button type="button" class="w-full text-left py-2.5 px-3 rounded-lg font-bold text-sm hover:bg-slate-100 flex items-center gap-2.5" onclick="navigateFromDrawer('page-map')"><i data-lucide="map" class="w-4 h-4 text-blue-600"></i> Peta Sebaran</button>
-    <button type="button" class="w-full text-left py-2.5 px-3 rounded-lg font-bold text-sm hover:bg-slate-100 flex items-center gap-2.5" onclick="navigateFromDrawer('page-settings')"><i data-lucide="settings" class="w-4 h-4 text-blue-600"></i> Setelan Sistem</button>
-    <a href="https://bangbeni.bsn.go.id" target="_blank" class="w-full text-left py-2.5 px-3 rounded-lg font-bold text-sm hover:bg-slate-100 flex items-center gap-2.5 text-blue-600"><i data-lucide="external-link" class="w-4 h-4"></i> Portal Bang Beni BSN</a>
-   </div>
-   <div class="border-t pt-3 text-center">
-    <p class="text-xs text-slate-400">PAGAR PKTN v2.6 &copy; 2026</p>
+     <div>
+      <label class="field-label text-xs">NIP / ID Petugas <span class="text-rose-600">*</span></label>
+      <input id="reg-nip" class="field-control text-sm" required placeholder="199904182025061006">
+     </div>
+     <div>
+      <label class="field-label text-xs">Kata Sandi <span class="text-rose-600">*</span></label>
+      <input id="reg-pass" type="password" class="field-control text-sm" required placeholder="adminpagarpktn2026">
+     </div>
+     <button type="submit" class="primary-btn w-full py-3.5 text-sm font-bold bg-emerald-600 hover:bg-emerald-700">Daftarkan Akun (Menunggu Verifikasi Admin)</button>
+    </form>
    </div>
   </div>
- </div>
 
- <!-- MODAL DETAIL LAPORAN -->
- <div id="detail-modal" class="modal-backdrop" onclick="closeDetailModal(event)">
-  <div class="modal-panel space-y-4">
-   <div class="flex items-center justify-between border-b pb-3">
-    <h3 class="font-extrabold text-lg">Detail Laporan Inspeksi</h3>
-    <button type="button" class="secondary-btn w-8 h-8 p-0 rounded-full" onclick="document.getElementById('detail-modal').classList.remove('open')"><i data-lucide="x" class="w-4 h-4"></i></button>
-   </div>
-   <div id="modal-detail-body" class="space-y-3 text-sm">
-    <!-- Dinamis isi detail -->
-   </div>
-  </div>
- </div>
-
- <!-- SCRIPT UTAMA APLIKASI -->
- <script>
-  // Global State & Inisialisasi
-  let currentStep = 1;
-  let currentUser = { name: "Petugas Lapangan", email: "", role: "petugas" };
-  let pendingAccounts = [
-   { name: "Siti Rahma", email: "siti.rahma@disperindag.go.id", nip: "199503122022032001" },
-   { name: "Budi Santoso", email: "budi.s@gmail.com", nip: "199001012019031005" }
-  ];
-  let historyData = JSON.parse(localStorage.getItem('pagar_history')) || [
-   {
-    id: "PKTN-2026-001",
-    date: "2026-08-01 10:30",
-    store: "Toko Sinar Terang",
-    address: "Jl. El Tari No. 45, Kupang",
-    owner: "Bapak Hendra",
-    product: "Pompa Air Listrik",
-    brand: "Shimizu",
-    status: "Terdaftar dan Sesuai (Legal)",
-    coordinates: "-10.1789, 123.6071"
-   },
-   {
-    id: "PKTN-2026-002",
-    date: "2026-08-05 14:15",
-    store: "CV Jaya Abadi",
-    address: "Jl. WJ Lalamentik, Kupang",
-    owner: "Ibu Maria",
-    product: "Kabel Listrik NYM",
-    brand: "Supreme",
-    status: "Tidak Terdaftar (Temuan)",
-    coordinates: "-10.1654, 123.6120"
-   }
-  ];
-
-  let mapInstance = null;
-  let mapMarkers = [];
-
-  // Inisialisasi Lucide Icons & Event Listeners
-  document.addEventListener("DOMContentLoaded", () => {
-   lucide.createIcons();
-   initAuthSession();
-   renderPendingList();
-   renderHistory();
-   updateAnalytics();
-   initMap();
-   initSignaturePad();
-   setupConditionalFields();
-  });
-
-  // Auth & Login Switch
-  function switchAuthTab(tab) {
-   const loginForm = document.getElementById('login-form');
-   const registerForm = document.getElementById('register-form');
-   const tabLogin = document.getElementById('tab-login');
-   const tabRegister = document.getElementById('tab-register');
-   if(tab === 'login') {
-    loginForm.classList.remove('hidden');
-    registerForm.classList.add('hidden');
-    tabLogin.className = "flex-1 py-2.5 rounded-lg bg-white shadow text-blue-600";
-    tabRegister.className = "flex-1 py-2.5 rounded-lg text-slate-600";
-   } else {
-    loginForm.classList.add('hidden');
-    registerForm.classList.remove('hidden');
-    tabRegister.className = "flex-1 py-2.5 rounded-lg bg-white shadow text-blue-600";
-    tabLogin.className = "flex-1 py-2.5 rounded-lg text-slate-600";
-   }
-  }
-
-  document.getElementById('login-form').addEventListener('submit', (e) => {
-   e.preventDefault();
-   const email = document.getElementById('login-email').value;
-   const isAdmin = email === 'huaneryzon@gmail.com';
-   currentUser = { 
-    name: isAdmin ? 'Eryzon Arifandy Huan, S.Mat' : email.split('@')[0], 
-    email: email, 
-    role: isAdmin ? 'admin' : 'petugas' 
-   };
-   document.getElementById('login-modal').classList.remove('open');
-   initAuthSession();
-  });
-
-  document.getElementById('register-form').addEventListener('submit', (e) => {
-   e.preventDefault();
-   const name = document.getElementById('reg-name').value;
-   const email = document.getElementById('reg-email').value;
-   const nip = document.getElementById('reg-nip').value;
-   pendingAccounts.push({ name, email, nip });
-   alert("Pendaftaran akun berhasil dikirim! Menunggu verifikasi Administrator.");
-   renderPendingList();
-   switchAuthTab('login');
-  });
-
-  function initAuthSession() {
-   document.getElementById('active-user-badge').textContent = `Sesi: ${currentUser.name} (${currentUser.role.toUpperCase()})`;
-   document.getElementById('welcome-greeting').textContent = `Selamat Datang, ${currentUser.name}!`;
-   document.getElementById('settings-name').value = currentUser.name;
-  }
-
-  document.getElementById('btn-logout').addEventListener('click', () => {
-   document.getElementById('login-modal').classList.add('open');
-  });
-
-  function renderPendingList() {
-   const container = document.getElementById('admin-pending-list');
-   if(!container) return;
-   if(pendingAccounts.length === 0) {
-    container.innerHTML = `<p class="text-xs text-slate-400">Tidak ada permintaan akun baru.</p>`;
-    return;
-   }
-   container.innerHTML = pendingAccounts.map((acc, idx) => `
-    <div class="p-3 bg-slate-50 rounded-xl border flex items-center justify-between gap-3">
-     <div>
-      <p class="font-bold text-sm">${acc.name}</p>
-      <p class="text-xs text-slate-500">${acc.email} | NIP: ${acc.nip}</p>
+  <div class="app-shell w-full">
+   <header class="app-header">
+    <div class="decor-stripe" aria-hidden="true"></div>
+    <div class="mobile-frame px-4 py-3 flex items-center justify-between gap-3">
+     <div class="flex items-center gap-3 min-w-0">
+      <div class="brand-mark shrink-0"><i data-lucide="shield-check" class="w-6 h-6"></i></div>
+      <div class="min-w-0">
+       <h1 class="font-extrabold leading-tight text-lg tracking-tight">PAGAR PKTN</h1>
+       <p id="active-user-badge" class="text-xs text-slate-500 font-bold truncate">Sesi: Memuat...</p>
+      </div>
      </div>
-     <div class="flex gap-2">
-      <button type="button" class="primary-btn text-xs py-1.5 px-3 bg-emerald-600" onclick="approveAccount(${idx})">Setujui</button>
-      <button type="button" class="danger-btn text-xs py-1.5 px-3" onclick="rejectAccount(${idx})">Tolak</button>
+     <div class="flex items-center gap-2.5 shrink-0">
+      <button id="btn-theme-toggle" type="button" class="secondary-btn w-10 h-10 p-0 flex items-center justify-center rounded-full" title="Alihkan Tema Terang/Gelap" aria-label="Alihkan Tema">
+       <i data-lucide="moon" class="w-5 h-5"></i>
+      </button>
+
+      <div id="network-status" class="network-pill online" role="status">
+       <span class="status-dot"></span><span id="network-label">Online</span>
+      </div>
+      <button id="btn-open-menu" type="button" class="secondary-btn w-10 h-10 p-0 flex items-center justify-center rounded-full"><i data-lucide="menu" class="w-5 h-5"></i></button>
+      <button id="btn-logout" type="button" class="secondary-btn w-10 h-10 p-0 text-rose-600 bg-rose-50 rounded-full flex items-center justify-center" title="Keluar Sesi"><i data-lucide="log-out" class="w-5 h-5"></i></button>
      </div>
     </div>
-   `).join('');
-  }
+   </header>
 
-  function approveAccount(idx) {
-   pendingAccounts.splice(idx, 1);
-   renderPendingList();
-   alert("Akun berhasil disetujui.");
-  }
+   <main class="mobile-frame px-4 py-5">
+    
+    <!-- BANNER SELAMAT DATANG -->
+    <div id="welcome-banner" class="mb-5 p-5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl shadow-lg flex items-center justify-between">
+     <div>
+      <p class="text-xs font-bold uppercase tracking-wider text-blue-200">Sistem Pengawasan Aktif</p>
+      <h2 id="welcome-greeting" class="text-lg font-black mt-1">Selamat Datang, Petugas!</h2>
+      <p class="text-sm text-blue-100 mt-1">Siap melaksanakan pengamatan kasat mata barang beredar.</p>
+     </div>
+     <div class="hidden sm:block"><i data-lucide="shield-alert" class="w-12 h-12 text-blue-200 opacity-80"></i></div>
+    </div>
 
-  function rejectAccount(idx) {
-   pendingAccounts.splice(idx, 1);
-   renderPendingList();
-   alert("Akun ditolak.");
-  }
+    <!-- ADMIN PANEL KHUSUS -->
+    <section id="page-admin-panel" class="page">
+     <div class="mb-5">
+      <p class="text-xs font-bold uppercase text-amber-600">Administrator</p>
+      <h2 class="text-2xl font-black">Verifikasi Permintaan Akun Baru</h2>
+     </div>
+     <div class="section-card space-y-3">
+      <p class="text-sm text-slate-500 font-medium">Daftar petugas yang mengajukan pembuatan akun baru dan menunggu persetujuan:</p>
+      <div id="admin-pending-list" class="space-y-3"></div>
+     </div>
+    </section>
 
-  // Navigasi Tab Bawah
-  document.querySelectorAll('.nav-btn').forEach(btn => {
-   btn.addEventListener('click', () => {
-    const target = btn.getAttribute('data-target');
-    switchPage(target);
-   });
-  });
+    <!-- 1. FORMULIR WIZARD 5 LANGKAH -->
+    <section id="page-form" class="page active">
+     <div class="mb-5">
+      <div class="flex justify-between items-center mb-1.5">
+       <p class="font-bold uppercase tracking-wider text-xs text-blue-600" id="wizard-title">Langkah 1 dari 5: Tim & Toko</p>
+       <span id="wizard-progress-text" class="text-sm font-black text-slate-600">20%</span>
+      </div>
+      <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
+       <div id="wizard-bar" class="bg-blue-600 h-full transition-all duration-300" style="width: 20%;"></div>
+      </div>
+     </div>
 
-  function switchPage(pageId) {
-   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-   document.getElementById(pageId).classList.add('active');
-   const activeNav = document.querySelector(`.nav-btn[data-target="${pageId}"]`);
-   if(activeNav) activeNav.classList.add('active');
-   if(pageId === 'page-map' && mapInstance) {
-    setTimeout(() => mapInstance.invalidateSize(), 200);
-   }
-   window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+     <form id="inspection-form" class="space-y-4" novalidate>
+      
+      <!-- STEP 1: Tim & Identitas Toko -->
+      <div class="wizard-step active-step" data-step="1">
+       <article class="section-card space-y-5">
+        <div class="section-heading">
+         <div class="section-icon"><i data-lucide="store" class="w-5 h-5"></i></div>
+         <div class="flex-1"><h3 class="font-extrabold text-base">Tim Pengawas & Identitas Pengecer</h3></div>
+        </div>
+        <div>
+         <label class="field-label">Instansi / Unit Kerja <span class="text-rose-600">*</span></label>
+         <input class="field-control" id="agency" required value="Dinas Perindustrian dan Perdagangan Pemerintah Provinsi NTT">
+        </div>
 
-  // Drawer Menu Samping
-  document.getElementById('btn-open-menu').addEventListener('click', () => {
-   document.getElementById('side-drawer').classList.add('open');
-  });
-  function closeDrawer(e) {
-   if(e.target.id === 'side-drawer') {
-    document.getElementById('side-drawer').classList.remove('open');
-   }
-  }
-  function toggleDrawer() {
-   document.getElementById('side-drawer').classList.remove('open');
-  }
-  function navigateFromDrawer(pageId) {
-   document.getElementById('side-drawer').classList.remove('open');
-   switchPage(pageId);
-  }
+        <!-- TIM PETUGAS -->
+        <div class="space-y-3">
+         <label class="field-label">Nama Petugas Pengawas <span class="text-rose-600">*</span></label>
+         <div id="officer-container" class="space-y-3">
+          <div class="flex gap-2">
+           <input id="officer-0" class="field-control flex-1 officer-input" required value="Eryzon Arifandy Huan, S.Mat">
+          </div>
+         </div>
+         <button type="button" class="secondary-btn text-xs py-2 px-3 font-bold mt-1" onclick="addOfficerField()">
+          <i data-lucide="user-plus" class="w-4 h-4"></i> Tambah Petugas
+         </button>
+        </div>
 
-  // Dark Mode Toggle
-  document.getElementById('btn-theme-toggle').addEventListener('click', () => {
-   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-   document.documentElement.setAttribute('data-theme', isDark ? '' : 'dark');
-  });
+        <div class="grid sm:grid-cols-2 gap-4">
+         <div>
+          <label class="field-label">Kode Sampel <span class="text-rose-600">*</span></label>
+          <input class="field-control" id="sample-code" required placeholder="Contoh: 003">
+         </div>
+         <div>
+          <label class="field-label">Nomor Telepon / WhatsApp <span class="text-rose-600">*</span></label>
+          <input class="field-control" id="phone" type="tel" inputmode="numeric" required placeholder="08123456789 (Min. 10 digit)">
+         </div>
+        </div>
+        <div>
+         <label class="field-label">Nama Toko / Pengecer <span class="text-rose-600">*</span></label>
+         <input class="field-control" id="business-name" required placeholder="Contoh: Toko Maju Jaya">
+        </div>
+        <div>
+         <label class="field-label">Alamat Pengecer <span class="text-rose-600">*</span></label>
+         <input class="field-control" id="retailer-address" required placeholder="Alamat lengkap lokasi">
+        </div>
+        <div>
+         <label class="field-label">Nama Pemilik / Penanggung Jawab <span class="text-rose-600">*</span></label>
+         <input class="field-control" id="owner-name" required placeholder="Nama pemilik toko">
+        </div>
+        <div>
+         <label class="field-label">Koordinat GPS</label>
+         <div class="flex gap-2">
+          <input id="coordinates" class="field-control flex-1" readonly placeholder="Belum mengambil titik GPS">
+          <button id="gps-button" class="secondary-btn px-5 font-bold shrink-0" type="button"><i data-lucide="map-pin" class="w-4 h-4"></i> Ambil GPS</button>
+         </div>
+         <p id="gps-feedback" class="mt-1.5 text-xs font-semibold text-slate-500"></p>
+        </div>
+       </article>
+       <button type="button" class="primary-btn w-full py-4 font-black text-sm" onclick="nextStep(1)">Selanjutnya: Produk & Bagian A &rarr;</button>
+      </div>
 
-  // Wizard Langkah Formulir
-  function nextStep(step) {
-   if(step === 1) {
-    const biz = document.getElementById('business-name').value;
-    const phone = document.getElementById('phone').value;
-    if(!biz || !phone) {
-     alert("Mohon lengkapi Nama Toko dan Nomor Telepon terlebih dahulu.");
-     return;
-    }
-   }
-   currentStep = step + 1;
-   updateWizardUI();
-  }
+      <!-- STEP 2: Produk & Bagian A -->
+      <div class="wizard-step" data-step="2">
+       <article class="section-card space-y-5">
+        <div class="section-heading">
+         <div class="section-icon"><i data-lucide="package-search" class="w-5 h-5"></i></div>
+         <div class="flex-1"><h3 class="font-extrabold text-base">Produk & Bagian A (Nomor Registrasi)</h3></div>
+        </div>
+        <div>
+         <label class="field-label">Jenis Produk / Komoditas <span class="text-rose-600">*</span></label>
+         <input class="field-control" id="product-type" placeholder="Contoh: Pompa Air Listrik">
+        </div>
+        <div>
+         <label class="field-label">Merek / Brand <span class="text-rose-600">*</span></label>
+         <input class="field-control" id="brand" placeholder="Contoh: Shimizu">
+        </div>
 
-  function prevStep(step) {
-   currentStep = step - 1;
-   updateWizardUI();
-  }
+        <hr class="my-3">
+        <h4 class="font-black text-xs uppercase text-blue-700 tracking-wider">BAGIAN A: Informasi Nomor Registrasi Standar</h4>
+        
+        <div class="p-4 bg-slate-50 rounded-xl border space-y-3">
+         <label class="field-label font-bold">1. Tanda & Nomor SNI pada Barang</label>
+         <select id="sni-barang-opt" class="field-control"><option value="Ada">Ada</option><option value="Tidak ada" selected>Tidak ada</option></select>
+         <div id="sni-barang-box" class="hidden"><input id="sni-barang-num" class="field-control" placeholder="Format: SNI XXXX:YYYY"></div>
+         <label class="doc-box" for="doc-sni-barang">
+          <input id="doc-sni-barang" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
+          <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto SNI Barang</span>
+         </label>
+        </div>
 
-  function updateWizardUI() {
-   document.querySelectorAll('.wizard-step').forEach(s => s.classList.remove('active-step'));
-   const targetStepEl = document.querySelector(`.wizard-step[data-step="${currentStep}"]`);
-   if(targetStepEl) targetStepEl.classList.add('active-step');
+        <div class="p-4 bg-slate-50 rounded-xl border space-y-3">
+         <label class="field-label font-bold">2. Tanda & Nomor SNI pada Kemasan</label>
+         <select id="sni-kemasan-opt" class="field-control"><option value="Ada dan sama pada barang">Ada dan sama pada barang</option><option value="Ada dan beda pada barang">Ada dan beda pada barang</option><option value="Tidak ada" selected>Tidak ada</option></select>
+         <div id="sni-kemasan-box" class="hidden"><input id="sni-kemasan-num" class="field-control" placeholder="Format: SNI XXXX:YYYY"></div>
+         <label class="doc-box" for="doc-sni-kemasan">
+          <input id="doc-sni-kemasan" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
+          <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto SNI Kemasan</span>
+         </label>
+        </div>
 
-   const titles = [
-    "Langkah 1 dari 5: Tim & Toko",
-    "Langkah 2 dari 5: Produk & Bagian A",
-    "Langkah 3 dari 5: Bagian B (Label)",
-    "Langkah 4 dari 5: Bagian C & D (Manual & Garansi)",
-    "Langkah 5 dari 5: Catatan & TTD"
-   ];
-   document.getElementById('wizard-title').textContent = titles[currentStep - 1];
-   const pct = currentStep * 20;
-   document.getElementById('wizard-progress-text').textContent = `${pct}%`;
-   document.getElementById('wizard-bar').style.width = `${pct}%`;
-   window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+        <div class="p-4 bg-slate-50 rounded-xl border space-y-3">
+         <label class="field-label font-bold">3. Kode LSpro pada Barang</label>
+         <select id="lspro-barang-opt" class="field-control"><option value="Ada">Ada</option><option value="Tidak ada" selected>Tidak ada</option></select>
+         <div id="lspro-barang-box" class="hidden"><input id="lspro-barang-num" class="field-control" placeholder="Format: LSPr-004-IDN"></div>
+         <label class="doc-box" for="doc-lspro-barang">
+          <input id="doc-lspro-barang" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
+          <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto LSpro Barang</span>
+         </label>
+        </div>
 
-  // Tambah Petugas Dinamis
-  let officerCount = 1;
-  function addOfficerField() {
-   const container = document.getElementById('officer-container');
-   const div = document.createElement('div');
-   div.className = "flex gap-2";
-   div.innerHTML = `<input id="officer-${officerCount}" class="field-control flex-1 officer-input" placeholder="Nama Petugas Pendamping">
-    <button type="button" class="danger-btn px-3 text-xs" onclick="this.parentElement.remove()">Hapus</button>`;
-   container.appendChild(div);
-   officerCount++;
-  }
+        <div class="p-4 bg-slate-50 rounded-xl border space-y-3">
+         <label class="field-label font-bold">4. Kode LSpro pada Kemasan</label>
+         <select id="lspro-kemasan-opt" class="field-control"><option value="Ada dan sama pada barang">Ada dan sama pada barang</option><option value="Ada dan beda pada barang">Ada dan beda pada barang</option><option value="Tidak ada" selected>Tidak ada</option></select>
+         <div id="lspro-kemasan-box" class="hidden"><input id="lspro-kemasan-num" class="field-control" placeholder="Format LSpro..."></div>
+         <label class="doc-box" for="doc-lspro-kemasan">
+          <input id="doc-lspro-kemasan" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
+          <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto LSpro Kemasan</span>
+         </label>
+        </div>
 
-  // GPS Mock / Real Geolocation
-  document.getElementById('gps-button').addEventListener('click', () => {
-   const feedback = document.getElementById('gps-feedback');
-   feedback.textContent = "Mengambil koordinat GPS akurat...";
-   if(navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition((pos) => {
-     const lat = pos.coords.latitude.toFixed(6);
-     const lng = pos.coords.longitude.toFixed(6);
-     document.getElementById('coordinates').value = `${lat}, ${lng}`;
-     feedback.textContent = "Koordinat GPS berhasil diperoleh!";
-     feedback.className = "mt-1.5 text-xs font-semibold text-emerald-600";
-    }, (err) => {
-     // Fallback Kupang Default
-     document.getElementById('coordinates').value = "-10.178900, 123.607100";
-     feedback.textContent = "Menggunakan titik GPS default wilayah Kupang.";
-     feedback.className = "mt-1.5 text-xs font-semibold text-amber-600";
-    }, { enableHighAccuracy: true });
-   } else {
-    document.getElementById('coordinates').value = "-10.178900, 123.607100";
-    feedback.textContent = "Geolocation tidak didukung browser.";
-   }
-  });
+        <div class="p-4 bg-slate-50 rounded-xl border space-y-3">
+         <label class="field-label font-bold">5. Nomor NPB pada Barang</label>
+         <select id="npb-barang-opt" class="field-control"><option value="Ada">Ada</option><option value="Tidak ada" selected>Tidak ada</option></select>
+         <div id="npb-barang-box" class="hidden"><input id="npb-barang-num" class="field-control" placeholder="Format NPB: 123.456/NPB/I/YYYY"></div>
+         <label class="doc-box" for="doc-npb-barang">
+          <input id="doc-npb-barang" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
+          <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto NPB Barang</span>
+         </label>
+        </div>
 
-  // Conditional Fields & Document Upload State
-  function setupConditionalFields() {
-   // SNI Barang
-   document.getElementById('sni-barang-opt').addEventListener('change', (e) => {
-    const val = e.target.value;
-    document.getElementById('sni-barang-box').classList.toggle('hidden', val !== 'Ada');
-   });
-   // SNI Kemasan
-   document.getElementById('sni-kemasan-opt').addEventListener('change', (e) => {
-    const val = e.target.value;
-    document.getElementById('sni-kemasan-box').classList.toggle('hidden', !val.includes('Ada'));
-   });
-   // LSpro Barang
-   document.getElementById('lspro-barang-opt').addEventListener('change', (e) => {
-    const val = e.target.value;
-    document.getElementById('lspro-barang-box').classList.toggle('hidden', val !== 'Ada');
-   });
-   // NPB Barang
-   document.getElementById('npb-barang-opt').addEventListener('change', (e) => {
-    const val = e.target.value;
-    document.getElementById('npb-barang-box').classList.toggle('hidden', val !== 'Ada');
-   });
-   // Manual
-   document.getElementById('manual-opt').addEventListener('change', (e) => {
-    document.getElementById('manual-box').classList.toggle('hidden', e.target.value !== 'Ada');
-   });
-   // Garansi
-   document.getElementById('garansi-opt').addEventListener('change', (e) => {
-    document.getElementById('garansi-box').classList.toggle('hidden', e.target.value !== 'Ada');
-   });
+        <div class="p-4 bg-slate-50 rounded-xl border space-y-3">
+         <label class="field-label font-bold">6. Nomor NPB pada Kemasan</label>
+         <select id="npb-kemasan-opt" class="field-control"><option value="Ada dan sama pada barang">Ada dan sama pada barang</option><option value="Ada dan beda pada barang">Ada dan beda pada barang</option><option value="Tidak ada" selected>Tidak ada</option></select>
+         <div id="npb-kemasan-box" class="hidden"><input id="npb-kemasan-num" class="field-control" placeholder="Format NPB..."></div>
+         <label class="doc-box" for="doc-npb-kemasan">
+          <input id="doc-npb-kemasan" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
+          <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto NPB Kemasan</span>
+         </label>
+        </div>
 
-   // Label Barang Merek
-   document.getElementById('label-brg-merek-opt').addEventListener('change', (e) => {
-    document.getElementById('label-brg-merek-val').classList.toggle('hidden', e.target.value !== 'Ada');
-   });
-   document.getElementById('label-brg-listrik-opt').addEventListener('change', (e) => {
-    document.getElementById('label-brg-listrik-val').classList.toggle('hidden', e.target.value !== 'Ada');
-   });
-   document.getElementById('label-brg-negara-opt').addEventListener('change', (e) => {
-    document.getElementById('label-brg-negara-val').classList.toggle('hidden', e.target.value !== 'Ada');
-   });
+        <!-- TOMBOL PORTAL BANG BENI -->
+        <div class="p-5 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 rounded-2xl shadow-lg text-white flex flex-col sm:flex-row items-center justify-between gap-4 border border-blue-400/30">
+         <div class="space-y-1 text-center sm:text-left">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/40 text-xs font-black uppercase tracking-wider text-blue-100 border border-blue-300/30">
+           <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Resmi BSN
+          </div>
+          <h4 class="font-black text-base tracking-tight">Verifikasi Validitas Nomor SNI</h4>
+          <p class="text-xs text-blue-100 leading-relaxed font-medium">Gunakan Portal Bang Beni untuk mengecek keaslian nomor pendaftaran.</p>
+         </div>
+         <a href="https://bangbeni.bsn.go.id" target="_blank" class="shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white text-blue-700 hover:bg-blue-50 font-black text-xs shadow-md transition-transform active:scale-95">
+          <i data-lucide="external-link" class="w-4 h-4 text-blue-600"></i> Buka Portal Bang Beni
+         </a>
+        </div>
 
-   // Label Kemasan Merek & Listrik
-   document.getElementById('label-kem-merek-opt').addEventListener('change', (e) => {
-    document.getElementById('label-kem-merek-val').classList.toggle('hidden', !e.target.value.includes('Ada'));
-   });
-   document.getElementById('label-kem-listrik-opt').addEventListener('change', (e) => {
-    document.getElementById('label-kem-listrik-val').classList.toggle('hidden', !e.target.value.includes('Ada'));
-   });
-   document.getElementById('label-kem-negara-opt').addEventListener('change', (e) => {
-    const val = e.target.value;
-    document.getElementById('label-kem-negara-val').classList.toggle('hidden', val !== 'Ada');
-    if(val === 'Ada') {
-     document.getElementById('dynamic-entity-section').classList.remove('hidden');
-    } else {
-     document.getElementById('dynamic-entity-section').classList.add('hidden');
-    }
-   });
-  }
-
-  function checkCountryMadeIn(el) {
-   const val = document.getElementById('label-kem-negara-val').value.toLowerCase();
-   const dynSec = document.getElementById('dynamic-entity-section');
-   const prodBox = document.getElementById('producer-dynamic-box');
-   const impBox = document.getElementById('importer-dynamic-box');
-   dynSec.classList.remove('hidden');
-   if(val.includes('indonesia')) {
-    prodBox.classList.remove('hidden');
-    impBox.classList.add('hidden');
-   } else {
-    prodBox.classList.add('hidden');
-    impBox.classList.remove('hidden');
-   }
-  }
-
-  function updateDocUI(input) {
-   const label = input.parentElement;
-   if(input.files && input.files[0]) {
-    label.classList.add('has-file');
-    const span = label.querySelector('.file-info');
-    span.textContent = "File Terunggah: " + input.files[0].name;
-   }
-  }
-
-  // Tanda Tangan Digital Canvas
-  let canvas, ctx, isDrawing = false;
-  function initSignaturePad() {
-   canvas = document.getElementById('signature-canvas');
-   if(!canvas) return;
-   ctx = canvas.getContext('2d');
-   resizeCanvas();
-
-   canvas.addEventListener('mousedown', startDraw);
-   canvas.addEventListener('mousemove', draw);
-   canvas.addEventListener('mouseup', stopDraw);
-   canvas.addEventListener('touchstart', startDrawMobile);
-   canvas.addEventListener('touchmove', drawMobile);
-   canvas.addEventListener('touchend', stopDraw);
-  }
-
-  function resizeCanvas() {
-   const rect = canvas.parentElement.getBoundingClientRect();
-   canvas.width = rect.width - 16;
-   canvas.height = 160;
-  }
-
-  function startDraw(e) {
-   isDrawing = true;
-   ctx.beginPath();
-   ctx.moveTo(e.offsetX, e.offsetY);
-  }
-
-  function draw(e) {
-   if(!isDrawing) return;
-   ctx.lineTo(e.offsetX, e.offsetY);
-   ctx.strokeStyle = '#202124';
-   ctx.lineWidth = 2;
-   ctx.stroke();
-  }
-
-  function startDrawMobile(e) {
-   e.preventDefault();
-   const touch = e.touches[0];
-   const rect = canvas.getBoundingClientRect();
-   isDrawing = true;
-   ctx.beginPath();
-   ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
-  }
-
-  function drawMobile(e) {
-   if(!isDrawing) return;
-   e.preventDefault();
-   const touch = e.touches[0];
-   const rect = canvas.getBoundingClientRect();
-   ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
-   ctx.strokeStyle = '#202124';
-   ctx.lineWidth = 2;
-   ctx.stroke();
-  }
-
-  function stopDraw() {
-   isDrawing = false;
-  }
-
-  function clearSignature() {
-   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  }
-
-  // Submit Form & Simpan Laporan
-  document.getElementById('inspection-form').addEventListener('submit', (e) => {
-   e.preventDefault();
-   const store = document.getElementById('business-name').value;
-   const address = document.getElementById('retailer-address').value;
-   const owner = document.getElementById('owner-name').value;
-   const product = document.getElementById('product-type').value || "Komoditas Umum";
-   const brand = document.getElementById('brand').value || "Merek Umum";
-   const status = document.getElementById('sni-status').value;
-   const coords = document.getElementById('coordinates').value || "-10.1789, 123.6071";
-
-   const newReport = {
-    id: `PKTN-2026-${String(historyData.length + 1).padStart(3, '0')}`,
-    date: new Date().toISOString().replace('T', ' ').substring(0, 16),
-    store, address, owner, product, brand, status, coordinates: coords
-   };
-
-   historyData.unshift(newReport);
-   localStorage.setItem('pagar_history', JSON.stringify(historyData));
-
-   alert("Laporan pengawasan berhasil disimpan & disinkronkan!");
-   document.getElementById('inspection-form').reset();
-   currentStep = 1;
-   updateWizardUI();
-   renderHistory();
-   updateAnalytics();
-   initMap();
-   switchPage('page-history');
-  });
-
-  // Render Riwayat
-  function renderHistory(dataToRender = historyData) {
-   const container = document.getElementById('history-container');
-   if(!container) return;
-   if(dataToRender.length === 0) {
-    container.innerHTML = `<div class="section-card text-center py-8 text-slate-400">Belum ada riwayat laporan pengawasan.</div>`;
-    return;
-   }
-   container.innerHTML = dataToRender.map(item => {
-    let cardClass = "legal";
-    if(item.status.includes("Tidak Terdaftar")) cardClass = "temuan";
-    else if(item.status.includes("Tidak Sesuai")) cardClass = "pending";
-
-    return `
-     <div class="history-card ${cardClass}" onclick="openDetailModal('${item.id}')">
-      <div class="flex justify-between items-start mb-2">
-       <div>
-        <span class="text-xs font-black uppercase text-blue-600">${item.id}</span>
-        <h4 class="font-extrabold text-base mt-0.5">${item.store}</h4>
+        <div>
+         <label class="field-label">Kesimpulan Status Validasi <span class="text-rose-600">*</span></label>
+         <select id="sni-status" class="field-control">
+          <option value="Terdaftar dan Sesuai (Legal)">Terdaftar dan Sesuai (Legal)</option>
+          <option value="Tidak Terdaftar (Temuan)">Tidak Terdaftar (Temuan)</option>
+          <option value="Terdaftar namun Tidak Sesuai Spesifikasinya">Terdaftar namun Tidak Sesuai Spesifikasinya</option>
+         </select>
+        </div>
+       </article>
+       <div class="flex gap-3">
+        <button type="button" class="secondary-btn w-1/2 py-4 font-bold text-sm" onclick="prevStep(2)">&larr; Sebelumnya</button>
+        <button type="button" class="primary-btn w-1/2 py-4 font-bold text-sm" onclick="nextStep(2)">Selanjutnya: Bagian B &rarr;</button>
        </div>
-       <span class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-100">${item.date}</span>
       </div>
-      <p class="text-xs text-slate-500 mb-2">${item.address}</p>
-      <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 text-xs font-semibold">
-       <span>Komoditas: <strong>${item.product} (${item.brand})</strong></span>
-       <span class="font-bold">${item.status}</span>
+
+      <!-- STEP 3: Bagian B (Label Lengkap + Dinamis Produsen / Importir) -->
+      <div class="wizard-step" data-step="3">
+       <article class="section-card space-y-5">
+        <div class="section-heading">
+         <div class="section-icon"><i data-lucide="languages" class="w-5 h-5"></i></div>
+         <div class="flex-1"><h3 class="font-extrabold text-base">Bagian B: Label Dalam Bahasa Indonesia (Lengkap)</h3></div>
+        </div>
+
+        <div class="p-4 bg-blue-50 rounded-xl border border-blue-200 flex items-center justify-between gap-3">
+         <div><p class="text-sm font-bold text-blue-900">Riwayat Auto-Fill</p><p class="text-xs text-blue-700">Pilih riwayat label agar tidak mengetik ulang.</p></div>
+         <select id="auto-fill-history" class="field-control max-w-[200px] text-sm"><option value="">-- Pilih --</option></select>
+        </div>
+
+        <div class="space-y-4">
+         <!-- 1. Tercantum Pada Barang -->
+         <div class="p-5 bg-slate-50 rounded-xl border space-y-3">
+          <h4 class="font-black text-xs uppercase text-blue-700 tracking-wider">1. Tercantum Pada Barang</h4>
+          <div>
+           <label class="field-label text-xs">Merek Barang</label>
+           <select id="label-brg-merek-opt" class="field-control mb-2"><option value="Ada">Ada</option><option value="Tidak ada" selected>Tidak ada</option></select>
+           <input id="label-brg-merek-val" class="field-control hidden" placeholder="Tuliskan merek pada barang...">
+          </div>
+          <div>
+           <label class="field-label text-xs">Penggunaan listrik; tegangan (Volt/V) dan frekuensi (Hz)</label>
+           <select id="label-brg-listrik-opt" class="field-control mb-2"><option value="Ada">Ada</option><option value="Tidak ada" selected>Tidak ada</option></select>
+           <input id="label-brg-listrik-val" class="field-control hidden mb-3" placeholder="Format: 220V ~ 50Hz">
+           <label class="doc-box" for="doc-label-listrik">
+            <input id="doc-label-listrik" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
+            <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto Penggunaan Listrik</span>
+           </label>
+          </div>
+          <div>
+           <label class="field-label text-xs">Negara pembuat atau Made in</label>
+           <select id="label-brg-negara-opt" class="field-control mb-2"><option value="Ada">Ada</option><option value="Tidak ada" selected>Tidak ada</option></select>
+           <input id="label-brg-negara-val" class="field-control hidden" placeholder="Tuliskan negara pembuat...">
+          </div>
+         </div>
+
+         <!-- 2. Tercantum Pada Kemasan (Dinamis: Produsen jika Indonesia, Importir jika Lainnya) -->
+         <div class="p-5 bg-slate-50 rounded-xl border space-y-3">
+          <h4 class="font-black text-xs uppercase text-blue-700 tracking-wider">2. Tercantum Pada Kemasan</h4>
+          <div>
+           <label class="field-label text-xs">Merek Barang</label>
+           <select id="label-kem-merek-opt" class="field-control mb-2"><option value="Ada dan sama pada barang">Ada dan sama pada barang</option><option value="Ada dan berbeda pada barang">Ada dan berbeda pada barang</option><option value="Tidak ada" selected>Tidak ada</option></select>
+           <input id="label-kem-merek-val" class="field-control hidden" placeholder="Tuliskan merek pada kemasan...">
+          </div>
+          <div>
+           <label class="field-label text-xs">Penggunaan listrik; tegangan (Volt/V) dan frekuensi (Hz)</label>
+           <select id="label-kem-listrik-opt" class="field-control mb-2"><option value="Ada dan sama pada barang">Ada dan sama pada barang</option><option value="Ada dan berbeda pada barang">Ada dan berbeda pada barang</option><option value="Tidak ada" selected>Tidak ada</option></select>
+           <input id="label-kem-listrik-val" class="field-control hidden" placeholder="Format: 220V ~ 50Hz">
+          </div>
+          <div>
+           <label class="field-label text-xs">Negara pembuat atau Made in</label>
+           <select id="label-kem-negara-opt" class="field-control mb-2" onchange="checkCountryMadeIn(this)"><option value="Ada">Ada</option><option value="Tidak ada" selected>Tidak ada</option></select>
+           <input id="label-kem-negara-val" class="field-control hidden mt-1" placeholder="Tuliskan negara (Contoh: Indonesia)" oninput="checkCountryMadeIn(this)">
+          </div>
+
+          <!-- Bagian Dinamis Produsen / Importir -->
+          <div id="dynamic-entity-section" class="hidden space-y-3 pt-3 border-t border-slate-200">
+           <div id="producer-dynamic-box" class="hidden space-y-3 p-4 bg-white rounded-xl border">
+            <p class="text-xs font-black text-emerald-700 uppercase tracking-wide">Barang Buatan Dalam Negeri (Indonesia)</p>
+            <div><label class="field-label text-xs">Nama Produsen</label><input id="dyn-producer-name" class="field-control" placeholder="Nama perusahaan produsen"></div>
+            <div><label class="field-label text-xs">Alamat Lengkap Produsen</label><input id="dyn-producer-addr" class="field-control" placeholder="Alamat pabrik produsen"></div>
+           </div>
+
+           <div id="importer-dynamic-box" class="hidden space-y-3 p-4 bg-white rounded-xl border">
+            <p class="text-xs font-black text-blue-700 uppercase tracking-wide">Barang Impor (Selain Indonesia)</p>
+            <div><label class="field-label text-xs">Nama Importir</label><input id="dyn-importer-name" class="field-control" placeholder="Nama perusahaan importir"></div>
+            <div><label class="field-label text-xs">Alamat Lengkap Importir</label><input id="dyn-importer-addr" class="field-control" placeholder="Alamat kantor importir"></div>
+           </div>
+          </div>
+
+         </div>
+        </div>
+       </article>
+       <div class="flex gap-3">
+        <button type="button" class="secondary-btn w-1/2 py-4 font-bold text-sm" onclick="prevStep(3)">&larr; Sebelumnya</button>
+        <button type="button" class="primary-btn w-1/2 py-4 font-bold text-sm" onclick="nextStep(3)">Selanjutnya: Bagian C & D &rarr;</button>
+       </div>
       </div>
+
+      <!-- STEP 4: Bagian C & D -->
+      <div class="wizard-step" data-step="4">
+       <article class="section-card space-y-5">
+        <div class="section-heading">
+         <div class="section-icon"><i data-lucide="book-open" class="w-5 h-5"></i></div>
+         <div class="flex-1">
+          <h3 class="font-extrabold text-base">Bagian C & D: Petunjuk Penggunaan & Garansi</h3></div>
+         </div>
+         
+         <div class="space-y-4">
+          <!-- Bagian C -->
+          <div class="p-5 bg-slate-50 rounded-xl border space-y-3">
+           <h4 class="font-black text-xs uppercase text-blue-700 tracking-wider">BAGIAN C: Petunjuk Penggunaan (Manual)</h4>
+           <div>
+            <label class="field-label text-xs">Petunjuk Penggunaan dalam Bahasa Indonesia</label>
+            <select id="manual-opt" class="field-control mb-2" onchange="toggleUploadBox(this, 'manual-box')">
+             <option value="Ada">Ada</option>
+             <option value="Tidak ada" selected>Tidak ada</option>
+            </select>
+            <div id="manual-box" class="hidden">
+             <label class="doc-box" for="doc-manual">
+              <input id="doc-manual" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
+              <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div>
+              <span class="file-info font-bold">Foto Manual Book</span>
+             </label>
+            </div>
+           </div>
+          </div>
+
+          <!-- Bagian D -->
+          <div class="p-5 bg-slate-50 rounded-xl border space-y-3">
+           <h4 class="font-black text-xs uppercase text-blue-700 tracking-wider">BAGIAN D: Kartu Garansi Purna Jual</h4>
+           <div>
+            <label class="field-label text-xs">Kartu Garansi dalam Bahasa Indonesia</label>
+            <select id="warranty-opt" class="field-control mb-2" onchange="toggleUploadBox(this, 'warranty-box')">
+             <option value="Ada">Ada</option>
+             <option value="Tidak ada" selected>Tidak ada</option>
+            </select>
+            <div id="warranty-box" class="hidden">
+             <label class="doc-box" for="doc-warranty">
+              <input id="doc-warranty" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
+              <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div>
+              <span class="file-info font-bold">Foto Kartu Garansi</span>
+             </label>
+            </div>
+           </div>
+          </div>
+         </div>
+        </article>
+        <div class="flex gap-3">
+         <button type="button" class="secondary-btn w-1/2 py-4 font-bold text-sm" onclick="prevStep(4)">&larr; Sebelumnya</button>
+         <button type="button" class="primary-btn w-1/2 py-4 font-bold text-sm" onclick="nextStep(4)">Selanjutnya: Akhiri Form &rarr;</button>
+        </div>
+       </div>
+
+       <!-- STEP 5: Dokumentasi Akhir & Kesimpulan -->
+       <div class="wizard-step" data-step="5">
+        <article class="section-card space-y-5">
+         <div class="section-heading">
+          <div class="section-icon"><i data-lucide="camera" class="w-5 h-5"></i></div>
+          <div class="flex-1"><h3 class="font-extrabold text-base">Dokumentasi Akhir & Keterangan</h3></div>
+         </div>
+
+         <div class="space-y-3">
+          <label class="field-label">Bukti Foto Pengawasan Lapangan <span class="text-rose-600">*</span></label>
+          <div class="grid grid-cols-2 gap-3">
+           <label class="doc-box" for="doc-final-front">
+            <input id="doc-final-front" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
+            <div class="icon-state"><i data-lucide="camera" class="w-6 h-6"></i></div><span class="file-info font-bold">Foto Depan Produk</span>
+           </label>
+           <label class="doc-box" for="doc-final-side">
+            <input id="doc-final-side" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
+            <div class="icon-state"><i data-lucide="camera" class="w-6 h-6"></i></div><span class="file-info font-bold">Samping / Belakang</span>
+           </label>
+           <label class="doc-box" for="doc-final-store">
+            <input id="doc-final-store" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
+            <div class="icon-state"><i data-lucide="camera" class="w-6 h-6"></i></div><span class="file-info font-bold">Tampak Depan Toko</span>
+           </label>
+           <label class="doc-box" for="doc-final-nota">
+            <input id="doc-final-nota" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
+            <div class="icon-state"><i data-lucide="camera" class="w-6 h-6"></i></div><span class="file-info font-bold">Nota / Kuitansi</span>
+           </label>
+          </div>
+         </div>
+
+         <div>
+          <label class="field-label">Catatan Tambahan / Keterangan Temuan</label>
+          <textarea id="final-notes" class="field-control" rows="3" placeholder="Tuliskan jika ada temuan khusus di lapangan yang tidak tercakup di form..."></textarea>
+         </div>
+        </article>
+        
+        <div class="flex gap-3">
+         <button type="button" class="secondary-btn w-1/3 py-4 font-bold text-sm" onclick="prevStep(5)">&larr; Kembali</button>
+         <button type="submit" class="primary-btn w-2/3 py-4 font-black text-sm bg-emerald-600 hover:bg-emerald-700 shadow-lg shadow-emerald-500/30">
+          Simpan Laporan &ensp;<i data-lucide="save" class="w-4 h-4"></i>
+         </button>
+        </div>
+       </div>
+
+      </form>
+     </section>
+
+     <!-- PAGE: PETA SEBARAN (LEAFLET) -->
+     <section id="page-map" class="page">
+      <div class="mb-5">
+       <h2 class="text-2xl font-black">Peta Sebaran Pengawasan</h2>
+       <p class="text-sm text-slate-500 mt-1">Pemetaan GPS lokasi toko yang telah diawasi.</p>
+      </div>
+      <div class="section-card p-2 relative">
+       <div id="leaflet-map"></div>
+       <button id="btn-recenter-map" class="absolute bottom-4 right-4 z-[400] bg-white p-3 rounded-xl shadow-lg border border-slate-200 text-blue-600">
+        <i data-lucide="crosshair" class="w-5 h-5"></i>
+       </button>
+      </div>
+     </section>
+
+     <!-- PAGE: RIWAYAT & STATISTIK -->
+     <section id="page-history" class="page">
+      <div class="mb-5">
+       <h2 class="text-2xl font-black">Riwayat Pengawasan</h2>
+       <p class="text-sm text-slate-500 mt-1">Laporan yang telah disimpan di perangkat ini.</p>
+      </div>
+      
+      <div class="flex gap-2 mb-4 overflow-x-auto pb-2 scrollbar-hide">
+       <button class="px-4 py-2 rounded-full bg-blue-600 text-white text-xs font-bold whitespace-nowrap">Semua Laporan</button>
+       <button class="px-4 py-2 rounded-full bg-slate-200 text-slate-700 text-xs font-bold whitespace-nowrap">Status Legal</button>
+       <button class="px-4 py-2 rounded-full bg-slate-200 text-slate-700 text-xs font-bold whitespace-nowrap">Ada Temuan</button>
+      </div>
+
+      <div id="history-container" class="space-y-0">
+       <!-- Sample Card 1 -->
+       <div class="history-card legal">
+        <div class="flex justify-between items-start mb-2">
+         <div>
+          <span class="inline-block px-2 py-1 rounded bg-emerald-100 text-emerald-700 text-[10px] font-black uppercase mb-1">Terdaftar & Legal</span>
+          <h4 class="font-extrabold text-sm">Pompa Air Shimizu</h4>
+         </div>
+         <span class="text-[10px] text-slate-400 font-bold">Hari ini, 09:30</span>
+        </div>
+        <p class="text-xs text-slate-500 mb-3"><i data-lucide="store" class="w-3 h-3 inline mr-1"></i> Toko Maju Jaya - Kupang</p>
+        <button class="w-full py-2 bg-slate-100 text-blue-600 font-bold text-xs rounded-lg">Lihat Detail Form</button>
+       </div>
+       
+       <!-- Sample Card 2 -->
+       <div class="history-card temuan">
+        <div class="flex justify-between items-start mb-2">
+         <div>
+          <span class="inline-block px-2 py-1 rounded bg-rose-100 text-rose-700 text-[10px] font-black uppercase mb-1">Temuan (Tidak Terdaftar)</span>
+          <h4 class="font-extrabold text-sm">Setrika Listrik Maspion</h4>
+         </div>
+         <span class="text-[10px] text-slate-400 font-bold">Kemarin, 14:15</span>
+        </div>
+        <p class="text-xs text-slate-500 mb-3"><i data-lucide="store" class="w-3 h-3 inline mr-1"></i> Sinar Bangunan - Kupang</p>
+        <button class="w-full py-2 bg-slate-100 text-blue-600 font-bold text-xs rounded-lg">Lihat Detail Form</button>
+       </div>
+      </div>
+     </section>
+
+     <!-- PAGE: PROFIL & PENGATURAN -->
+     <section id="page-profile" class="page">
+      <div class="mb-5">
+       <h2 class="text-2xl font-black">Profil Petugas</h2>
+      </div>
+      <div class="section-card text-center space-y-2">
+       <div class="w-20 h-20 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-3">
+        <i data-lucide="user" class="w-10 h-10"></i>
+       </div>
+       <h3 class="font-black text-lg">Eryzon Arifandy Huan, S.Mat</h3>
+       <p class="text-xs font-bold text-slate-500">NIP: 199904182025061006</p>
+       <p class="text-xs text-slate-500">Dinas Perindustrian dan Perdagangan Prov. NTT</p>
+       <button class="mt-4 px-5 py-2 bg-rose-50 text-rose-600 font-bold text-xs rounded-lg border border-rose-200" onclick="alert('Keluar aplikasi?')">Keluar Akun</button>
+      </div>
+     </section>
+    </main>
+
+    <!-- FAB BUTTON (Shortcut Tambah Baru) -->
+    <button class="fab-btn hidden" id="fab-new-form" onclick="resetForm()">
+     <i data-lucide="plus" class="w-7 h-7"></i>
+    </button>
+
+    <!-- BOTTOM NAVIGATION MENU (10 Tombol - 2 Baris) -->
+    <nav class="bottom-nav">
+     <div class="nav-inner pb-1">
+      <!-- Baris 1 (Utama) -->
+      <button type="button" class="nav-btn active" onclick="switchTab('page-form', this)">
+       <i data-lucide="clipboard-edit"></i><span>Formulir</span>
+      </button>
+      <button type="button" class="nav-btn" onclick="switchTab('page-history', this)">
+       <i data-lucide="history"></i><span>Riwayat</span>
+      </button>
+      <button type="button" class="nav-btn" onclick="switchTab('page-map', this)">
+       <i data-lucide="map-pin"></i><span>Peta GPS</span>
+      </button>
+      <button type="button" class="nav-btn" onclick="alert('Modul Statistik sedang dikembangkan')">
+       <i data-lucide="bar-chart-2"></i><span>Statistik</span>
+      </button>
+      <button type="button" class="nav-btn" onclick="switchTab('page-admin-panel', this)">
+       <i data-lucide="shield-alert"></i><span>Admin</span>
+      </button>
+      
+      <!-- Baris 2 (Ekstra) -->
+      <button type="button" class="nav-btn mt-1" onclick="alert('Pencarian Data...')">
+       <i data-lucide="search"></i><span>Cari</span>
+      </button>
+      <button type="button" class="nav-btn mt-1" onclick="alert('Sinkronisasi Data ke Server BSN...')">
+       <i data-lucide="refresh-cw"></i><span>Sinkron</span>
+      </button>
+      <button type="button" class="nav-btn mt-1" onclick="alert('Ekspor ke PDF/Excel...')">
+       <i data-lucide="download"></i><span>Ekspor</span>
+      </button>
+      <button type="button" class="nav-btn mt-1" onclick="alert('Bantuan & Panduan Aplikasi')">
+       <i data-lucide="help-circle"></i><span>Panduan</span>
+      </button>
+      <button type="button" class="nav-btn mt-1" onclick="switchTab('page-profile', this)">
+       <i data-lucide="user"></i><span>Profil</span>
+      </button>
      </div>
+    </nav>
+   </div>
+  </div>
+
+  <!-- SCRIPT LOGIKA APLIKASI -->
+  <script>
+   // 1. Inisialisasi Icon Lucide
+   lucide.createIcons();
+
+   // 2. State & Navigasi Halaman
+   function switchTab(pageId, btnEl) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+    
+    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+    if(btnEl) btnEl.classList.add('active');
+
+    // Tampilkan FAB jika di halaman history/map
+    const fab = document.getElementById('fab-new-form');
+    if(pageId === 'page-history' || pageId === 'page-map') fab.classList.remove('hidden');
+    else fab.classList.add('hidden');
+
+    if(pageId === 'page-map') initMap();
+    window.scrollTo(0, 0);
+   }
+
+   // 3. Logika Autentikasi (Login/Register)
+   function switchAuthTab(tab) {
+    const loginForm = document.getElementById('login-form');
+    const regForm = document.getElementById('register-form');
+    const tabLogin = document.getElementById('tab-login');
+    const tabReg = document.getElementById('tab-register');
+    const title = document.getElementById('auth-title');
+    
+    if(tab === 'login') {
+     loginForm.classList.remove('hidden'); regForm.classList.add('hidden');
+     tabLogin.classList.add('bg-white', 'shadow', 'text-blue-600');
+     tabReg.classList.remove('bg-white', 'shadow', 'text-blue-600');
+     title.innerText = 'Login Petugas / Admin';
+    } else {
+     loginForm.classList.add('hidden'); regForm.classList.remove('hidden');
+     tabReg.classList.add('bg-white', 'shadow', 'text-blue-600');
+     tabLogin.classList.remove('bg-white', 'shadow', 'text-blue-600');
+     title.innerText = 'Pendaftaran Akun';
+    }
+   }
+
+   function showForgotPassword() { alert("Silakan hubungi Administrator (Dinas Perindag Prov. NTT) untuk mereset kata sandi Anda."); }
+
+   // Simulasi Login Submission
+   document.getElementById('login-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    document.getElementById('login-modal').classList.remove('open');
+    document.getElementById('active-user-badge').innerText = 'Sesi: Eryzon A. (Admin)';
+   });
+
+   // 4. Wizard Form Logic
+   let currentStep = 1;
+   const totalSteps = 5;
+
+   function updateProgressBar() {
+    const percentage = ((currentStep) / totalSteps) * 100;
+    document.getElementById('wizard-bar').style.width = `${percentage}%`;
+    document.getElementById('wizard-progress-text').innerText = `${Math.round(percentage)}%`;
+    
+    const titles = [
+     "Langkah 1 dari 5: Tim & Toko", 
+     "Langkah 2 dari 5: Produk & SNI", 
+     "Langkah 3 dari 5: Label (Bhs Indonesia)", 
+     "Langkah 4 dari 5: Manual & Garansi", 
+     "Langkah 5 dari 5: Dokumentasi Akhir"
+    ];
+    document.getElementById('wizard-title').innerText = titles[currentStep - 1];
+   }
+
+   function nextStep(step) {
+    if(step < totalSteps) {
+     document.querySelector(`[data-step="${step}"]`).classList.remove('active-step');
+     currentStep = step + 1;
+     document.querySelector(`[data-step="${currentStep}"]`).classList.add('active-step');
+     updateProgressBar();
+     window.scrollTo(0, 0);
+    }
+   }
+
+   function prevStep(step) {
+    if(step > 1) {
+     document.querySelector(`[data-step="${step}"]`).classList.remove('active-step');
+     currentStep = step - 1;
+     document.querySelector(`[data-step="${currentStep}"]`).classList.add('active-step');
+     updateProgressBar();
+     window.scrollTo(0, 0);
+    }
+   }
+
+   function resetForm() {
+    document.getElementById('inspection-form').reset();
+    document.querySelectorAll('.doc-box').forEach(box => {
+     box.classList.remove('has-file');
+     const icon = box.querySelector('.icon-state i');
+     if(icon) icon.setAttribute('data-lucide', 'camera');
+    });
+    lucide.createIcons();
+    prevStep(currentStep); // reset to step 1
+    while(currentStep > 1) { prevStep(currentStep); }
+    switchTab('page-form', document.querySelectorAll('.nav-btn')[0]);
+   }
+
+   document.getElementById('inspection-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    alert('Laporan berhasil disimpan secara lokal! Anda dapat menyinkronkannya ke server nanti.');
+    resetForm();
+    switchTab('page-history', document.querySelectorAll('.nav-btn')[1]);
+   });
+
+   // 5. Tambah Petugas Dinamis
+   let officerCount = 1;
+   function addOfficerField() {
+    const container = document.getElementById('officer-container');
+    const div = document.createElement('div');
+    div.className = 'flex gap-2 mt-2';
+    div.innerHTML = `
+     <input class="field-control flex-1 officer-input" required placeholder="Nama Petugas Tambahan">
+     <button type="button" class="danger-btn px-4" onclick="this.parentElement.remove()"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
     `;
-   }).join('');
-  }
-
-  function filterHistory() {
-   const q = document.getElementById('search-history').value.toLowerCase();
-   const filtered = historyData.filter(i => i.store.toLowerCase().includes(q) || i.product.toLowerCase().includes(q) || i.id.toLowerCase().includes(q));
-   renderHistory(filtered);
-  }
-
-  function openDetailModal(id) {
-   const item = historyData.find(i => i.id === id);
-   if(!item) return;
-   const body = document.getElementById('modal-detail-body');
-   body.innerHTML = `
-    <p><strong>ID Laporan:</strong> ${item.id}</p>
-    <p><strong>Waktu:</strong> ${item.date}</p>
-    <p><strong>Nama Toko:</strong> ${item.store}</p>
-    <p><strong>Alamat:</strong> ${item.address}</p>
-    <p><strong>Pemilik:</strong> ${item.owner}</p>
-    <p><strong>Komoditas / Merek:</strong> ${item.product} / ${item.brand}</p>
-    <p><strong>Status Validasi:</strong> <span class="font-bold">${item.status}</span></p>
-    <p><strong>Koordinat GPS:</strong> ${item.coordinates}</p>
-   `;
-   document.getElementById('detail-modal').classList.add('open');
-  }
-
-  function closeDetailModal(e) {
-   if(e.target.id === 'detail-modal') {
-    document.getElementById('detail-modal').classList.remove('open');
-   }
-  }
-
-  function exportDataJSON() {
-   const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(historyData, null, 2));
-   const dlAnchor = document.createElement('a');
-   dlAnchor.setAttribute("href", dataStr);
-   dlAnchor.setAttribute("download", "laporan_pagar_pktn_2026.json");
-   document.body.appendChild(dlAnchor);
-   dlAnchor.click();
-   dlAnchor.remove();
-  }
-
-  // Analitik & Statistik
-  function updateAnalytics() {
-   const total = historyData.length;
-   const legal = historyData.filter(i => i.status.includes("Legal")).length;
-   const temuan = historyData.filter(i => i.status.includes("Tidak Terdaftar") || i.status.includes("Tidak Sesuai")).length;
-   const compliance = total > 0 ? Math.round((legal / total) * 100) : 0;
-
-   document.getElementById('stat-total').textContent = total;
-   document.getElementById('stat-legal').textContent = legal;
-   document.getElementById('stat-temuan').textContent = temuan;
-   document.getElementById('stat-compliance').textContent = `${compliance}%`;
-
-   const barsContainer = document.getElementById('analytics-bars');
-   barsContainer.innerHTML = `
-    <div class="flex flex-col items-center gap-1">
-     <span class="text-xs font-bold">${legal}</span>
-     <div class="w-12 bg-emerald-500 rounded-t-lg transition-all" style="height: ${total ? (legal/total)*120 : 0}px"></div>
-     <span class="text-[11px] font-semibold text-slate-500">Legal</span>
-    </div>
-    <div class="flex flex-col items-center gap-1">
-     <span class="text-xs font-bold">${temuan}</span>
-     <div class="w-12 bg-rose-500 rounded-t-lg transition-all" style="height: ${total ? (temuan/total)*120 : 0}px"></div>
-     <span class="text-[11px] font-semibold text-slate-500">Temuan</span>
-    </div>
-   `;
-  }
-
-  // Peta Geospasial Leaflet
-  function initMap() {
-   const mapEl = document.getElementById('leaflet-map');
-   if(!mapEl) return;
-   if(!mapInstance) {
-    mapInstance = L.map('leaflet-map').setView([-10.1789, 123.6071], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-     maxZoom: 19,
-     attribution: '&copy; OpenStreetMap'
-    }).addTo(mapInstance);
+    container.appendChild(div);
+    lucide.createIcons();
    }
 
-   // Clear existing markers
-   mapMarkers.forEach(m => mapInstance.removeLayer(m));
-   mapMarkers = [];
+   // 6. Tampilkan/Sembunyikan Input Upload & Text dinamis
+   function setupToggleLogic(optId, valId, condition = 'Ada') {
+    const opt = document.getElementById(optId);
+    const val = document.getElementById(valId);
+    if(opt && val) {
+     opt.addEventListener('change', (e) => {
+      if(e.target.value.includes(condition)) val.classList.remove('hidden');
+      else val.classList.add('hidden');
+     });
+    }
+   }
 
-   historyData.forEach(item => {
-    if(item.coordinates) {
-     const parts = item.coordinates.split(',');
-     if(parts.length === 2) {
-      const lat = parseFloat(parts[0].trim());
-      const lng = parseFloat(parts[1].trim());
-      if(!isNaN(lat) && !isNaN(lng)) {
-       const marker = L.marker([lat, lng]).addTo(mapInstance)
-        .bindPopup(`<b>${item.store}</b><br>${item.product}<br>${item.status}`);
-       mapMarkers.push(marker);
-      }
+   function toggleUploadBox(selectEl, boxId) {
+    const box = document.getElementById(boxId);
+    if(selectEl.value === 'Ada') box.classList.remove('hidden');
+    else box.classList.add('hidden');
+   }
+
+   // Bind setup logic for multiple fields
+   ['label-brg-merek', 'label-brg-listrik', 'label-brg-negara', 'label-kem-merek', 'label-kem-listrik'].forEach(prefix => {
+    setupToggleLogic(`${prefix}-opt`, `${prefix}-val`);
+   });
+   ['sni-barang', 'sni-kemasan', 'lspro-barang', 'lspro-kemasan', 'npb-barang', 'npb-kemasan'].forEach(prefix => {
+    setupToggleLogic(`${prefix}-opt`, `${prefix}-box`);
+   });
+
+   // Logika Produsen vs Importir (Bagian B)
+   function checkCountryMadeIn(el) {
+    const valInput = document.getElementById('label-kem-negara-val');
+    const dynSection = document.getElementById('dynamic-entity-section');
+    const prodBox = document.getElementById('producer-dynamic-box');
+    const impBox = document.getElementById('importer-dynamic-box');
+    
+    const country = valInput.value.toLowerCase();
+    const hasCountry = document.getElementById('label-kem-negara-opt').value.includes('Ada');
+
+    if(hasCountry && country.length > 2) {
+     dynSection.classList.remove('hidden');
+     if(country.includes('indonesia')) {
+      prodBox.classList.remove('hidden'); impBox.classList.add('hidden');
+     } else {
+      prodBox.classList.add('hidden'); impBox.classList.remove('hidden');
      }
+    } else {
+     dynSection.classList.add('hidden');
+    }
+   }
+
+   // 7. Update UI Upload File
+   function updateDocUI(input) {
+    const box = input.closest('.doc-box');
+    const icon = box.querySelector('.icon-state i');
+    if(input.files && input.files[0]) {
+     box.classList.add('has-file');
+     icon.setAttribute('data-lucide', 'check-circle-2');
+    } else {
+     box.classList.remove('has-file');
+     icon.setAttribute('data-lucide', 'camera');
+    }
+    lucide.createIcons();
+   }
+
+   // 8. Logika GPS
+   document.getElementById('gps-button').addEventListener('click', () => {
+    const btn = document.getElementById('gps-button');
+    const input = document.getElementById('coordinates');
+    const feedback = document.getElementById('gps-feedback');
+    
+    btn.innerHTML = `<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> Mencari...`;
+    lucide.createIcons();
+
+    if ("geolocation" in navigator) {
+     navigator.geolocation.getCurrentPosition(
+      (position) => {
+       input.value = `${position.coords.latitude.toFixed(6)}, ${position.coords.longitude.toFixed(6)}`;
+       feedback.innerText = `Akurasi: ±${Math.round(position.coords.accuracy)} meter`;
+       feedback.classList.replace('text-slate-500', 'text-success');
+       btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i> Oke`;
+       lucide.createIcons();
+      },
+      (error) => {
+       input.value = '';
+       feedback.innerText = "Gagal mengambil lokasi. Periksa izin GPS HP Anda.";
+       feedback.classList.replace('text-slate-500', 'text-rose-600');
+       btn.innerHTML = `<i data-lucide="map-pin" class="w-4 h-4"></i> Ulangi`;
+       lucide.createIcons();
+      }, { enableHighAccuracy: true, timeout: 10000 }
+     );
     }
    });
-  }
 
-  function saveSettings() {
-   currentUser.name = document.getElementById('settings-name').value;
-   document.getElementById('active-user-badge').textContent = `Sesi: ${currentUser.name} (${currentUser.role.toUpperCase()})`;
-   alert("Pengaturan profil berhasil disimpan.");
-  }
+   // 9. Dark Mode Toggle
+   document.getElementById('btn-theme-toggle').addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if(isDark) {
+     document.documentElement.removeAttribute('data-theme');
+    } else {
+     document.documentElement.setAttribute('data-theme', 'dark');
+    }
+   });
 
-  function clearAllData() {
-   if(confirm("Apakah Anda yakin ingin menghapus seluruh riwayat lokal?")) {
-    localStorage.removeItem('pagar_history');
-    historyData = [];
-    renderHistory();
-    updateAnalytics();
-    initMap();
-    alert("Semua data berhasil dibersihkan.");
+   // 10. Inisialisasi Peta Leaflet
+   let map;
+   function initMap() {
+    if(map) return; // cegah inisialisasi ganda
+    map = L.map('leaflet-map').setView([-10.178, 123.582], 13); // Default Kupang, NTT
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+     attribution: '© OpenStreetMap'
+    }).addTo(map);
+    
+    // Sample Marker
+    L.marker([-10.178, 123.582]).addTo(map).bindPopup('<b>Toko Maju Jaya</b><br>Kupang, NTT');
    }
-  }
- </script>
-</body>
+  </script>
+ </body>
 </html>
