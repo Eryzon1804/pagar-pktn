@@ -471,7 +471,7 @@
          
          <div>
           <label class="field-label">Ketersediaan Petunjuk Penggunaan</label>
-          <select id="petunjuk-opt" class="field-control font-bold" onchange="toggleSection('petunjuk-sub-box', this.value)">
+          <select id="petunjuk-opt" class="field-control font-bold" onchange="tampilBoxLangkah4('petunjuk-sub-box', this.value)">
            <option value="Ada">Ada</option>
            <option value="Tidak ada" selected>Tidak ada</option>
           </select>
@@ -1790,7 +1790,7 @@
       link.click();
     });
 
-   // --- SINKRONISASI CLOUD ---
+  // --- SINKRONISASI CLOUD ---
     document.getElementById('btn-sync-now').addEventListener('click', async () => {
       const url = "https://script.google.com/macros/s/AKfycbycZ1Dn-oWfbhlrIuqE5PfdWVnEouyYsS3WXt4LACNbw1x9YfDFx2HQYd0QAvGzj2ah/exec";
       const unsynced = reports.filter(r => !r.synced);
@@ -1840,12 +1840,12 @@
     }
 
     // ==========================================
-    // FUNGSI UNTUK LANGKAH 4 (BAGIAN C & D)
+    // FUNGSI UNTUK LANGKAH 4 (NAMA SUDAH DIGANTI)
     // ==========================================
     
-    // 1. Fungsi untuk Tampil/Sembunyi Bagian Utama (Box)
-    function toggleSection(elementId, value) {
+    function tampilBoxLangkah4(elementId, value) {
       const el = document.getElementById(elementId);
+      if (!el) return; // Pengaman
       if(value === 'Ada') {
         el.classList.remove('hidden');
         if(elementId === 'petunjuk-sub-box') syncDataBagianC();
@@ -1854,47 +1854,50 @@
       }
     }
 
-    // 2. Fungsi untuk Tampil/Sembunyi Input Text Tambahan
-    function toggleField(elementId, value) {
+    function tampilInputLangkah4(elementId, value) {
       const el = document.getElementById(elementId);
+      if (!el) return; // Pengaman
       if(value === 'Ada') {
         el.classList.remove('hidden');
       } else {
         el.classList.add('hidden');
-        el.value = ''; // Kosongkan isian jika dipilih "Tidak"
+        el.value = ''; 
       }
     }
 
-    // 3. Fungsi Logika untuk Menarik Data dari Langkah 2 & 3 ke Langkah 4
     function syncDataBagianC() {
-      const merekBrand = document.getElementById('brand') ? document.getElementById('brand').value : "";
-      const negaraAsal = document.getElementById('label-kem-negara-val') ? document.getElementById('label-kem-negara-val').value.trim().toLowerCase() : "";
-      
-      const namaProd = document.getElementById('dyn-producer-name') ? document.getElementById('dyn-producer-name').value : "";
-      const alamatProd = document.getElementById('dyn-producer-addr') ? document.getElementById('dyn-producer-addr').value : "";
-      
-      const namaImp = document.getElementById('dyn-importer-name') ? document.getElementById('dyn-importer-name').value : "";
-      const alamatImp = document.getElementById('dyn-importer-addr') ? document.getElementById('dyn-importer-addr').value : "";
+      try {
+        const merekBrand = document.getElementById('brand') ? document.getElementById('brand').value : "";
+        const negaraAsal = document.getElementById('label-kem-negara-val') ? document.getElementById('label-kem-negara-val').value.trim().toLowerCase() : "";
+        
+        const namaProd = document.getElementById('dyn-producer-name') ? document.getElementById('dyn-producer-name').value : "";
+        const alamatProd = document.getElementById('dyn-producer-addr') ? document.getElementById('dyn-producer-addr').value : "";
+        
+        const namaImp = document.getElementById('dyn-importer-name') ? document.getElementById('dyn-importer-name').value : "";
+        const alamatImp = document.getElementById('dyn-importer-addr') ? document.getElementById('dyn-importer-addr').value : "";
 
-      const boxProdusen = document.getElementById('c-produsen-box');
-      const boxImportir = document.getElementById('c-importir-box');
-      const valProdusen = document.getElementById('c-produsen-val');
-      const valImportir = document.getElementById('c-importir-val');
-      const valMerek = document.getElementById('c-merek-val');
+        const boxProdusen = document.getElementById('c-produsen-box');
+        const boxImportir = document.getElementById('c-importir-box');
+        const valProdusen = document.getElementById('c-produsen-val');
+        const valImportir = document.getElementById('c-importir-val');
+        const valMerek = document.getElementById('c-merek-val');
 
-      if(valMerek) valMerek.value = merekBrand;
+        if(valMerek) valMerek.value = merekBrand;
 
-      if (negaraAsal === 'indonesia') {
-        boxProdusen.classList.remove('hidden');
-        boxImportir.classList.add('hidden');
-        valProdusen.value = namaProd + (alamatProd ? "\n" + alamatProd : "");
-      } else if (negaraAsal !== '') {
-        boxImportir.classList.remove('hidden');
-        boxProdusen.classList.add('hidden');
-        valImportir.value = namaImp + (alamatImp ? "\n" + alamatImp : "");
-      } else {
-        boxProdusen.classList.add('hidden');
-        boxImportir.classList.add('hidden');
+        if (negaraAsal === 'indonesia') {
+          if(boxProdusen) boxProdusen.classList.remove('hidden');
+          if(boxImportir) boxImportir.classList.add('hidden');
+          if(valProdusen) valProdusen.value = namaProd + (alamatProd ? "\n" + alamatProd : "");
+        } else if (negaraAsal !== '') {
+          if(boxImportir) boxImportir.classList.remove('hidden');
+          if(boxProdusen) boxProdusen.classList.add('hidden');
+          if(valImportir) valImportir.value = namaImp + (alamatImp ? "\n" + alamatImp : "");
+        } else {
+          if(boxProdusen) boxProdusen.classList.add('hidden');
+          if(boxImportir) boxImportir.classList.add('hidden');
+        }
+      } catch (error) {
+        console.error("Error saat menarik data: ", error);
       }
     }
 
