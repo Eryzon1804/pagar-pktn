@@ -455,7 +455,7 @@
        </div>
       </div>
 
-      <!-- STEP 4: Bagian C & D -->
+     <!-- STEP 4: Bagian C & D -->
       <div class="wizard-step" data-step="4">
        <article class="section-card space-y-5">
         <div class="section-heading">
@@ -463,114 +463,138 @@
          <div class="flex-1"><h3 class="font-extrabold text-base">Bagian C & D: Petunjuk & Garansi</h3></div>
         </div>
 
+        <!-- ============================================== -->
+        <!-- BAGIAN C: PETUNJUK PENGGUNAAN -->
+        <!-- ============================================== -->
         <div class="p-5 bg-slate-50 rounded-xl border space-y-4">
          <h4 class="font-black text-xs uppercase text-blue-700 tracking-wider">Bagian C: Petunjuk Penggunaan</h4>
+         
          <div>
-          <label class="field-label">Petunjuk Penggunaan</label>
-          <select id="petunjuk-opt" class="field-control">
+          <label class="field-label">Ketersediaan Petunjuk Penggunaan</label>
+          <select id="petunjuk-opt" class="field-control font-bold" onchange="toggleSection('petunjuk-sub-box', this.value)">
            <option value="Ada">Ada</option>
            <option value="Tidak ada" selected>Tidak ada</option>
           </select>
          </div>
 
-         <div id="petunjuk-sub-box" class="hidden space-y-4 pt-2">
-          <label class="doc-box" for="doc-petunjuk">
-           <input id="doc-petunjuk" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
-           <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto Petunjuk Penggunaan</span>
-          </label>
-          <div class="flex items-center justify-between gap-3 text-sm">
-           <span class="font-bold">Nama dan alamat lengkap Produsen atau Importir</span>
-           <select id="p-prod" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak">Tidak</option></select>
-          </div>
-          <div class="flex items-center justify-between gap-3 text-sm">
-           <span class="font-bold">Merek, jenis, tipe dan/atau model produk</span>
-           <select id="p-merek" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak">Tidak</option></select>
-          </div>
-          <div class="flex items-center justify-between gap-3 text-sm">
-           <span class="font-bold">Spesifikasi produk</span>
-           <select id="p-spek" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak">Tidak</option></select>
-          </div>
-          <div class="flex items-center justify-between gap-3 text-sm">
-           <span class="font-bold">Keterangan cara penggunaan sesuai fungsi produk</span>
-           <select id="p-cara" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak">Tidak</option></select>
-          </div>
-          <div class="space-y-1.5">
-           <div class="flex items-center justify-between gap-3 text-sm">
-            <span class="font-bold">Nomor tanda pendaftaran petunjuk penggunaan</span>
-            <select id="p-reg-opt" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select>
+         <!-- Sub-box Bagian C (Hanya muncul jika Petunjuk = Ada) -->
+         <div id="petunjuk-sub-box" class="hidden space-y-4 pt-4 border-t border-slate-200">
+          
+          <!-- 1. Data Produsen / Importir (Ditarik otomatis) -->
+          <div class="p-3 bg-blue-50/50 border border-blue-100 rounded-lg space-y-2">
+           <span class="text-[11px] font-black text-blue-800 uppercase tracking-wide">1. Data Produsen / Importir (Otomatis)</span>
+           
+           <div id="c-produsen-box" class="hidden">
+            <label class="text-[10px] text-slate-500 font-bold uppercase">Nama & Alamat Produsen (Lokal)</label>
+            <textarea id="c-produsen-val" class="field-control text-sm bg-slate-100 cursor-not-allowed" rows="2" readonly placeholder="Akan terisi otomatis dari data sebelumnya..."></textarea>
            </div>
-           <input id="p-reg-val" class="field-control hidden mt-1.5" placeholder="Nomor tanda pendaftaran...">
+           
+           <div id="c-importir-box" class="hidden">
+            <label class="text-[10px] text-slate-500 font-bold uppercase">Nama & Alamat Importir (Impor)</label>
+            <textarea id="c-importir-val" class="field-control text-sm bg-slate-100 cursor-not-allowed" rows="2" readonly placeholder="Akan terisi otomatis dari data sebelumnya..."></textarea>
+           </div>
           </div>
+
+          <!-- 2. Merek, Jenis, Tipe (Ditarik otomatis) -->
+          <div class="p-3 bg-blue-50/50 border border-blue-100 rounded-lg space-y-2">
+           <span class="text-[11px] font-black text-blue-800 uppercase tracking-wide">2. Merek, Jenis, Tipe / Model (Otomatis)</span>
+           <input id="c-merek-val" class="field-control text-sm bg-slate-100 cursor-not-allowed" readonly placeholder="Akan terisi otomatis dari data sebelumnya...">
+          </div>
+
+          <!-- 3, 4, 5. Opsi Spesifikasi & Penggunaan -->
+          <div class="space-y-3 text-sm pt-2">
+           <div class="flex items-center justify-between gap-3">
+            <span class="font-bold">3. Spesifikasi produk</span>
+            <select id="p-spek" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak">Tidak</option></select>
+           </div>
+           
+           <div class="flex items-center justify-between gap-3">
+            <span class="font-bold">4. Keterangan cara penggunaan sesuai fungsi</span>
+            <select id="p-cara" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak">Tidak</option></select>
+           </div>
+
+           <div class="flex items-center justify-between gap-3">
+            <span class="font-bold">5. Petunjuk pemeliharaan</span>
+            <select id="p-pelihara" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak">Tidak</option></select>
+           </div>
+          </div>
+
+          <!-- 6. Nomor Tanda Pendaftaran -->
+          <div class="space-y-1.5 pt-2 border-t border-slate-200">
+           <div class="flex items-center justify-between gap-3 text-sm">
+            <span class="font-bold">6. Nomor Tanda Pendaftaran Petunjuk Penggunaan & Garansi</span>
+            <select id="p-reg-opt" class="field-control w-28 text-xs" onchange="toggleField('p-reg-val', this.value)">
+             <option value="Ada">Ada</option>
+             <option value="Tidak" selected>Tidak</option>
+            </select>
+           </div>
+           <input id="p-reg-val" class="field-control hidden mt-2" placeholder="Tuliskan nomor pendaftaran di sini...">
+          </div>
+
+          <!-- 7. Dokumentasi -->
+          <div class="pt-2">
+           <label class="doc-box" for="doc-petunjuk">
+            <input id="doc-petunjuk" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
+            <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto Petunjuk Penggunaan</span>
+           </label>
+          </div>
+
          </div>
         </div>
 
+        <!-- ============================================== -->
+        <!-- BAGIAN D: KARTU GARANSI -->
+        <!-- ============================================== -->
         <div class="p-5 bg-slate-50 rounded-xl border space-y-4">
          <h4 class="font-black text-xs uppercase text-blue-700 tracking-wider">Bagian D: Jaminan Layanan Purna Jual (Garansi)</h4>
-         <div class="space-y-3.5 text-sm">
-          <div class="flex items-center justify-between gap-3"><span class="font-bold">1. Nama & alamat Produsen/Importir</span><select id="g-prod" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak">Tidak</option></select></div>
-          <div class="flex items-center justify-between gap-3"><span class="font-bold">2. Nama & alamat pusat layanan (min. 6/10 kota)</span><select id="g-sc" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak">Tidak</option></select></div>
-          <div class="space-y-1.5">
-           <div class="flex items-center justify-between gap-3"><span class="font-bold">3. Masa jaminan min. 1 tahun sejak pembelian</span><select id="g-masa-opt" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
-           <input id="g-masa-val" class="field-control hidden mt-1.5" placeholder="Keterangan masa garansi...">
-          </div>
-          <div class="flex items-center justify-between gap-3"><span class="font-bold">4. Syarat, prosedur klaim, & perbaikan gratis</span><select id="g-syarat" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak">Tidak</option></select></div>
-          <div class="flex items-center justify-between gap-3"><span class="font-bold">5. Cakupan atau daftar kerusakan dijamin</span><select id="g-cakupan" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak">Tidak</option></select></div>
-          <div class="space-y-1.5">
-           <div class="flex items-center justify-between gap-3"><span class="font-bold">6. Nomor Telepon pengaduan konsumen</span><select id="g-telp-opt" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
-           <input id="g-telp-val" class="field-control hidden mt-1.5" placeholder="Nomor Telepon: 021-xxxxxxx">
-          </div>
-          <div class="flex items-center justify-between gap-3"><span class="font-bold">7. Data identitas unik Produk Elektronik/Telematika</span><select id="g-unik" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak">Tidak</option></select></div>
-          <div class="flex items-center justify-between gap-3"><span class="font-bold">8. Ketersediaan suku cadang</span><select id="g-spare" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak">Tidak</option></select></div>
-          <div class="flex items-center justify-between gap-3"><span class="font-bold">9. Pergantian barang sejenis selama masa jaminan</span><select id="g-ganti" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak">Tidak</option></select></div>
-          <div class="space-y-1.5">
-           <div class="flex items-center justify-between gap-3"><span class="font-bold">10. Nomor tanda pendaftaran petunjuk & kartu jaminan</span><select id="g-reg-opt" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
-           <input id="g-reg-val" class="field-control hidden mt-1.5" placeholder="Nomor tanda pendaftaran garansi...">
-          </div>
+         
+         <div>
+          <label class="field-label">Ketersediaan Kartu Garansi</label>
+          <select id="garansi-opt" class="field-control font-bold" onchange="toggleSection('garansi-sub-box', this.value)">
+           <option value="Ada">Ada</option>
+           <option value="Tidak ada" selected>Tidak ada</option>
+          </select>
          </div>
-         <div class="pt-3">
-          <label class="doc-box" for="doc-garansi">
-           <input id="doc-garansi" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
-           <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto Kartu Jaminan / Garansi</span>
-          </label>
+
+         <!-- Sub-box Bagian D (Hanya muncul jika Garansi = Ada) -->
+         <div id="garansi-sub-box" class="hidden space-y-4 pt-4 border-t border-slate-200 text-sm">
+          <div class="space-y-3.5">
+           <div class="flex items-center justify-between gap-3"><span class="font-bold">1. Nama & alamat Produsen/Importir</span><select id="g-prod" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak">Tidak</option></select></div>
+           <div class="flex items-center justify-between gap-3"><span class="font-bold">2. Nama & alamat pusat layanan (min. 6/10 kota)</span><select id="g-sc" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak">Tidak</option></select></div>
+           <div class="space-y-1.5">
+            <div class="flex items-center justify-between gap-3"><span class="font-bold">3. Masa jaminan min. 1 tahun sejak pembelian</span><select id="g-masa-opt" class="field-control w-28 text-xs" onchange="toggleField('g-masa-val', this.value)"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
+            <input id="g-masa-val" class="field-control hidden mt-1.5" placeholder="Keterangan masa garansi...">
+           </div>
+           <div class="flex items-center justify-between gap-3"><span class="font-bold">4. Syarat, prosedur klaim, & perbaikan gratis</span><select id="g-syarat" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak">Tidak</option></select></div>
+           <div class="flex items-center justify-between gap-3"><span class="font-bold">5. Cakupan atau daftar kerusakan dijamin</span><select id="g-cakupan" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak">Tidak</option></select></div>
+           <div class="space-y-1.5">
+            <div class="flex items-center justify-between gap-3"><span class="font-bold">6. Nomor Telepon pengaduan konsumen</span><select id="g-telp-opt" class="field-control w-28 text-xs" onchange="toggleField('g-telp-val', this.value)"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
+            <input id="g-telp-val" class="field-control hidden mt-1.5" placeholder="Nomor Telepon: 021-xxxxxxx">
+           </div>
+           <div class="flex items-center justify-between gap-3"><span class="font-bold">7. Data identitas unik Produk Elektronik/Telematika</span><select id="g-unik" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak">Tidak</option></select></div>
+           <div class="flex items-center justify-between gap-3"><span class="font-bold">8. Ketersediaan suku cadang</span><select id="g-spare" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak">Tidak</option></select></div>
+           <div class="flex items-center justify-between gap-3"><span class="font-bold">9. Pergantian barang sejenis selama masa jaminan</span><select id="g-ganti" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak">Tidak</option></select></div>
+           <div class="space-y-1.5">
+            <div class="flex items-center justify-between gap-3"><span class="font-bold">10. Nomor tanda pendaftaran garansi</span><select id="g-reg-opt" class="field-control w-28 text-xs" onchange="toggleField('g-reg-val', this.value)"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
+            <input id="g-reg-val" class="field-control hidden mt-1.5" placeholder="Nomor tanda pendaftaran garansi...">
+           </div>
+          </div>
+          
+          <div class="pt-3">
+           <label class="doc-box" for="doc-garansi">
+            <input id="doc-garansi" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
+            <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto Kartu Jaminan / Garansi</span>
+           </label>
+          </div>
          </div>
         </div>
        </article>
+
        <div class="flex gap-3">
         <button type="button" class="secondary-btn w-1/2 py-4 font-bold text-sm" onclick="prevStep(4)">&larr; Sebelumnya</button>
         <button type="button" class="primary-btn w-1/2 py-4 font-bold text-sm" onclick="nextStep(4)">Selanjutnya: Dokumentasi &rarr;</button>
        </div>
       </div>
-
-      <!-- STEP 5: Dokumentasi Utama & Lapangan Opsional -->
-      <div class="wizard-step" data-step="5">
-       <article class="section-card space-y-5">
-        <div class="section-heading">
-         <div class="section-icon"><i data-lucide="camera" class="w-5 h-5"></i></div>
-         <div class="flex-1"><h3 class="font-extrabold text-base">Dokumentasi Foto Umum & Lapangan</h3></div>
-        </div>
-        <p class="text-sm font-medium text-slate-500 mb-2">Unggah foto umum penunjang lokasi dan produk.</p>
-        <div class="grid grid-cols-2 gap-4 mb-4">
-         <label class="doc-box" for="photo-toko"><input id="photo-toko" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)"><div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Tampak Depan Toko</span></label>
-         <label class="doc-box" for="photo-etalase"><input id="photo-etalase" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)"><div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Produk di Rak / Etalase</span></label>
-        </div>
-
-        <div class="border-t pt-4 mt-4">
-         <h4 class="font-black text-xs uppercase text-blue-700 tracking-wider mb-2">Dokumentasi Pelaksanaan di Lapangan (Opsional)</h4>
-         <p class="text-xs text-slate-500 mb-3 font-medium">Foto aktivitas saat wawancara atau pemeriksaan fisik di tempat (bersifat opsional, dapat dikosongkan).</p>
-         <div class="grid grid-cols-2 gap-4">
-          <label class="doc-box" for="photo-pelaksanaan-1"><input id="photo-pelaksanaan-1" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)"><div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Aktivitas Pengawasan (Opsional)</span></label>
-          <label class="doc-box" for="photo-pelaksanaan-2"><input id="photo-pelaksanaan-2" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)"><div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Wawancara Pemilik (Opsional)</span></label>
-         </div>
-        </div>
-       </article>
-       <div class="flex gap-3">
-        <button type="button" class="secondary-btn w-1/2 py-4 font-bold text-sm" onclick="prevStep(5)">&larr; Sebelumnya</button>
-        <button id="submit-btn" class="primary-btn w-1/2 py-4 font-black text-sm bg-emerald-600 hover:bg-emerald-700" type="submit"><i data-lucide="rocket" class="w-4 h-4"></i> Simpan Laporan</button>
-       </div>
-      </div>
-
-     </form>
-    </section>
 
     <!-- 2. HALAMAN RIWAYAT -->
     <section id="page-history" class="page">
@@ -1766,7 +1790,7 @@
       link.click();
     });
 
-    // --- SINKRONISASI CLOUD ---
+   // --- SINKRONISASI CLOUD ---
     document.getElementById('btn-sync-now').addEventListener('click', async () => {
       const url = "https://script.google.com/macros/s/AKfycbycZ1Dn-oWfbhlrIuqE5PfdWVnEouyYsS3WXt4LACNbw1x9YfDFx2HQYd0QAvGzj2ah/exec";
       const unsynced = reports.filter(r => !r.synced);
@@ -1815,6 +1839,66 @@
       }, 200);
     }
 
+    // ==========================================
+    // FUNGSI UNTUK LANGKAH 4 (BAGIAN C & D)
+    // ==========================================
+    
+    // 1. Fungsi untuk Tampil/Sembunyi Bagian Utama (Box)
+    function toggleSection(elementId, value) {
+      const el = document.getElementById(elementId);
+      if(value === 'Ada') {
+        el.classList.remove('hidden');
+        if(elementId === 'petunjuk-sub-box') syncDataBagianC();
+      } else {
+        el.classList.add('hidden');
+      }
+    }
+
+    // 2. Fungsi untuk Tampil/Sembunyi Input Text Tambahan
+    function toggleField(elementId, value) {
+      const el = document.getElementById(elementId);
+      if(value === 'Ada') {
+        el.classList.remove('hidden');
+      } else {
+        el.classList.add('hidden');
+        el.value = ''; // Kosongkan isian jika dipilih "Tidak"
+      }
+    }
+
+    // 3. Fungsi Logika untuk Menarik Data dari Langkah 2 & 3 ke Langkah 4
+    function syncDataBagianC() {
+      const merekBrand = document.getElementById('brand') ? document.getElementById('brand').value : "";
+      const negaraAsal = document.getElementById('label-kem-negara-val') ? document.getElementById('label-kem-negara-val').value.trim().toLowerCase() : "";
+      
+      const namaProd = document.getElementById('dyn-producer-name') ? document.getElementById('dyn-producer-name').value : "";
+      const alamatProd = document.getElementById('dyn-producer-addr') ? document.getElementById('dyn-producer-addr').value : "";
+      
+      const namaImp = document.getElementById('dyn-importer-name') ? document.getElementById('dyn-importer-name').value : "";
+      const alamatImp = document.getElementById('dyn-importer-addr') ? document.getElementById('dyn-importer-addr').value : "";
+
+      const boxProdusen = document.getElementById('c-produsen-box');
+      const boxImportir = document.getElementById('c-importir-box');
+      const valProdusen = document.getElementById('c-produsen-val');
+      const valImportir = document.getElementById('c-importir-val');
+      const valMerek = document.getElementById('c-merek-val');
+
+      if(valMerek) valMerek.value = merekBrand;
+
+      if (negaraAsal === 'indonesia') {
+        boxProdusen.classList.remove('hidden');
+        boxImportir.classList.add('hidden');
+        valProdusen.value = namaProd + (alamatProd ? "\n" + alamatProd : "");
+      } else if (negaraAsal !== '') {
+        boxImportir.classList.remove('hidden');
+        boxProdusen.classList.add('hidden');
+        valImportir.value = namaImp + (alamatImp ? "\n" + alamatImp : "");
+      } else {
+        boxProdusen.classList.add('hidden');
+        boxImportir.classList.add('hidden');
+      }
+    }
+
+    // --- INISIALISASI ---
     initDB();
     lucide.createIcons();
   </script>
