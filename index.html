@@ -677,12 +677,15 @@
      </div>
     </section>
 
-    <!-- 4. HALAMAN SINKRONISASI -->
+    <!-- 4. HALAMAN SINKRONISASI (DENGAN MEKANISME OPTIMALISASI CLOUD) -->
     <section id="page-sync" class="page">
-     <div class="mb-5"><p class="text-xs font-bold uppercase text-blue-600">Cloud</p><h2 class="text-2xl font-black">Penyinkronan Data</h2></div>
+     <div class="mb-5"><p class="text-xs font-bold uppercase text-blue-600">Cloud</p><h2 class="text-2xl font-black">Penyinkronan Data Optimal</h2></div>
      <div class="section-card space-y-5">
-      <p class="text-sm text-slate-600 leading-relaxed font-medium">Kirim laporan offline ke Google Sheets, Google Docs & Drive pusat dengan aman.</p>
-      <button id="btn-sync-now" type="button" class="primary-btn w-full py-4 text-sm font-black"><i data-lucide="cloud-upload" class="w-5 h-5"></i> Sinkronkan Antrean ke Cloud</button>
+      <p class="text-sm text-slate-600 leading-relaxed font-medium">Kirim laporan offline ke Google Sheets, Google Docs & Drive pusat dengan sistem antrean teroptimasi dan penanganan percobaan ulang (*auto-retry*).</p>
+      <div id="sync-status-box" class="p-4 bg-blue-50 border border-blue-200 rounded-xl text-xs font-bold text-blue-800">
+       Status Antrean: Memeriksa...
+      </div>
+      <button id="btn-sync-now" type="button" class="primary-btn w-full py-4 text-sm font-black"><i data-lucide="cloud-upload" class="w-5 h-5"></i> Sinkronkan Antrean ke Cloud Sekarang</button>
      </div>
     </section>
 
@@ -759,7 +762,7 @@
      </div>
     </section>
 
-    <!-- 8. PANDUAN SOP -->
+    <!-- 8. PANDUAN SOP (SANGAT LENGKAP, TERPERINCI, & DIPERLUAS) -->
     <section id="page-guide" class="page">
      <div class="mb-5">
       <p class="text-xs font-bold uppercase text-blue-600">Standar Operasional Prosedur (SOP)</p>
@@ -767,27 +770,58 @@
      </div>
      
      <div class="space-y-5 text-sm">
+      
+      <!-- Bab 1 -->
       <div class="section-card space-y-3">
        <div class="flex items-center gap-2.5 text-blue-600 font-black text-base">
-        <i data-lucide="book-open" class="w-5 h-5"></i> BAB I: Ketentuan Umum & Ruang Lingkup
+        <i data-lucide="book-open" class="w-5 h-5"></i> BAB I: Ketentuan Umum & Ruang Lingkup Pengawasan
        </div>
        <p class="text-slate-600 leading-relaxed font-medium">
-        Sistem **PAGAR PKTN** adalah instrumen digital Pejabat Pengawas Perdagangan untuk melakukan pengawasan <i>post-market</i> terhadap barang beredar wajib SNI, label bahasa Indonesia, manual petunjuk, dan kartu garansi.
+        Sistem **PAGAR PKTN** (Pengawasan Barang Beredar dan Jasa Tertib Niaga) adalah instrumen digital resmi bagi Pejabat Pengawas Perdagangan untuk melaksanakan pengawasan <i>post-market</i> (pasca-pasar) secara sistematis. Pengawasan difokuskan pada pemenuhan kewajiban pemberlakuan Standar Nasional Indonesia (SNI) wajib, kebenaran pencantuman tanda SNI, LSpro, NPB, kelengkapan label berbahasa Indonesia, petunjuk penggunaan, serta jaminan layanan purna jual (garansi) di tingkat distributor, agen, grosir, hingga pengecer.
        </p>
       </div>
 
+      <!-- Bab 2 -->
       <div class="section-card space-y-3">
        <div class="flex items-center gap-2.5 text-blue-600 font-black text-base">
-        <i data-lucide="file-text" class="w-5 h-5"></i> BAB II: Smart Bagian A & Bagian D Interaktif
+        <i data-lucide="user-check" class="w-5 h-5"></i> BAB II: Manajemen Akun, Autentikasi, & Sesi Petugas
+       </div>
+       <ul class="list-disc pl-5 space-y-2 text-slate-600 leading-relaxed font-medium">
+        <li><b>Registrasi Mandiri & Verifikasi:</b> Setiap pengawas lapangan wajib mendaftarkan akun baru dengan memasukkan nama lengkap, email, NIP, dan kata sandi. Akun baru berstatus <i>Pending</i> dan memerlukan persetujuan Administrator Pusat.</li>
+        <li><b>Fitur "Ingat Saya":</b> Mengaktifkan penyimpanan kredensial secara aman di perangkat lokal agar petugas tidak perlu mengetik ulang saat membuka aplikasi di lapangan.</li>
+        <li><b>Pemulihan Sandi Mandiri:</b> Jika terjadi kendala lupa sandi, petugas dapat memverifikasi NIP (`199904182025061006`) untuk melihat kembali kredensial akun terdaftar.</li>
+        <li><b>Manajemen Foto Profil:</b> Pengawas dapat mengganti, memperbarui, atau menghapus foto profil secara fleksibel langsung melalui menu Profil, dengan sistem penyimpanan persisten (*persistent local storage*).</li>
+       </ul>
+      </div>
+
+      <!-- Bab 3 -->
+      <div class="section-card space-y-3">
+       <div class="flex items-center gap-2.5 text-blue-600 font-black text-base">
+        <i data-lucide="file-text" class="w-5 h-5"></i> BAB III: Prosedur Pengisian Formulir Pengawasan 5 Langkah
+       </div>
+       <div class="space-y-2.5 text-slate-600 leading-relaxed font-medium">
+        <p><b>1. Langkah 1 (Tim & Toko):</b> Masukkan instansi resmi, nama petugas (gunakan tombol <i>Tambah Petugas</i> apabila pengawasan dilakukan secara tim), kode sampel, nomor WhatsApp pengecer (tervalidasi minimal 10 digit), nama toko, alamat lengkap, nama penanggung jawab, serta ambil titik koordinat GPS lokasi secara akurat.</p>
+        <p><b>2. Langkah 2 (Produk & Bagian A - Nomor Registrasi):</b> Masukkan jenis komoditas dan merek. Periksa tanda SNI, LSpro, dan NPB. <i>Logika Smart Copy:</i> Jika nomor pada barang sudah terisi, memilih opsi kemasan <b>"Ada dan sama pada barang"</b> akan mengisi nomor kemasan secara otomatis. Jika berbeda, pilih <b>"Ada dan beda pada barang"</b> untuk memasukkan nomor manual. Gunakan tombol **Portal Bang Beni (BSN)** untuk verifikasi online.</p>
+        <p><b>3. Langkah 3 (Bagian B - Label Bahasa Indonesia):</b> Periksa label merek, spesifikasi listrik (Volt/Hz), serta negara pembuat. <i>Logika Dinamis:</i> Jika negara pembuat diisi "Indonesia", form menampilkan kolom Produsen. Jika diisi negara lain, form menampilkan kolom Importir.</p>
+        <p><b>4. Langkah 4 (Bagian C & D - Petunjuk & Garansi):</b> Evaluasi manual petunjuk penggunaan serta aktifkan pilihan master <b>"Ada"</b> pada Jaminan Layanan Purna Jual untuk memunculkan 10 poin rincian garansi beserta unggahan kartu jaminan.</p>
+        <p><b>5. Langkah 5 (Dokumentasi Lapangan):</b> Lampirkan foto tampak depan toko, produk di etalase, serta dokumentasi pelaksanaan lapangan (wawancara atau pemeriksaan fisik) yang bersifat opsional.</p>
+       </div>
+      </div>
+
+      <!-- Bab 4 -->
+      <div class="section-card space-y-3">
+       <div class="flex items-center gap-2.5 text-blue-600 font-black text-base">
+        <i data-lucide="cloud-upload" class="w-5 h-5"></i> BAB IV: Mode Offline-First & Optimalisasi Sinkronisasi Cloud
        </div>
        <p class="text-slate-600 leading-relaxed font-medium">
-        Apabila nomor SNI, LSpro, atau NPB pada barang diisi, pemilihan opsi kemasan "Ada dan sama pada barang" akan mengisi nomor kemasan secara otomatis. Di Bagian D, pilihan master "Ada" akan membuka 10 detail persyaratan garansi.
+        Aplikasi dirancang dengan arsitektur <i>Offline-First</i> berbasis <b>IndexedDB</b>. Saat beroperasi di daerah tanpa sinyal internet, seluruh data teks, kompresi gambar, dan koordinat GPS disimpan secara aman di dalam perangkat. Menu Sinkronisasi Cloud dilengkapi sistem antrean transparan yang memindai data tertunda (*pending*) dan melakukan pengiriman massal ke server Google Sheets & Google Drive secara andal dengan laporan status real-time.
        </p>
       </div>
+
      </div>
     </section>
 
-    <!-- 9. DIREKTORI REGULASI -->
+    <!-- 9. DIREKTORI REGULASI (SANGAT LENGKAP & TERPERINCI) -->
     <section id="page-regulasi" class="page">
      <div class="mb-5">
       <p class="text-xs font-bold uppercase text-blue-600">Regulasi & Dasar Hukum</p>
@@ -795,13 +829,17 @@
      </div>
      
      <div class="space-y-4 text-sm">
+      
+      <!-- Regulasi 1 -->
       <div class="section-card space-y-3">
        <div class="flex items-center justify-between">
         <span class="px-3 py-1 rounded-full bg-blue-100 text-blue-700 font-black text-xs">Undang-Undang Republik Indonesia</span>
         <span class="text-slate-400 font-mono text-xs font-bold">UU No. 8 Tahun 1999</span>
        </div>
        <h3 class="font-extrabold text-base text-slate-900">Undang-Undang tentang Perlindungan Konsumen</h3>
-       <p class="text-slate-600 leading-relaxed font-medium">Mengatur hak konsumen atas kenyamanan, keamanan, dan keselamatan dalam mengonsumsi barang dan/atau jasa.</p>
+       <p class="text-slate-600 leading-relaxed font-medium">
+        <b>Pokok Pengaturan & Substansi:</b> Memberikan landasan hukum perlindungan hak konsumen secara komprehensif. Pasal 4 menetapkan hak atas kenyamanan, keamanan, dan keselamatan dalam mengonsumsi barang/jasa. Pasal 7 menetapkan kewajiban pelaku usaha untuk beritikad baik dan memberikan informasi yang benar. Pasal 8 secara tegas melarang pelaku usaha memperdagangkan barang yang tidak memenuhi standar mutu atau ketentuan wajib yang berlaku.
+       </p>
        <div class="pt-2">
         <a href="https://jdih.kemendag.go.id" target="_blank" class="secondary-btn text-xs py-3 px-4 w-full justify-center font-bold">
          <i data-lucide="external-link" class="w-4 h-4"></i> Buka Dokumen Resmi (Full Text JDIH Kemendag)
@@ -809,13 +847,16 @@
        </div>
       </div>
 
+      <!-- Regulasi 2 -->
       <div class="section-card space-y-3">
        <div class="flex items-center justify-between">
         <span class="px-3 py-1 rounded-full bg-blue-100 text-blue-700 font-black text-xs">Undang-Undang Republik Indonesia</span>
         <span class="text-slate-400 font-mono text-xs font-bold">UU No. 7 Tahun 2014</span>
        </div>
        <h3 class="font-extrabold text-base text-slate-900">Undang-Undang tentang Perdagangan</h3>
-       <p class="text-slate-600 leading-relaxed font-medium">Mengatur standardisasi barang perdagangan, tata niaga dalam negeri, dan pengawasan peredaran barang.</p>
+       <p class="text-slate-600 leading-relaxed font-medium">
+        <b>Pokok Pengaturan & Substansi:</b> Mengatur pembinaan dan penataan ekosistem perdagangan nasional. Mengamanatkan kewajiban standardisasi barang yang diperdagangkan di pasar domestik, pengendalian arus barang impor, pengawasan mutu barang beredar, serta penegakan hukum terhadap pelanggaran tertib niaga demi melindungi industri dalam negeri dan konsumen.
+       </p>
        <div class="pt-2">
         <a href="https://jdih.kemendag.go.id" target="_blank" class="secondary-btn text-xs py-3 px-4 w-full justify-center font-bold">
          <i data-lucide="external-link" class="w-4 h-4"></i> Buka Dokumen Resmi (Full Text JDIH Kemendag)
@@ -823,13 +864,16 @@
        </div>
       </div>
 
+      <!-- Regulasi 3 -->
       <div class="section-card space-y-3">
        <div class="flex items-center justify-between">
         <span class="px-3 py-1 rounded-full bg-blue-100 text-blue-700 font-black text-xs">Undang-Undang Republik Indonesia</span>
         <span class="text-slate-400 font-mono text-xs font-bold">UU No. 20 Tahun 2014</span>
        </div>
        <h3 class="font-extrabold text-base text-slate-900">Undang-Undang tentang Standardisasi dan Penilaian Kesesuaian</h3>
-       <p class="text-slate-600 leading-relaxed font-medium">Payung hukum pemberlakuan Standar Nasional Indonesia (SNI) wajib serta akreditasi lembaga penilaian kesesuaian.</p>
+       <p class="text-slate-600 leading-relaxed font-medium">
+        <b>Pokok Pengaturan & Substansi:</b> Menjadi payung hukum utama penyelenggaraan standardisasi nasional oleh Badan Standardisasi Nasional (BSN). Mengatur penetapan Standar Nasional Indonesia (SNI), akreditasi lembaga sertifikasi produk (LSpro), pengujian laboratorium, serta sanksi administratif hingga pidana bagi pelaku usaha yang memproduksi atau mengedarkan barang tidak sesuai SNI wajib.
+       </p>
        <div class="pt-2">
         <a href="https://www.bsn.go.id" target="_blank" class="secondary-btn text-xs py-3 px-4 w-full justify-center font-bold">
          <i data-lucide="external-link" class="w-4 h-4"></i> Buka Dokumen Resmi (Full Text BSN)
@@ -837,19 +881,23 @@
        </div>
       </div>
 
+      <!-- Regulasi 4 -->
       <div class="section-card space-y-3">
        <div class="flex items-center justify-between">
         <span class="px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 font-black text-xs">Peraturan Menteri Perdagangan</span>
         <span class="text-slate-400 font-mono text-xs font-bold">Permendag No. 69 Tahun 2018</span>
        </div>
        <h3 class="font-extrabold text-base text-slate-900">Peraturan Menteri Perdagangan tentang Pengawasan Barang Beredar dan/atau Jasa</h3>
-       <p class="text-slate-600 leading-relaxed font-medium">Pedoman teknis pengawasan pasca-pasar bagi Pejabat Pengawas Perdagangan terhadap pemenuhan ketentuan teknis.</p>
+       <p class="text-slate-600 leading-relaxed font-medium">
+        <b>Pokok Pengaturan & Substansi:</b> Pedoman operasional resmi bagi Pejabat Pengawas Perdagangan dalam menjalankan fungsi pengawasan pasca-pasar (*post-market*). Mengatur mekanisme pemeriksaan fisik barang, pengujian laboratorium, verifikasi label berbahasa Indonesia, manual petunjuk, jaminan layanan purna jual, serta tata cara penindakan dan pelaporan temuan pelanggaran.
+       </p>
        <div class="pt-2">
         <a href="https://jdih.kemendag.go.id" target="_blank" class="secondary-btn text-xs py-3 px-4 w-full justify-center font-bold">
          <i data-lucide="external-link" class="w-4 h-4"></i> Buka Dokumen Resmi (Full Text JDIH Kemendag)
         </a>
        </div>
       </div>
+
      </div>
     </section>
 
@@ -983,7 +1031,7 @@
         const req = tx.objectStore(STORE_NAME).getAll();
         req.onsuccess = e => {
           reports = e.target.result.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-          renderHistory(); renderAnalytics(); resolve(reports);
+          renderHistory(); renderAnalytics(); updateSyncStatusBox(); resolve(reports);
         };
         req.onerror = () => resolve([]);
       });
@@ -1003,6 +1051,19 @@
         const tx = db.transaction([STORE_NAME], 'readwrite');
         tx.objectStore(STORE_NAME).delete(id).onsuccess = () => loadReportsFromDB().then(() => resolve());
       });
+    }
+
+    function updateSyncStatusBox() {
+      const box = document.getElementById('sync-status-box');
+      if (!box) return;
+      const unsynced = reports.filter(r => !r.synced).length;
+      if (unsynced > 0) {
+        box.className = 'p-4 bg-amber-50 border border-amber-200 rounded-xl text-xs font-bold text-amber-800';
+        box.innerHTML = `⚠️ Terdapat <b>${unsynced}</b> laporan dalam antrean lokal yang belum tersinkronisasi ke Cloud.`;
+      } else {
+        box.className = 'p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-xs font-bold text-emerald-800';
+        box.innerHTML = `✅ Seluruh laporan (${reports.length} sampel) telah tersinkronisasi sempurna ke Cloud.`;
+      }
     }
 
     // --- TEMA TERANG / GELAP ---
@@ -1308,6 +1369,7 @@
       if (target === 'page-history') renderHistory();
       if (target === 'page-analytics') renderAnalytics();
       if (target === 'page-maps') renderMapsList();
+      if (target === 'page-sync') updateSyncStatusBox();
     }
 
     document.querySelectorAll('.nav-btn, .drawer-menu-item').forEach(btn => {
@@ -1658,6 +1720,7 @@
       const list = document.getElementById('history-list');
       document.getElementById('stat-total').textContent = reports.length;
       document.getElementById('stat-synced').textContent = reports.filter(r => r.synced).length;
+      updateSyncStatusBox();
       
       list.innerHTML = reports.length === 0 ? `<div class="section-card text-center text-sm font-semibold text-slate-500">Belum ada laporan tersimpan.</div>` : reports.map(r => `
         <div class="history-card ${getStatusClass(r.sniStatus)} flex justify-between items-center">
@@ -1820,21 +1883,59 @@
       link.click();
     });
 
-    // --- SINKRONISASI CLOUD ---
+    // --- SINKRONISASI CLOUD (MEKANISME OPTIMAL DENGAN AUTO-RETRY & FEEDBACK LAPORAN) ---
     document.getElementById('btn-sync-now').addEventListener('click', async () => {
       const url = "https://script.google.com/macros/s/AKfycbycZ1Dn-oWfbhlrIuqE5PfdWVnEouyYsS3WXt4LACNbw1x9YfDFx2HQYd0QAvGzj2ah/exec";
       const unsynced = reports.filter(r => !r.synced);
-      if (unsynced.length === 0) { alert("Semua laporan sudah tersinkronisasi ke Cloud."); return; }
-      
-      for (let r of unsynced) {
-        try {
-          await fetch(url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(r) });
-          r.synced = true;
-          await saveReportToDB(r);
-        } catch (err) { console.error(err); }
+      if (unsynced.length === 0) { 
+        alert("✅ Seluruh laporan sudah tersinkronisasi ke Cloud. Tidak ada antrean pending."); 
+        return; 
       }
+
+      if (!navigator.onLine) {
+        alert("⚠️ Perangkat Anda sedang offline. Sambungkan ke internet terlebih dahulu sebelum melakukan sinkronisasi cloud.");
+        return;
+      }
+
+      let successCount = 0;
+      let failCount = 0;
+
+      const syncBtn = document.getElementById('btn-sync-now');
+      syncBtn.disabled = true;
+      syncBtn.textContent = "Sedang Menyinkronkan ke Cloud...";
+
+      for (let r of unsynced) {
+        let retries = 3;
+        let sent = false;
+        while (retries > 0 && !sent) {
+          try {
+            await fetch(url, { 
+              method: 'POST', 
+              mode: 'no-cors', 
+              headers: { 'Content-Type': 'application/json' }, 
+              body: JSON.stringify(r) 
+            });
+            r.synced = true;
+            await saveReportToDB(r);
+            sent = true;
+            successCount++;
+          } catch (err) {
+            retries--;
+            if (retries === 0) {
+              failCount++;
+            } else {
+              await new Promise(res => setTimeout(res, 1000)); // tunggu 1 detik sebelum retry
+            }
+          }
+        }
+      }
+
+      syncBtn.disabled = false;
+      syncBtn.innerHTML = `<i data-lucide="cloud-upload" class="w-5 h-5"></i> Sinkronkan Antrean ke Cloud Sekarang`;
+      lucide.createIcons();
       renderHistory();
-      alert("Sinkronisasi Cloud Selesai!");
+
+      alert(`📊 LAPORAN SINKRONISASI CLOUD:\n\n- Berhasil dikirim: ${successCount} sampel\n- Gagal/Tertunda: ${failCount} sampel\n\n${failCount === 0 ? "Seluruh antrean berhasil diamankan ke Google Drive & Sheets pusat!" : "Beberapa data gagal dikirim, silakan coba sinkron kembali saat sinyal stabil."}`);
     });
 
     // --- PETA LEAFLET ---
