@@ -285,6 +285,7 @@
         <hr class="my-3">
         <h4 class="font-black text-xs uppercase text-blue-700 tracking-wider">BAGIAN A: Informasi Nomor Registrasi Standar</h4>
         
+        <!-- 1. SNI -->
         <div class="p-4 bg-slate-50 rounded-xl border space-y-3">
          <label class="field-label font-bold">1. Tanda & Nomor SNI pada Barang</label>
          <select id="sni-barang-opt" class="field-control"><option value="Ada">Ada</option><option value="Tidak ada" selected>Tidak ada</option></select>
@@ -305,6 +306,7 @@
          </label>
         </div>
 
+        <!-- 3. LSpro -->
         <div class="p-4 bg-slate-50 rounded-xl border space-y-3">
          <label class="field-label font-bold">3. Kode LSpro pada Barang</label>
          <select id="lspro-barang-opt" class="field-control"><option value="Ada">Ada</option><option value="Tidak ada" selected>Tidak ada</option></select>
@@ -325,6 +327,7 @@
          </label>
         </div>
 
+        <!-- 5. NPB -->
         <div class="p-4 bg-slate-50 rounded-xl border space-y-3">
          <label class="field-label font-bold">5. Nomor NPB pada Barang</label>
          <select id="npb-barang-opt" class="field-control"><option value="Ada">Ada</option><option value="Tidak ada" selected>Tidak ada</option></select>
@@ -374,17 +377,12 @@
        </div>
       </div>
 
-      <!-- STEP 3: Bagian B (Label Lengkap + Dinamis Produsen / Importir) -->
+      <!-- STEP 3: Bagian B (Label Lengkap + Dinamis Produsen / Importir - Tanpa Auto-fill History) -->
       <div class="wizard-step" data-step="3">
        <article class="section-card space-y-5">
         <div class="section-heading">
          <div class="section-icon"><i data-lucide="languages" class="w-5 h-5"></i></div>
          <div class="flex-1"><h3 class="font-extrabold text-base">Bagian B: Label Dalam Bahasa Indonesia (Lengkap)</h3></div>
-        </div>
-
-        <div class="p-4 bg-blue-50 rounded-xl border border-blue-200 flex items-center justify-between gap-3">
-         <div><p class="text-sm font-bold text-blue-900">Riwayat Auto-Fill</p><p class="text-xs text-blue-700">Pilih riwayat label agar tidak mengetik ulang.</p></div>
-         <select id="auto-fill-history" class="field-control max-w-[200px] text-sm"><option value="">-- Pilih --</option></select>
         </div>
 
         <div class="space-y-4">
@@ -789,7 +787,7 @@
        </div>
        <div class="space-y-2.5 text-slate-600 leading-relaxed font-medium">
         <p><b>1. Langkah 1 (Tim & Toko):</b> Masukkan instansi, nama petugas (gunakan tombol <i>Tambah Petugas</i> jika pengawasan dilaksanakan secara beregu), kode sampel, nomor WhatsApp pengecer (tervalidasi minimal 10 digit), nama toko, alamat lengkap, nama pemilik, serta ambil titik koordinat GPS lokasi.</p>
-        <p><b>2. Langkah 2 (Produk & Bagian A):</b> Input komoditas dan merek. Periksa tanda registrasi (SNI, LSpro, NPB) pada barang dan kemasan. Manfaatkan tautan langsung ke **Portal Bang Beni (BSN)** untuk mengecek keaslian sertifikasi. <i>Validasi Otomatis:</i> Sistem menolak pengiriman jika pilihan "Ada" tetapi nomor registrasi dikosongkan.</p>
+        <p><b>2. Langkah 2 (Produk & Bagian A):</b> Input komoditas dan merek. Periksa tanda registrasi (SNI, LSpro, NPB) pada barang dan kemasan. Jika kemasan sama dengan barang, pilih <b>"Ada dan sama pada barang"</b> maka nomor akan terisi otomatis. Jika berbeda, pilih <b>"Ada dan beda pada barang"</b> untuk mengisi nomor secara manual. Manfaatkan tautan langsung ke **Portal Bang Beni (BSN)** untuk mengecek keaslian sertifikasi.</p>
         <p><b>3. Langkah 3 (Bagian B - Label Bahasa Indonesia):</b> Periksa label merek, spesifikasi kelistrikan (Voltase & Frekuensi) beserta foto, serta negara pembuat. <i>Logika Dinamis:</i> Jika negara pembuat diisi "Indonesia", sistem menampilkan kolom Nama & Alamat Produsen. Jika diisi negara lain (impor), sistem menampilkan kolom Nama & Alamat Importir.</p>
         <p><b>4. Langkah 4 (Bagian C & D - Petunjuk & Garansi):</b> Evaluasi ketersediaan buku manual petunjuk penggunaan serta kelengkapan 10 poin syarat jaminan purna jual (kartu garansi).</p>
         <p><b>5. Langkah 5 (Dokumentasi Lapangan):</b> Unggah foto tampak depan toko, produk di etalase, serta dokumentasi pelaksanaan lapangan (wawancara/pemeriksaan fisik yang bersifat opsional).</p>
@@ -966,7 +964,7 @@
         const req = tx.objectStore(STORE_NAME).getAll();
         req.onsuccess = e => {
           reports = e.target.result.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-          renderHistory(); renderAnalytics(); populateAutoFillHistory(); resolve(reports);
+          renderHistory(); renderAnalytics(); resolve(reports);
         };
         req.onerror = () => resolve([]);
       });
@@ -1299,16 +1297,70 @@
     });
     document.getElementById('fab-form').addEventListener('click', () => switchPage('page-form'));
 
-    // --- FORM TOGGLES ---
-    ['sni-barang', 'sni-kemasan', 'lspro-barang', 'lspro-kemasan', 'npb-barang', 'npb-kemasan'].forEach(id => {
-      const opt = document.getElementById(`${id}-opt`);
-      if(opt) {
-        opt.addEventListener('change', e => {
-          const box = document.getElementById(`${id}-box`);
-          if (e.target.value.includes('Ada')) box.classList.remove('hidden'); else box.classList.add('hidden');
+    // --- FORM TOGGLES & BAGIAN A KEMASAN LOGIC ---
+    ['sni', 'lspro', 'npb'].forEach(type => {
+      const barangOpt = document.getElementById(`${type}-barang-opt`);
+      const barangNum = document.getElementById(`${type}-barang-num`);
+      const barangBox = document.getElementById(`${type}-barang-box`);
+      
+      const kemasanOpt = document.getElementById(`${type}-kemasan-opt`);
+      const kemasanBox = document.getElementById(`${type}-kemasan-box`);
+      const kemasanNum = document.getElementById(`${type}-kemasan-num`);
+
+      if (barangOpt) {
+        barangOpt.addEventListener('change', e => {
+          if (e.target.value.includes('Ada')) {
+            barangBox.classList.remove('hidden');
+          } else {
+            barangBox.classList.add('hidden');
+            if (barangNum) barangNum.value = '';
+            updateKemasanLogic(type);
+          }
+        });
+      }
+
+      if (barangNum) {
+        barangNum.addEventListener('input', () => {
+          if (kemasanOpt && kemasanOpt.value === 'Ada dan sama pada barang') {
+            kemasanNum.value = barangNum.value;
+          }
+        });
+      }
+
+      if (kemasanOpt) {
+        kemasanOpt.addEventListener('change', () => {
+          updateKemasanLogic(type);
         });
       }
     });
+
+    function updateKemasanLogic(type) {
+      const barangNum = document.getElementById(`${type}-barang-num`);
+      const kemasanOpt = document.getElementById(`${type}-kemasan-opt`);
+      const kemasanBox = document.getElementById(`${type}-kemasan-box`);
+      const kemasanNum = document.getElementById(`${type}-kemasan-num`);
+
+      if (!kemasanOpt) return;
+      const val = kemasanOpt.value;
+
+      if (val === 'Ada dan sama pada barang') {
+        kemasanBox.classList.remove('hidden');
+        kemasanNum.value = barangNum ? barangNum.value : '';
+        kemasanNum.readOnly = true;
+        kemasanNum.style.backgroundColor = 'var(--bg)';
+      } else if (val === 'Ada dan beda pada barang') {
+        kemasanBox.classList.remove('hidden');
+        kemasanNum.value = '';
+        kemasanNum.readOnly = false;
+        kemasanNum.style.backgroundColor = 'var(--surface)';
+        kemasanNum.placeholder = 'Ketik nomor pada kemasan...';
+      } else {
+        kemasanBox.classList.add('hidden');
+        kemasanNum.value = '';
+        kemasanNum.readOnly = false;
+        kemasanNum.style.backgroundColor = 'var(--surface)';
+      }
+    }
 
     ['brg-merek', 'brg-listrik', 'brg-negara', 'kem-merek', 'kem-listrik', 'kem-negara'].forEach(item => {
       const [sec, sub] = item.split('-');
@@ -1375,39 +1427,6 @@
         document.getElementById('coordinates').value = `${pos.coords.latitude.toFixed(6)}, ${pos.coords.longitude.toFixed(6)}`;
         fb.textContent = 'Koordinat GPS berhasil diperoleh.';
       }, () => { fb.textContent = 'Gagal mendeteksi GPS.'; });
-    });
-
-    // --- AUTO-FILL HISTORY ---
-    function populateAutoFillHistory() {
-      const sel = document.getElementById('auto-fill-history');
-      if (!sel) return;
-      sel.innerHTML = '<option value="">-- Pilih Riwayat --</option>';
-      reports.forEach((r, idx) => {
-        if (r.labelData) { sel.innerHTML += `<option value="${idx}">${r.brand} - ${r.productType}</option>`; }
-      });
-    }
-
-    document.getElementById('auto-fill-history').addEventListener('change', e => {
-      const idx = e.target.value;
-      if (idx === "") return;
-      const r = reports[idx];
-      if (r && r.labelData) {
-        const ld = r.labelData;
-        document.getElementById('label-brg-merek-opt').value = ld.brgMerekOpt;
-        document.getElementById('label-brg-merek-val').value = ld.brgMerekVal;
-        document.getElementById('label-brg-listrik-opt').value = ld.brgListrikOpt;
-        document.getElementById('label-brg-listrik-val').value = ld.brgListrikVal;
-        document.getElementById('label-brg-negara-opt').value = ld.brgNegaraOpt;
-        document.getElementById('label-brg-negara-val').value = ld.brgNegaraVal;
-        document.getElementById('label-kem-merek-opt').value = ld.kemMerekOpt;
-        document.getElementById('label-kem-merek-val').value = ld.kemMerekVal;
-        document.getElementById('label-kem-listrik-opt').value = ld.kemListrikOpt;
-        document.getElementById('label-kem-listrik-val').value = ld.kemListrikVal;
-        document.getElementById('label-kem-negara-opt').value = ld.kemNegaraOpt;
-        document.getElementById('label-kem-negara-val').value = ld.kemNegaraVal;
-        checkCountryMadeIn();
-        alert("Data Bagian B berhasil dimuat dari riwayat!");
-      }
     });
 
     // --- CAMERA & UI FEEDBACK ---
