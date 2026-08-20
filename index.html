@@ -677,7 +677,7 @@
      </div>
     </section>
 
-    <!-- 4. HALAMAN SINKRONISASI (DENGAN MEKANISME OPTIMALISASI CLOUD) -->
+    <!-- 4. HALAMAN SINKRONISASI -->
     <section id="page-sync" class="page">
      <div class="mb-5"><p class="text-xs font-bold uppercase text-blue-600">Cloud</p><h2 class="text-2xl font-black">Penyinkronan Data Optimal</h2></div>
      <div class="section-card space-y-5">
@@ -762,7 +762,7 @@
      </div>
     </section>
 
-    <!-- 8. PANDUAN SOP (SANGAT LENGKAP, TERPERINCI, & DIPERLUAS) -->
+    <!-- 8. PANDUAN SOP (SANGAT LENGKAP & TERPERINCI) -->
     <section id="page-guide" class="page">
      <div class="mb-5">
       <p class="text-xs font-bold uppercase text-blue-600">Standar Operasional Prosedur (SOP)</p>
@@ -887,7 +887,7 @@
         <span class="px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 font-black text-xs">Peraturan Menteri Perdagangan</span>
         <span class="text-slate-400 font-mono text-xs font-bold">Permendag No. 69 Tahun 2018</span>
        </div>
-       <h3 class="font-extrabold text-base text-slate-900">Peraturan Menteri Perdagangan tentang Pengawasan Barang Beredar dan/atau Jasa</h3>
+       <h3 class="font-extrabold text-base text-slate-900">Undang-Undang tentang Pengawasan Barang Beredar dan/atau Jasa</h3>
        <p class="text-slate-600 leading-relaxed font-medium">
         <b>Pokok Pengaturan & Substansi:</b> Pedoman operasional resmi bagi Pejabat Pengawas Perdagangan dalam menjalankan fungsi pengawasan pasca-pasar (*post-market*). Mengatur mekanisme pemeriksaan fisik barang, pengujian laboratorium, verifikasi label berbahasa Indonesia, manual petunjuk, jaminan layanan purna jual, serta tata cara penindakan dan pelaporan temuan pelanggaran.
        </p>
@@ -1079,6 +1079,26 @@
     const ADMIN_CREDENTIALS = { email: "huaneryzon@gmail.com", pass: "adminpagarpktn2026", name: "Eryzon Arifandy Huan, S.Mat", nip: "199904182025061006" };
     let currentInspector = JSON.parse(localStorage.getItem('pagar_pktn_user')) || null;
 
+    window.addEventListener('DOMContentLoaded', () => {
+      const remembered = JSON.parse(localStorage.getItem('pagar_pktn_remember') || 'null');
+      if (remembered && !currentInspector) {
+        const { email, pass } = remembered;
+        let adminAvatar = localStorage.getItem('pagar_pktn_admin_avatar') || '';
+        if (email === ADMIN_CREDENTIALS.email && pass === ADMIN_CREDENTIALS.pass) {
+          currentInspector = { ...ADMIN_CREDENTIALS, avatar: adminAvatar };
+          localStorage.setItem('pagar_pktn_user', JSON.stringify(currentInspector));
+        } else {
+          let users = JSON.parse(localStorage.getItem('pagar_pktn_users') || '[]');
+          let found = users.find(u => u.email === email && u.pass === pass);
+          if (found && found.status !== 'pending') {
+            currentInspector = found;
+            localStorage.setItem('pagar_pktn_user', JSON.stringify(currentInspector));
+          }
+        }
+        updateSessionUI();
+      }
+    });
+
     function updateSessionUI() {
       if (!currentInspector) {
         document.getElementById('login-modal').classList.add('open');
@@ -1143,9 +1163,10 @@
           currentInspector.avatar = e.target.result;
           localStorage.setItem('pagar_pktn_user', JSON.stringify(currentInspector));
           
-          let users = JSON.parse(localStorage.getItem('pagar_pktn_users') || '[]');
-          let foundInUsers = users.find(u => u.email === currentInspector.email);
-          if (foundInUsers) {
+          if (currentInspector.email === ADMIN_CREDENTIALS.email) {
+            localStorage.setItem('pagar_pktn_admin_avatar', currentInspector.avatar);
+          } else {
+            let users = JSON.parse(localStorage.getItem('pagar_pktn_users') || '[]');
             users = users.map(u => { if(u.email === currentInspector.email) u.avatar = currentInspector.avatar; return u; });
             localStorage.setItem('pagar_pktn_users', JSON.stringify(users));
           }
@@ -1162,9 +1183,13 @@
         currentInspector.avatar = '';
         localStorage.setItem('pagar_pktn_user', JSON.stringify(currentInspector));
         
-        let users = JSON.parse(localStorage.getItem('pagar_pktn_users') || '[]');
-        users = users.map(u => { if(u.email === currentInspector.email) u.avatar = ''; return u; });
-        localStorage.setItem('pagar_pktn_users', JSON.stringify(users));
+        if (currentInspector.email === ADMIN_CREDENTIALS.email) {
+          localStorage.removeItem('pagar_pktn_admin_avatar');
+        } else {
+          let users = JSON.parse(localStorage.getItem('pagar_pktn_users') || '[]');
+          users = users.map(u => { if(u.email === currentInspector.email) u.avatar = ''; return u; });
+          localStorage.setItem('pagar_pktn_users', JSON.stringify(users));
+        }
 
         updateSessionUI();
         alert("Foto profil berhasil dihapus.");
@@ -1239,7 +1264,7 @@
       const remember = document.getElementById('remember-me').checked;
 
       let existingUser = JSON.parse(localStorage.getItem('pagar_pktn_user') || '{}');
-      let savedAvatar = (existingUser.email === email && existingUser.avatar) ? existingUser.avatar : '';
+      let savedAvatar = (existingUser.email === email && existingUser.avatar) ? existingUser.avatar : localStorage.getItem('pagar_pktn_admin_avatar') || '';
 
       if (email === ADMIN_CREDENTIALS.email && pass === ADMIN_CREDENTIALS.pass) {
         currentInspector = { ...ADMIN_CREDENTIALS, avatar: savedAvatar };
@@ -1924,7 +1949,7 @@
             if (retries === 0) {
               failCount++;
             } else {
-              await new Promise(res => setTimeout(res, 1000)); // tunggu 1 detik sebelum retry
+              await new Promise(res => setTimeout(res, 1000));
             }
           }
         }
