@@ -78,7 +78,7 @@
     
     .modal-backdrop, .drawer-backdrop, .login-backdrop { position: fixed; inset: 0; z-index: 90; padding: 16px; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; }
     .modal-backdrop.open, .drawer-backdrop.open, .login-backdrop.open { display: flex; }
-    .modal-panel { width: min(100%, 520px); max-height: 84vh; overflow: auto; border-radius: 20px; background: var(--surface); padding: 24px; border: 1px solid var(--line); }
+    .modal-panel { width: min(100%, 620px); max-height: 88vh; overflow: auto; border-radius: 20px; background: var(--surface); padding: 24px; border: 1px solid var(--line); }
     .drawer-panel { position: fixed; right: 0; top: 0; bottom: 0; width: 300px; background: var(--surface); z-index: 95; transform: translateX(100%); transition: transform .3s cubic-bezier(0.16, 1, 0.3, 1); padding: 24px; display: flex; flex-direction: column; gap: 16px; box-shadow: -4px 0 24px rgba(0,0,0,0.2); }
     .drawer-panel.open { transform: translateX(0); }
     
@@ -277,11 +277,18 @@
         </div>
         <div>
          <label class="field-label">Jenis Produk / Komoditas <span class="text-rose-600">*</span></label>
-         <input class="field-control" id="product-type" placeholder="Contoh: Pompa Air Listrik">
+         <select class="field-control text-sm" id="product-type" required>
+          <option value="">-- Pilih Jenis Produk Pengawasan --</option>
+          <option value="Pompa Air Listrik">Pompa Air Listrik</option>
+          <option value="Setrika Listrik">Setrika Listrik</option>
+          <option value="Baja Lembaran Lapis Seng">Baja Lembaran Lapis Seng (BLS)</option>
+          <option value="Baja Tulangan Beton">Baja Tulangan Beton (BjTB)</option>
+          <option value="Kabel Listrik">Kabel Listrik</option>
+         </select>
         </div>
         <div>
          <label class="field-label">Merek / Brand <span class="text-rose-600">*</span></label>
-         <input class="field-control" id="brand" placeholder="Contoh: Shimizu">
+         <input class="field-control" id="brand" placeholder="Contoh: Shimizu / Supreme / Master Steel">
         </div>
 
         <hr class="my-3">
@@ -397,12 +404,12 @@
            <input id="label-brg-merek-val" class="field-control hidden" placeholder="Tuliskan merek pada barang...">
           </div>
           <div>
-           <label class="field-label text-xs">Penggunaan listrik; tegangan (Volt/V) dan frekuensi (Hz)</label>
+           <label class="field-label text-xs">Penggunaan listrik / Spesifikasi Teknis / Ukuran</label>
            <select id="label-brg-listrik-opt" class="field-control mb-2"><option value="Ada">Ada</option><option value="Tidak ada" selected>Tidak ada</option></select>
-           <input id="label-brg-listrik-val" class="field-control hidden mb-3" placeholder="Format: 220V ~ 50Hz">
+           <input id="label-brg-listrik-val" class="field-control hidden mb-3" placeholder="Format spesifikasi teknis...">
            <label class="doc-box" for="doc-label-listrik">
             <input id="doc-label-listrik" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
-            <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto Penggunaan Listrik</span>
+            <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto Spesifikasi / Label</span>
            </label>
           </div>
           <div>
@@ -421,9 +428,9 @@
            <input id="label-kem-merek-val" class="field-control hidden" placeholder="Tuliskan merek pada kemasan...">
           </div>
           <div>
-           <label class="field-label text-xs">Penggunaan listrik; tegangan (Volt/V) dan frekuensi (Hz)</label>
+           <label class="field-label text-xs">Penggunaan listrik / Spesifikasi Teknis / Ukuran</label>
            <select id="label-kem-listrik-opt" class="field-control mb-2"><option value="Ada dan sama pada barang">Ada dan sama pada barang</option><option value="Ada dan berbeda pada barang">Ada dan berbeda pada barang</option><option value="Tidak ada" selected>Tidak ada</option></select>
-           <input id="label-kem-listrik-val" class="field-control hidden" placeholder="Format: 220V ~ 50Hz">
+           <input id="label-kem-listrik-val" class="field-control hidden" placeholder="Format spesifikasi teknis...">
           </div>
           <div>
            <label class="field-label text-xs">Negara pembuat atau Made in</label>
@@ -762,7 +769,7 @@
      </div>
     </section>
 
-    <!-- 8. PANDUAN SOP (SANGAT LENGKAP & TERPERINCI) -->
+    <!-- 8. PANDUAN SOP -->
     <section id="page-guide" class="page">
      <div class="mb-5">
       <p class="text-xs font-bold uppercase text-blue-600">Standar Operasional Prosedur (SOP)</p>
@@ -770,58 +777,36 @@
      </div>
      
      <div class="space-y-5 text-sm">
-      
-      <!-- Bab 1 -->
       <div class="section-card space-y-3">
        <div class="flex items-center gap-2.5 text-blue-600 font-black text-base">
-        <i data-lucide="book-open" class="w-5 h-5"></i> BAB I: Ketentuan Umum & Ruang Lingkup Pengawasan
+        <i data-lucide="book-open" class="w-5 h-5"></i> BAB I: Ketentuan Umum & Ruang Lingkup
        </div>
        <p class="text-slate-600 leading-relaxed font-medium">
-        Sistem **PAGAR PKTN** (Pengawasan Barang Beredar dan Jasa Tertib Niaga) adalah instrumen digital resmi bagi Pejabat Pengawas Perdagangan untuk melaksanakan pengawasan <i>post-market</i> (pasca-pasar) secara sistematis. Pengawasan difokuskan pada pemenuhan kewajiban pemberlakuan Standar Nasional Indonesia (SNI) wajib, kebenaran pencantuman tanda SNI, LSpro, NPB, kelengkapan label berbahasa Indonesia, petunjuk penggunaan, serta jaminan layanan purna jual (garansi) di tingkat distributor, agen, grosir, hingga pengecer.
+        Sistem **PAGAR PKTN** adalah instrumen digital Pejabat Pengawas Perdagangan untuk melakukan pengawasan <i>post-market</i> terhadap barang beredar wajib SNI, label bahasa Indonesia, manual petunjuk, dan kartu garansi.
        </p>
       </div>
 
-      <!-- Bab 2 -->
       <div class="section-card space-y-3">
        <div class="flex items-center gap-2.5 text-blue-600 font-black text-base">
-        <i data-lucide="user-check" class="w-5 h-5"></i> BAB II: Manajemen Akun, Autentikasi, & Sesi Petugas
-       </div>
-       <ul class="list-disc pl-5 space-y-2 text-slate-600 leading-relaxed font-medium">
-        <li><b>Registrasi Mandiri & Verifikasi:</b> Setiap pengawas lapangan wajib mendaftarkan akun baru dengan memasukkan nama lengkap, email, NIP, dan kata sandi. Akun baru berstatus <i>Pending</i> dan memerlukan persetujuan Administrator Pusat.</li>
-        <li><b>Fitur "Ingat Saya":</b> Mengaktifkan penyimpanan kredensial secara aman di perangkat lokal agar petugas tidak perlu mengetik ulang saat membuka aplikasi di lapangan.</li>
-        <li><b>Pemulihan Sandi Mandiri:</b> Jika terjadi kendala lupa sandi, petugas dapat memverifikasi NIP (`199904182025061006`) untuk melihat kembali kredensial akun terdaftar.</li>
-        <li><b>Manajemen Foto Profil:</b> Pengawas dapat mengganti, memperbarui, atau menghapus foto profil secara fleksibel langsung melalui menu Profil, dengan sistem penyimpanan persisten (*persistent local storage*).</li>
-       </ul>
-      </div>
-
-      <!-- Bab 3 -->
-      <div class="section-card space-y-3">
-       <div class="flex items-center gap-2.5 text-blue-600 font-black text-base">
-        <i data-lucide="file-text" class="w-5 h-5"></i> BAB III: Prosedur Pengisian Formulir Pengawasan 5 Langkah
-       </div>
-       <div class="space-y-2.5 text-slate-600 leading-relaxed font-medium">
-        <p><b>1. Langkah 1 (Tim & Toko):</b> Masukkan instansi resmi, nama petugas (gunakan tombol <i>Tambah Petugas</i> apabila pengawasan dilakukan secara tim), kode sampel, nomor WhatsApp pengecer (tervalidasi minimal 10 digit), nama toko, alamat lengkap, nama penanggung jawab, serta ambil titik koordinat GPS lokasi secara akurat.</p>
-        <p><b>2. Langkah 2 (Produk & Bagian A - Nomor Registrasi):</b> Masukkan jenis komoditas dan merek. Periksa tanda SNI, LSpro, dan NPB. <i>Logika Smart Copy:</i> Jika nomor pada barang sudah terisi, memilih opsi kemasan <b>"Ada dan sama pada barang"</b> akan mengisi nomor kemasan secara otomatis. Jika berbeda, pilih <b>"Ada dan beda pada barang"</b> untuk memasukkan nomor manual. Gunakan tombol **Portal Bang Beni (BSN)** untuk verifikasi online.</p>
-        <p><b>3. Langkah 3 (Bagian B - Label Bahasa Indonesia):</b> Periksa label merek, spesifikasi listrik (Volt/Hz), serta negara pembuat. <i>Logika Dinamis:</i> Jika negara pembuat diisi "Indonesia", form menampilkan kolom Produsen. Jika diisi negara lain, form menampilkan kolom Importir.</p>
-        <p><b>4. Langkah 4 (Bagian C & D - Petunjuk & Garansi):</b> Evaluasi manual petunjuk penggunaan serta aktifkan pilihan master <b>"Ada"</b> pada Jaminan Layanan Purna Jual untuk memunculkan 10 poin rincian garansi beserta unggahan kartu jaminan.</p>
-        <p><b>5. Langkah 5 (Dokumentasi Lapangan):</b> Lampirkan foto tampak depan toko, produk di etalase, serta dokumentasi pelaksanaan lapangan (wawancara atau pemeriksaan fisik) yang bersifat opsional.</p>
-       </div>
-      </div>
-
-      <!-- Bab 4 -->
-      <div class="section-card space-y-3">
-       <div class="flex items-center gap-2.5 text-blue-600 font-black text-base">
-        <i data-lucide="cloud-upload" class="w-5 h-5"></i> BAB IV: Mode Offline-First & Optimalisasi Sinkronisasi Cloud
+        <i data-lucide="user-check" class="w-5 h-5"></i> BAB II: Manajemen Akun & Autentikasi
        </div>
        <p class="text-slate-600 leading-relaxed font-medium">
-        Aplikasi dirancang dengan arsitektur <i>Offline-First</i> berbasis <b>IndexedDB</b>. Saat beroperasi di daerah tanpa sinyal internet, seluruh data teks, kompresi gambar, dan koordinat GPS disimpan secara aman di dalam perangkat. Menu Sinkronisasi Cloud dilengkapi sistem antrean transparan yang memindai data tertunda (*pending*) dan melakukan pengiriman massal ke server Google Sheets & Google Drive secara andal dengan laporan status real-time.
+        Pengawas dapat melakukan login dengan fitur "Ingat Saya" untuk menyimpan sesi secara persisten. Foto profil yang diunggah akan tersimpan permanen di perangkat lokal dan tidak akan hilang saat halaman direfresh.
        </p>
       </div>
 
+      <div class="section-card space-y-3">
+       <div class="flex items-center gap-2.5 text-blue-600 font-black text-base">
+        <i data-lucide="file-text" class="w-5 h-5"></i> BAB III: Komoditas Luas, Pratinjau Tabel, & Sinkronisasi
+       </div>
+       <p class="text-slate-600 leading-relaxed font-medium">
+        Petugas dapat memilih komoditas (Pompa Air, Setrika, Baja Lembaran Lapis Seng, Baja Tulangan Beton, atau Kabel Listrik) serta melihat pratinjau tabel laporan kasat mata persis seperti format Google Docs.
+       </p>
+      </div>
      </div>
     </section>
 
-    <!-- 9. DIREKTORI REGULASI (SANGAT LENGKAP & TERPERINCI) -->
+    <!-- 9. DIREKTORI REGULASI -->
     <section id="page-regulasi" class="page">
      <div class="mb-5">
       <p class="text-xs font-bold uppercase text-blue-600">Regulasi & Dasar Hukum</p>
@@ -829,17 +814,13 @@
      </div>
      
      <div class="space-y-4 text-sm">
-      
-      <!-- Regulasi 1 -->
       <div class="section-card space-y-3">
        <div class="flex items-center justify-between">
         <span class="px-3 py-1 rounded-full bg-blue-100 text-blue-700 font-black text-xs">Undang-Undang Republik Indonesia</span>
         <span class="text-slate-400 font-mono text-xs font-bold">UU No. 8 Tahun 1999</span>
        </div>
        <h3 class="font-extrabold text-base text-slate-900">Undang-Undang tentang Perlindungan Konsumen</h3>
-       <p class="text-slate-600 leading-relaxed font-medium">
-        <b>Pokok Pengaturan & Substansi:</b> Memberikan landasan hukum perlindungan hak konsumen secara komprehensif. Pasal 4 menetapkan hak atas kenyamanan, keamanan, dan keselamatan dalam mengonsumsi barang/jasa. Pasal 7 menetapkan kewajiban pelaku usaha untuk beritikad baik dan memberikan informasi yang benar. Pasal 8 secara tegas melarang pelaku usaha memperdagangkan barang yang tidak memenuhi standar mutu atau ketentuan wajib yang berlaku.
-       </p>
+       <p class="text-slate-600 leading-relaxed font-medium">Mengatur hak konsumen atas kenyamanan, keamanan, dan keselamatan dalam mengonsumsi barang dan/atau jasa.</p>
        <div class="pt-2">
         <a href="https://jdih.kemendag.go.id" target="_blank" class="secondary-btn text-xs py-3 px-4 w-full justify-center font-bold">
          <i data-lucide="external-link" class="w-4 h-4"></i> Buka Dokumen Resmi (Full Text JDIH Kemendag)
@@ -847,16 +828,13 @@
        </div>
       </div>
 
-      <!-- Regulasi 2 -->
       <div class="section-card space-y-3">
        <div class="flex items-center justify-between">
         <span class="px-3 py-1 rounded-full bg-blue-100 text-blue-700 font-black text-xs">Undang-Undang Republik Indonesia</span>
         <span class="text-slate-400 font-mono text-xs font-bold">UU No. 7 Tahun 2014</span>
        </div>
        <h3 class="font-extrabold text-base text-slate-900">Undang-Undang tentang Perdagangan</h3>
-       <p class="text-slate-600 leading-relaxed font-medium">
-        <b>Pokok Pengaturan & Substansi:</b> Mengatur pembinaan dan penataan ekosistem perdagangan nasional. Mengamanatkan kewajiban standardisasi barang yang diperdagangkan di pasar domestik, pengendalian arus barang impor, pengawasan mutu barang beredar, serta penegakan hukum terhadap pelanggaran tertib niaga demi melindungi industri dalam negeri dan konsumen.
-       </p>
+       <p class="text-slate-600 leading-relaxed font-medium">Mengatur standardisasi barang perdagangan, tata niaga dalam negeri, dan pengawasan peredaran barang.</p>
        <div class="pt-2">
         <a href="https://jdih.kemendag.go.id" target="_blank" class="secondary-btn text-xs py-3 px-4 w-full justify-center font-bold">
          <i data-lucide="external-link" class="w-4 h-4"></i> Buka Dokumen Resmi (Full Text JDIH Kemendag)
@@ -864,16 +842,13 @@
        </div>
       </div>
 
-      <!-- Regulasi 3 -->
       <div class="section-card space-y-3">
        <div class="flex items-center justify-between">
         <span class="px-3 py-1 rounded-full bg-blue-100 text-blue-700 font-black text-xs">Undang-Undang Republik Indonesia</span>
         <span class="text-slate-400 font-mono text-xs font-bold">UU No. 20 Tahun 2014</span>
        </div>
        <h3 class="font-extrabold text-base text-slate-900">Undang-Undang tentang Standardisasi dan Penilaian Kesesuaian</h3>
-       <p class="text-slate-600 leading-relaxed font-medium">
-        <b>Pokok Pengaturan & Substansi:</b> Menjadi payung hukum utama penyelenggaraan standardisasi nasional oleh Badan Standardisasi Nasional (BSN). Mengatur penetapan Standar Nasional Indonesia (SNI), akreditasi lembaga sertifikasi produk (LSpro), pengujian laboratorium, serta sanksi administratif hingga pidana bagi pelaku usaha yang memproduksi atau mengedarkan barang tidak sesuai SNI wajib.
-       </p>
+       <p class="text-slate-600 leading-relaxed font-medium">Payung hukum pemberlakuan Standar Nasional Indonesia (SNI) wajib serta akreditasi lembaga penilaian kesesuaian.</p>
        <div class="pt-2">
         <a href="https://www.bsn.go.id" target="_blank" class="secondary-btn text-xs py-3 px-4 w-full justify-center font-bold">
          <i data-lucide="external-link" class="w-4 h-4"></i> Buka Dokumen Resmi (Full Text BSN)
@@ -881,23 +856,19 @@
        </div>
       </div>
 
-      <!-- Regulasi 4 -->
       <div class="section-card space-y-3">
        <div class="flex items-center justify-between">
         <span class="px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 font-black text-xs">Peraturan Menteri Perdagangan</span>
         <span class="text-slate-400 font-mono text-xs font-bold">Permendag No. 69 Tahun 2018</span>
        </div>
-       <h3 class="font-extrabold text-base text-slate-900">Undang-Undang tentang Pengawasan Barang Beredar dan/atau Jasa</h3>
-       <p class="text-slate-600 leading-relaxed font-medium">
-        <b>Pokok Pengaturan & Substansi:</b> Pedoman operasional resmi bagi Pejabat Pengawas Perdagangan dalam menjalankan fungsi pengawasan pasca-pasar (*post-market*). Mengatur mekanisme pemeriksaan fisik barang, pengujian laboratorium, verifikasi label berbahasa Indonesia, manual petunjuk, jaminan layanan purna jual, serta tata cara penindakan dan pelaporan temuan pelanggaran.
-       </p>
+       <h3 class="font-extrabold text-base text-slate-900">Peraturan Menteri Perdagangan tentang Pengawasan Barang Beredar dan/atau Jasa</h3>
+       <p class="text-slate-600 leading-relaxed font-medium">Pedoman teknis pengawasan pasca-pasar bagi Pejabat Pengawas Perdagangan terhadap pemenuhan ketentuan teknis.</p>
        <div class="pt-2">
         <a href="https://jdih.kemendag.go.id" target="_blank" class="secondary-btn text-xs py-3 px-4 w-full justify-center font-bold">
          <i data-lucide="external-link" class="w-4 h-4"></i> Buka Dokumen Resmi (Full Text JDIH Kemendag)
         </a>
        </div>
       </div>
-
      </div>
     </section>
 
@@ -1819,7 +1790,7 @@
       lucide.createIcons();
     }
 
-    // --- DETAIL & EDIT ---
+    // --- DETAIL & EDIT & PRATINJAU TABEL KASAT MATA (PERSIS FILE GOOGLE DOCS) ---
     window.openDetail = function(id) {
       const r = reports.find(item => item.id === id);
       if (!r) return;
@@ -1829,6 +1800,7 @@
         <p class="text-sm font-medium"><b>Barang:</b> ${r.productType} - ${r.brand}</p>
         <p class="text-sm font-medium"><b>Status Validasi:</b> <span class="font-bold text-blue-600">${r.sniStatus}</span></p>
         <div class="pt-3 flex flex-col gap-2.5">
+          <button class="primary-btn text-xs font-bold py-3 bg-blue-600 hover:bg-blue-700" onclick="openTablePreview('${r.id}')"><i data-lucide="table" class="w-4 h-4"></i> Pratinjau Tabel Laporan Kasat Mata</button>
           <button class="secondary-btn text-xs font-bold py-3" onclick="openEditReport('${r.id}')">Edit / Verifikasi SNI</button>
           ${r.docUrl ? `<a href="${r.docUrl}" target="_blank" class="primary-btn text-xs font-bold text-center py-3">Buka File Google Docs</a>` : ''}
           ${r.folderUrl ? `<a href="${r.folderUrl}" target="_blank" class="secondary-btn text-xs font-bold text-center py-3">Buka Folder Google Drive</a>` : ''}
@@ -1836,6 +1808,151 @@
         </div>
       `;
       document.getElementById('detail-modal').classList.add('open');
+      lucide.createIcons();
+    };
+
+    window.openTablePreview = function(id) {
+      const r = reports.find(item => item.id === id);
+      if (!r) return;
+      document.getElementById('modal-title').textContent = `Tabel Kasat Mata: ${r.productType}`;
+      
+      const chk = (cond) => cond ? '√' : '';
+      const cAda = (opt) => opt && opt.includes('Ada') ? '√' : '';
+      const cTidak = (opt) => (!opt || opt.includes('Tidak') || opt === '') ? '√' : '';
+
+      document.getElementById('modal-content').innerHTML = `
+        <div class="space-y-4 text-xs font-sans">
+          <div class="flex justify-between items-center pb-2 border-b print:hidden">
+            <button class="secondary-btn text-xs py-1.5 px-3 font-bold" onclick="openDetail('${r.id}')">&larr; Kembali ke Detail</button>
+            <button class="primary-btn text-xs py-1.5 px-3 font-bold" onclick="window.print()"><i data-lucide="printer" class="w-3.5 h-3.5"></i> Cetak Tabel</button>
+          </div>
+          
+          <div class="p-5 bg-white rounded-xl border shadow-sm space-y-4 text-slate-900 leading-relaxed">
+            <div class="text-center font-black text-sm uppercase tracking-wider border-b pb-3">
+              TABEL PENGAMATAN KASAT MATA<br>${r.productType.toUpperCase()}
+            </div>
+            
+            <div class="grid grid-cols-1 gap-1 text-xs font-bold">
+              <div>Nama Barang &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${r.productType}</div>
+              <div>Merek Barang &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${r.brand}</div>
+              <div>Kode Sampel &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${r.sampleCode}</div>
+              <div>Nama dan Alamat Pengecer : ${r.businessName}, ${r.retailerAddress}</div>
+              <div>Kesimpulan &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${r.sniStatus}</div>
+            </div>
+
+            <table class="w-full text-[11px] border-collapse border border-slate-700 mt-3">
+              <thead>
+                <tr class="bg-slate-100 text-center font-bold">
+                  <th class="border border-slate-700 p-2 w-1/4">Dasar Hukum</th>
+                  <th class="border border-slate-700 p-2 w-1/4">Parameter Pengawasan Barang</th>
+                  <th class="border border-slate-700 p-2">Keterangan Penandaan</th>
+                  <th class="border border-slate-700 p-2 w-12">Ada</th>
+                  <th class="border border-slate-700 p-2 w-12">Tidak</th>
+                  <th class="border border-slate-700 p-2 w-1/4">Keterangan</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-700">
+                <!-- 1. Standar SNI -->
+                <tr>
+                  <td class="border border-slate-700 p-2 font-semibold align-top" rowspan="2">
+                    Undang-Undang Republik Indonesia Nomor 8 Tahun 1999 tentang Perlindungan Konsumen<br><br>
+                    Permendag Nomor 69 Tahun 2018 tentang Pengawasan Barang Beredar dan/atau Jasa<br><br>
+                    Permendag Nomor 25 Tahun 2021 tentang Penetapan Barang Yang Wajib Menggunakan Atau Melengkapi Label Berbahasa Indonesia<br><br>
+                    Permendag No.33 Tahun 2025 tentang Standar Kegiatan Usaha dan/atau Standar Produk/Jasa pada Penyelenggaraan Perizinan Berusaha Berbasis Risiko Sektor Perdagangan dan Metrologi Legal
+                  </td>
+                  <td class="border border-slate-700 p-2 font-bold" rowspan="2">Standar</td>
+                  <td class="border border-slate-700 p-2">Tanda dan Nomor SNI, Kode LSpro pada Barang dan/atau Kemasan</td>
+                  <td class="border border-slate-700 p-2 text-center font-bold">${cAda(r.bagianA.sniBarangOpt) || cAda(r.bagianA.lsproBarangOpt)}</td>
+                  <td class="border border-slate-700 p-2 text-center font-bold">${cTidak(r.bagianA.sniBarangOpt) && cTidak(r.bagianA.lsproBarangOpt) ? '√' : ''}</td>
+                  <td class="border border-slate-700 p-2">SNI: ${r.bagianA.sniBarangNum || '-'}<br>LSpro: ${r.bagianA.lsproBarangNum || '-'}</td>
+                </tr>
+                <tr>
+                  <td class="border border-slate-700 p-2">Nomor NPB pada Barang dan/atau Kemasan</td>
+                  <td class="border border-slate-700 p-2 text-center font-bold">${cAda(r.bagianA.npbBarangOpt)}</td>
+                  <td class="border border-slate-700 p-2 text-center font-bold">${cTidak(r.bagianA.npbBarangOpt)}</td>
+                  <td class="border border-slate-700 p-2">NPB: ${r.bagianA.npbBarangNum || '-'}</td>
+                </tr>
+
+                <!-- 2. Label Barang -->
+                <tr>
+                  <td class="border border-slate-700 p-2 font-semibold align-top" rowspan="4">Label Dalam Bahasa Indonesia</td>
+                  <td class="border border-slate-700 p-2 font-bold" rowspan="4">Tercantum Pada Barang</td>
+                  <td class="border border-slate-700 p-2">Merek Barang</td>
+                  <td class="border border-slate-700 p-2 text-center font-bold">${cAda(r.labelData.brgMerekOpt)}</td>
+                  <td class="border border-slate-700 p-2 text-center font-bold">${cTidak(r.labelData.brgMerekOpt)}</td>
+                  <td class="border border-slate-700 p-2">${r.labelData.brgMerekVal || r.brand}</td>
+                </tr>
+                <tr>
+                  <td class="border border-slate-700 p-2">Penggunaan listrik; Tegangan (Volt/V) dan frekuensi (Hz) / Spesifikasi</td>
+                  <td class="border border-slate-700 p-2 text-center font-bold">${cAda(r.labelData.brgListrikOpt)}</td>
+                  <td class="border border-slate-700 p-2 text-center font-bold">${cTidak(r.labelData.brgListrikOpt)}</td>
+                  <td class="border border-slate-700 p-2">${r.labelData.brgListrikVal || '-'}</td>
+                </tr>
+                <tr>
+                  <td class="border border-slate-700 p-2">Negara Pembuat atau Made in</td>
+                  <td class="border border-slate-700 p-2 text-center font-bold">${cAda(r.labelData.brgNegaraOpt)}</td>
+                  <td class="border border-slate-700 p-2 text-center font-bold">${cTidak(r.labelData.brgNegaraOpt)}</td>
+                  <td class="border border-slate-700 p-2">${r.labelData.brgNegaraVal || '-'}</td>
+                </tr>
+                <tr>
+                  <td class="border border-slate-700 p-2">Nama Barang</td>
+                  <td class="border border-slate-700 p-2 text-center font-bold">√</td>
+                  <td class="border border-slate-700 p-2 text-center font-bold"></td>
+                  <td class="border border-slate-700 p-2">${r.productType}</td>
+                </tr>
+
+                <!-- 3. Label Kemasan -->
+                <tr>
+                  <td class="border border-slate-700 p-2" rowspan="3"></td>
+                  <td class="border border-slate-700 p-2 font-bold" rowspan="3">Tercantum Pada Kemasan</td>
+                  <td class="border border-slate-700 p-2">Merek Barang</td>
+                  <td class="border border-slate-700 p-2 text-center font-bold">${!r.labelData.kemMerekOpt.includes('Tidak') ? '√' : ''}</td>
+                  <td class="border border-slate-700 p-2 text-center font-bold">${r.labelData.kemMerekOpt.includes('Tidak') ? '√' : ''}</td>
+                  <td class="border border-slate-700 p-2">${r.labelData.kemMerekVal || r.brand}</td>
+                </tr>
+                <tr>
+                  <td class="border border-slate-700 p-2">Penggunaan Listrik; Tegangan (Volt/V) dan Frekuensi (Hz) / Spesifikasi</td>
+                  <td class="border border-slate-700 p-2 text-center font-bold">${!r.labelData.kemListrikOpt.includes('Tidak') ? '√' : ''}</td>
+                  <td class="border border-slate-700 p-2 text-center font-bold">${r.labelData.kemListrikOpt.includes('Tidak') ? '√' : ''}</td>
+                  <td class="border border-slate-700 p-2">${r.labelData.kemListrikVal || '-'}</td>
+                </tr>
+                <tr>
+                  <td class="border border-slate-700 p-2">Nama dan Alamat Produsen / Importir</td>
+                  <td class="border border-slate-700 p-2 text-center font-bold">${r.labelData.producerName || r.labelData.importerName ? '√' : ''}</td>
+                  <td class="border border-slate-700 p-2 text-center font-bold">${!r.labelData.producerName && !r.labelData.importerName ? '√' : ''}</td>
+                  <td class="border border-slate-700 p-2">${r.labelData.producerName ? 'Produsen: ' + r.labelData.producerName + ', ' + r.labelData.producerAddr : (r.labelData.importerName ? 'Importir: ' + r.labelData.importerName + ', ' + r.labelData.importerAddr : '-')}</td>
+                </tr>
+
+                <!-- 4. Petunjuk Penggunaan -->
+                <tr>
+                  <td class="border border-slate-700 p-2" rowspan="2"></td>
+                  <td class="border border-slate-700 p-2 font-bold" rowspan="2">Petunjuk Penggunaan<br><span class="text-[10px] font-normal">(wajib memenuhi persyaratan paling sedikit mencantumkan)</span></td>
+                  <td class="border border-slate-700 p-2">Merek, Jenis, Tipe, Model, Spesifikasi, Cara Penggunaan & Petunjuk Pemeliharaan</td>
+                  <td class="border border-slate-700 p-2 text-center font-bold">${cAda(r.bagianC.opt)}</td>
+                  <td class="border border-slate-700 p-2 text-center font-bold">${cTidak(r.bagianC.opt)}</td>
+                  <td class="border border-slate-700 p-2">Tersedia manual penggunaan</td>
+                </tr>
+                <tr>
+                  <td class="border border-slate-700 p-2">Nomor Tanda Pendaftaran Petunjuk Penggunaan dan Jaminan Layanan Purna Jual</td>
+                  <td class="border border-slate-700 p-2 text-center font-bold">${cAda(r.bagianC.regOpt)}</td>
+                  <td class="border border-slate-700 p-2 text-center font-bold">${cTidak(r.bagianC.regOpt)}</td>
+                  <td class="border border-slate-700 p-2">No. Reg: ${r.bagianC.regVal || '-'}</td>
+                </tr>
+
+                <!-- 5. Garansi -->
+                <tr>
+                  <td class="border border-slate-700 p-2"></td>
+                  <td class="border border-slate-700 p-2 font-bold">Jaminan Layanan Purna Jual<br><span class="text-[10px] font-normal">(Kartu Garansi)</span></td>
+                  <td class="border border-slate-700 p-2">Pusat layanan min. 6 kota, Masa jaminan min. 1 tahun, Syarat Klaim, Suku Cadang, & No. Pendaftaran</td>
+                  <td class="border border-slate-700 p-2 text-center font-bold">${cAda(r.bagianD.masterOpt)}</td>
+                  <td class="border border-slate-700 p-2 text-center font-bold">${cTidak(r.bagianD.masterOpt)}</td>
+                  <td class="border border-slate-700 p-2">Status Garansi: ${r.bagianD.masterOpt}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
       lucide.createIcons();
     };
 
@@ -1908,7 +2025,7 @@
       link.click();
     });
 
-    // --- SINKRONISASI CLOUD (MEKANISME OPTIMAL DENGAN AUTO-RETRY & FEEDBACK LAPORAN) ---
+    // --- SINKRONISASI CLOUD ---
     document.getElementById('btn-sync-now').addEventListener('click', async () => {
       const url = "https://script.google.com/macros/s/AKfycbycZ1Dn-oWfbhlrIuqE5PfdWVnEouyYsS3WXt4LACNbw1x9YfDFx2HQYd0QAvGzj2ah/exec";
       const unsynced = reports.filter(r => !r.synced);
