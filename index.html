@@ -127,15 +127,15 @@
     <form id="register-form" class="space-y-4 hidden">
      <div>
       <label class="field-label text-xs">Nama Lengkap <span class="text-rose-600">*</span></label>
-      <input id="reg-name" class="field-control text-sm" required placeholder="Eryzon Arifandy Huan, S.Mat">
+      <input id="reg-name" class="field-control text-sm" required placeholder="Nama Petugas Lapangan">
      </div>
      <div>
       <label class="field-label text-xs">Alamat Email <span class="text-rose-600">*</span></label>
-      <input id="reg-email" type="email" class="field-control text-sm" required placeholder="huaneryzon@gmail.com">
+      <input id="reg-email" type="email" class="field-control text-sm" required placeholder="petugas@gmail.com">
      </div>
      <div>
       <label class="field-label text-xs">NIP / ID Petugas <span class="text-rose-600">*</span></label>
-      <input id="reg-nip" class="field-control text-sm" required placeholder="199904182025061006">
+      <input id="reg-nip" class="field-control text-sm" required placeholder="19990418202506xxxx">
      </div>
      <div>
       <label class="field-label text-xs">Kata Sandi <span class="text-rose-600">*</span></label>
@@ -769,7 +769,7 @@
      </div>
     </section>
 
-    <!-- 8. PANDUAN SOP -->
+    <!-- 8. PANDUAN SOP (DIKERJAKAN LEBIH LENGKAP & KOMPREHENSIF) -->
     <section id="page-guide" class="page">
      <div class="mb-5">
       <p class="text-xs font-bold uppercase text-blue-600">Standar Operasional Prosedur (SOP)</p>
@@ -779,28 +779,39 @@
      <div class="space-y-5 text-sm">
       <div class="section-card space-y-3">
        <div class="flex items-center gap-2.5 text-blue-600 font-black text-base">
-        <i data-lucide="book-open" class="w-5 h-5"></i> BAB I: Ketentuan Umum & Ruang Lingkup
+        <i data-lucide="book-open" class="w-5 h-5"></i> BAB I: Pendahuluan & Dasar Hukum Pengawasan
        </div>
        <p class="text-slate-600 leading-relaxed font-medium">
-        Sistem **PAGAR PKTN** adalah instrumen digital Pejabat Pengawas Perdagangan untuk melakukan pengawasan <i>post-market</i> terhadap barang beredar wajib SNI, label bahasa Indonesia, manual petunjuk, dan kartu garansi.
+        Sistem **PAGAR PKTN** adalah instrumen digital Pejabat Pengawas Perdagangan untuk melakukan pengawasan <i>post-market</i> terhadap barang beredar wajib SNI. Pengawasan ini berlandaskan pada Undang-Undang Nomor 8 Tahun 1999 tentang Perlindungan Konsumen, UU Nomor 7 Tahun 2014 tentang Perdagangan, UU Nomor 20 Tahun 2014 tentang Standardisasi dan Penilaian Kesesuaian, serta Permendag Nomor 69 Tahun 2018 tentang Pengawasan Barang Beredar dan/atau Jasa.
        </p>
       </div>
 
       <div class="section-card space-y-3">
        <div class="flex items-center gap-2.5 text-blue-600 font-black text-base">
-        <i data-lucide="user-check" class="w-5 h-5"></i> BAB II: Manajemen Akun & Autentikasi
+        <i data-lucide="shield-check" class="w-5 h-5"></i> BAB II: Hak Akses, Keamanan, & Autentikasi Petugas
        </div>
        <p class="text-slate-600 leading-relaxed font-medium">
-        Pengawas dapat melakukan login dengan fitur "Ingat Saya" untuk menyimpan sesi secara persisten. Foto profil yang diunggah akan tersimpan permanen di perangkat lokal dan tidak akan hilang saat halaman direfresh.
+        Setiap petugas lapangan wajib masuk menggunakan akun resmi terverifikasi. Akun Administrator Pusat dilindungi secara eksklusif dan tidak dapat didaftarkan melalui form umum publik. Fitur <i>Ingat Saya</i> memastikan sesi login tetap aman dan persisten di perangkat petugas tanpa risiko terhapus saat halaman dimuat ulang.
        </p>
       </div>
 
       <div class="section-card space-y-3">
        <div class="flex items-center gap-2.5 text-blue-600 font-black text-base">
-        <i data-lucide="file-text" class="w-5 h-5"></i> BAB III: Komoditas Luas, Pratinjau Tabel, & Sinkronisasi
+        <i data-lucide="file-text" class="w-5 h-5"></i> BAB III: Tahapan Pelaksanaan Pengawasan Lapangan
+       </div>
+       <ul class="list-disc pl-5 space-y-2 text-slate-600 leading-relaxed font-medium">
+        <li><b>Persiapan & Koordinasi:</b> Menyiapkan surat tugas, instrumen aplikasi PAGAR PKTN, dan memastikan perangkat seluler memiliki daya serta konektivitas memadai (mode <i>Offline-First</i> aktif).</li>
+        <li><b>Pemeriksaan Toko & Pengecer:</b> Mendatangi lokasi sasaran, mendata identitas pemilik/penanggung jawab, mencatat nomor telepon, serta merekam titik koordinat GPS lokasi secara akurat.</li>
+        <li><b>Pengujian Kasat Mata Komoditas:</b> Memilih jenis produk (Pompa Air, Setrika, Baja Lembaran Lapis Seng, Baja Tulangan Beton, atau Kabel Listrik), memeriksa tanda SNI, LSpro, NPB, kelengkapan label berbahasa Indonesia, petunjuk penggunaan, dan kartu garansi purna jual.</li>
+       </ul>
+      </div>
+
+      <div class="section-card space-y-3">
+       <div class="flex items-center gap-2.5 text-blue-600 font-black text-base">
+        <i data-lucide="table" class="w-5 h-5"></i> BAB IV: Pratinjau Tabel & Sinkronisasi Cloud
        </div>
        <p class="text-slate-600 leading-relaxed font-medium">
-        Petugas dapat memilih komoditas (Pompa Air, Setrika, Baja Lembaran Lapis Seng, Baja Tulangan Beton, atau Kabel Listrik) serta melihat pratinjau tabel laporan kasat mata persis seperti format Google Docs.
+        Hasil pengawasan dapat diverifikasi melalui menu **Riwayat &rarr; Detail &rarr; Pratinjau Tabel Laporan Kasat Mata** yang formatnya telah disesuaikan persis dengan dokumen resmi Google Docs. Data offline dapat disinkronkan ke server pusat secara optimal menggunakan tombol sinkronisasi dengan mekanisme percobaan ulang otomatis (*auto-retry*).
        </p>
       </div>
      </div>
@@ -1212,15 +1223,21 @@
       }
     };
 
+    // PROTEKSI PENDAFTARAN AKUN ADMIN
     document.getElementById('register-form').addEventListener('submit', e => {
       e.preventDefault();
       const name = document.getElementById('reg-name').value;
-      const email = document.getElementById('reg-email').value;
+      const email = document.getElementById('reg-email').value.trim();
       const nip = document.getElementById('reg-nip').value;
       const pass = document.getElementById('reg-pass').value;
 
+      if (email.toLowerCase() === ADMIN_CREDENTIALS.email.toLowerCase()) {
+        alert("AKSES DITOLAK:\nEmail tersebut merupakan akun Administrator Pusat dan tidak dapat didaftarkan melalui formulir publik.");
+        return;
+      }
+
       let users = JSON.parse(localStorage.getItem('pagar_pktn_users') || '[]');
-      if (users.some(u => u.email === email)) { alert("Email tersebut sudah terdaftar!"); return; }
+      if (users.some(u => u.email.toLowerCase() === email.toLowerCase())) { alert("Email tersebut sudah terdaftar!"); return; }
       users.push({ name, email, nip, pass, status: 'pending', avatar: '' });
       localStorage.setItem('pagar_pktn_users', JSON.stringify(users));
       alert("Registrasi berhasil! Menunggu persetujuan Administrator.");
@@ -1269,7 +1286,9 @@
       }
     });
 
+    // UCAPAN TERIMA KASIH SAAT KELUAR (LOGOUT)
     document.getElementById('btn-logout').addEventListener('click', () => {
+      alert("Terima kasih telah melaksanakan tugas pengawasan dengan baik!");
       localStorage.removeItem('pagar_pktn_user');
       currentInspector = null;
       document.getElementById('login-modal').classList.add('open');
@@ -1278,7 +1297,7 @@
     function renderAdminPendingList() {
       const container = document.getElementById('admin-pending-list');
       let users = JSON.parse(localStorage.getItem('pagar_pktn_users') || '[]');
-      let pendings = users.filter(u => u.status === 'pending');
+      let pendings = users.filter(u => u.email.toLowerCase() !== ADMIN_CREDENTIALS.email.toLowerCase() && u.status === 'pending');
       if (pendings.length === 0) { container.innerHTML = `<p class="text-xs text-slate-400 italic">Tidak ada permintaan akun baru.</p>`; return; }
       container.innerHTML = pendings.map(u => `
         <div class="p-3.5 bg-slate-50 border rounded-xl flex items-center justify-between text-sm">
@@ -1816,7 +1835,6 @@
       if (!r) return;
       document.getElementById('modal-title').textContent = `Tabel Kasat Mata: ${r.productType}`;
       
-      const chk = (cond) => cond ? '√' : '';
       const cAda = (opt) => opt && opt.includes('Ada') ? '√' : '';
       const cTidak = (opt) => (!opt || opt.includes('Tidak') || opt === '') ? '√' : '';
 
