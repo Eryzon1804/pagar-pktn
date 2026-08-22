@@ -1033,6 +1033,7 @@
     // --- DATABASE & STATE MANAGEMENT ---
     let db = null; 
     let reports = []; 
+    let isFormSubmitting = false; // Flag pencegahan kirim ganda
     const DB_NAME = 'PagarPKTNDB'; 
     const STORE_NAME = 'reports';
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzHukzDIJ_SL4MQ1fxtWjfKNRMpnBQCPIDgzrPh6496TZQ_QJSGRlawP5btJNVqyfnL/exec";
@@ -1429,6 +1430,7 @@
       const btn = document.querySelector(`.nav-btn[data-target="${target}"]`);
       if (btn) btn.classList.add('active');
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (target === 'page-form') { isFormSubmitting = false; } // Reset status kirim saat buka form baru
       if (target === 'page-history') renderHistory();
       if (target === 'page-analytics') renderAnalytics();
       if (target === 'page-maps') renderMapsList();
@@ -1441,7 +1443,10 @@
         drawer.classList.remove('open'); backdrop.classList.remove('open');
       });
     });
-    document.getElementById('fab-form').addEventListener('click', () => switchPage('page-form'));
+    document.getElementById('fab-form').addEventListener('click', () => {
+      isFormSubmitting = false; // Reset status kirim saat klik buat laporan baru
+      switchPage('page-form');
+    });
 
     // --- FORM TOGGLES & BAGIAN A KEMASAN LOGIC ---
     ['sni', 'lspro', 'npb'].forEach(type => {
@@ -1588,7 +1593,7 @@
       }, () => { fb.textContent = 'Gagal mendeteksi GPS.'; });
     });
 
-    // --- CAMERA & UI FEEDBACK ---
+    // --- CAMERA & UI FEEDBACK & PEMBERSIHAN FOTO ---
     function updateDocUI(input) {
       const label = input.parentElement;
       const iconState = label.querySelector('.icon-state');
@@ -1600,6 +1605,26 @@
       }
       lucide.createIcons();
     }
+
+    function resetAllDocUI() {
+      document.querySelectorAll('.doc-box').forEach(label => {
+        label.classList.remove('has-file');
+        const iconState = label.querySelector('.icon-state');
+        const fileInfo = label.querySelector('.file-info');
+        if (iconState) iconState.innerHTML = '<i data-lucide="camera" class="w-7 h-7"></i>';
+        if (fileInfo && fileInfo.getAttribute('data-default-text')) {
+          fileInfo.textContent = fileInfo.getAttribute('data-default-text');
+        }
+      });
+      lucide.createIcons();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.doc-box').forEach(label => {
+        const fileInfo = label.querySelector('.file-info');
+        if (fileInfo) fileInfo.setAttribute('data-default-text', fileInfo.textContent);
+      });
+    });
 
     function compressImage(file, maxWidth = 900, quality = 0.7) {
       return new Promise((resolve) => {
@@ -1622,9 +1647,16 @@
       });
     }
 
-    // --- SUBMIT FORM DENGAN PENGIRIMAN LANGSUNG ONLINE / OFFLINE ---
+    // --- SUBMIT FORM DENGAN PENCEGAHAN PENGIRIMAN GANDA ---
     document.getElementById('inspection-form').addEventListener('submit', async e => {
       e.preventDefault();
+
+      // Cek apakah form sudah pernah dikirim sebelumnya dalam sesi ini
+      if (isFormSubmitting) {
+        showAppNotify("Pemberitahuan", "Formulir pengawasan ini telah dikirim sebelumnya. Silakan buat laporan baru jika ingin melakukan pengawasan lainnya.", "warning");
+        return;
+      }
+
       const form = e.target;
 
       const phone = document.getElementById('phone').value.trim();
@@ -1644,6 +1676,9 @@
         document.getElementById('sni-barang-num').focus();
         return;
       }
+
+      // Kunci form agar tidak bisa dikirim dua kali
+      isFormSubmitting = true;
 
       const officerInputs = document.querySelectorAll('.officer-input');
       const officersList = Array.from(officerInputs).map(i => i.value.trim()).filter(v => v !== '');
@@ -1754,7 +1789,7 @@
           });
           reportData.synced = true;
           await saveReportToDB(reportData);
-          form.reset(); currentStep = 1; updateWizard();
+          form.reset(); resetAllDocUI(); currentStep = 1; updateWizard();
           switchPage('page-history');
           showAppNotify("🚀 Laporan Berhasil Dikirim!", "Data pengawasan telah sukses diproses dan dikirim secara online ke Spreadsheet, Drive, dan Google Docs pusat.", "success");
           return;
@@ -1766,7 +1801,7 @@
       // Mode Offline
       reportData.synced = false;
       await saveReportToDB(reportData);
-      form.reset(); currentStep = 1; updateWizard();
+      form.reset(); resetAllDocUI(); currentStep = 1; updateWizard();
       switchPage('page-history');
       showAppNotify("⏳ Disimpan Sementara (Offline)", "Perangkat sedang offline. Data disimpan aman di memori lokal. Status validasi dapat diedit kapan saja sebelum disinkronkan.", "warning");
     });
@@ -1856,11 +1891,20 @@
       lucide.createIcons();
     }
 
-    // --- DETAIL & EDIT OFFLINE & AKSES GOOGLE DOCS ---
+    // --- DETAIL & EDIT OFFLINE & AKSES/DOWNLOAD GOOGLE DOCS ---
     window.openDetail = function(id) {
       const r = reports.find(item => item.id === id);
       if (!r) return;
       document.getElementById('modal-title').textContent = `Sampel: ${r.sampleCode}`;
+      
+      let docxDownloadUrl = '#';
+      if (r.docUrl) {
+        const fileIdMatch = r.docUrl.match(/\/d\/([a-zA-Z0-9-_]+)/);
+        if (fileIdMatch && fileIdMatch[1]) {
+          docxDownloadUrl = `https://docs.google.com/document/d/${fileIdMatch[1]}/export?format=docx`;
+        }
+      }
+
       document.getElementById('modal-content').innerHTML = `
         <p class="text-sm font-medium"><b>Toko:</b> ${r.businessName} (${r.retailerAddress})</p>
         <p class="text-sm font-medium"><b>Barang:</b> ${r.productType} - ${r.brand}</p>
@@ -1872,10 +1916,13 @@
           <button class="secondary-btn text-xs font-bold py-3 w-full" onclick="openEditReport('${r.id}')"><i data-lucide="edit-3" class="w-4 h-4"></i> Edit / Verifikasi Status Validasi</button>
           
           ${r.docUrl ? `
-            <div class="p-3 bg-blue-50 border border-blue-200 rounded-xl space-y-2">
-              <p class="text-xs font-bold text-blue-900">Dokumen Google Docs:</p>
-              <a href="${r.docUrl}" target="_blank" class="primary-btn text-xs font-bold py-2.5 w-full justify-center"><i data-lucide="external-link" class="w-4 h-4"></i> Buka Google Docs</a>
-              <p class="text-[11px] text-slate-600 leading-relaxed">Anda dapat mengedit langsung atau unduh dalam format Word (<b>File > Download > Microsoft Word .docx</b>) untuk dicetak.</p>
+            <div class="p-3.5 bg-blue-50 border border-blue-200 rounded-xl space-y-2.5">
+              <p class="text-xs font-bold text-blue-900">Dokumen Google Docs & Unduh Word:</p>
+              <div class="flex gap-2">
+                <a href="${r.docUrl}" target="_blank" class="primary-btn text-xs font-bold py-2.5 flex-1 justify-center"><i data-lucide="external-link" class="w-4 h-4"></i> Buka Docs</a>
+                <a href="${docxDownloadUrl}" class="secondary-btn text-xs font-bold py-2.5 flex-1 justify-center bg-emerald-100 text-emerald-800 hover:bg-emerald-200"><i data-lucide="download" class="w-4 h-4"></i> Download .docx</a>
+              </div>
+              <p class="text-[11px] text-slate-600 leading-relaxed">Klik 'Download .docx' untuk langsung mengunduh file dalam bentuk Word siap cetak.</p>
             </div>
           ` : `<p class="text-xs text-amber-600 font-semibold bg-amber-50 p-2.5 rounded-lg border border-amber-200">⚠️ Dokumen Google Docs otomatis tergenerate saat data disinkronkan ke Cloud.</p>`}
 
@@ -2074,7 +2121,7 @@
       if (!r) return;
       r.sniStatus = document.getElementById('edit-status').value;
       r.bagianA.sniBarangNum = document.getElementById('edit-sni-num').value;
-      r.synced = false; // Set menjadi pending agar dapat disinkronkan ulang dengan status terbaru
+      r.synced = false; 
       await saveReportToDB(r);
       document.getElementById('detail-modal').classList.remove('open');
       renderHistory();
@@ -2165,7 +2212,7 @@
       showAppNotify("📊 Laporan Sinkronisasi Cloud", `Berhasil dikirim: ${successCount} sampel\nGagal/Tertunda: ${failCount} sampel`, failCount === 0 ? "success" : "warning");
     });
 
-    // --- PETA LEAFLET DENGAN PENANDA WARNA (HIJAU = LEGAL, MERAH/KUNING = BERMASALAH) ---
+    // --- PETA LEAFLET DENGAN PENANDA WARNA ---
     let leafletMap = null;
     let leafletMarkers = [];
     function renderMapsList() {
