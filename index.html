@@ -1033,7 +1033,7 @@
     // --- DATABASE & STATE MANAGEMENT ---
     let db = null; 
     let reports = []; 
-    let isFormSubmitting = false; // Flag pencegahan kirim ganda
+    let isFormSubmitting = false; // Flag proteksi pengiriman ganda
     const DB_NAME = 'PagarPKTNDB'; 
     const STORE_NAME = 'reports';
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzHukzDIJ_SL4MQ1fxtWjfKNRMpnBQCPIDgzrPh6496TZQ_QJSGRlawP5btJNVqyfnL/exec";
@@ -1430,7 +1430,11 @@
       const btn = document.querySelector(`.nav-btn[data-target="${target}"]`);
       if (btn) btn.classList.add('active');
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      if (target === 'page-form') { isFormSubmitting = false; } // Reset status kirim saat buka form baru
+      if (target === 'page-form') { 
+        isFormSubmitting = false; 
+        const sBtn = document.getElementById('submit-btn');
+        if (sBtn) { sBtn.disabled = false; sBtn.style.opacity = '1'; sBtn.style.cursor = 'pointer'; }
+      }
       if (target === 'page-history') renderHistory();
       if (target === 'page-analytics') renderAnalytics();
       if (target === 'page-maps') renderMapsList();
@@ -1444,7 +1448,9 @@
       });
     });
     document.getElementById('fab-form').addEventListener('click', () => {
-      isFormSubmitting = false; // Reset status kirim saat klik buat laporan baru
+      isFormSubmitting = false; 
+      const sBtn = document.getElementById('submit-btn');
+      if (sBtn) { sBtn.disabled = false; sBtn.style.opacity = '1'; sBtn.style.cursor = 'pointer'; }
       switchPage('page-form');
     });
 
@@ -1651,8 +1657,10 @@
     document.getElementById('inspection-form').addEventListener('submit', async e => {
       e.preventDefault();
 
-      // Cek apakah form sudah pernah dikirim sebelumnya dalam sesi ini
-      if (isFormSubmitting) {
+      const submitBtn = document.getElementById('submit-btn');
+
+      // Jika form sudah dikirim atau tombol dalam keadaan terkunci, cegah duplikasi
+      if (isFormSubmitting || (submitBtn && submitBtn.disabled)) {
         showAppNotify("Pemberitahuan", "Formulir pengawasan ini telah dikirim sebelumnya. Silakan buat laporan baru jika ingin melakukan pengawasan lainnya.", "warning");
         return;
       }
@@ -1677,8 +1685,13 @@
         return;
       }
 
-      // Kunci form agar tidak bisa dikirim dua kali
+      // Kunci form secara total untuk mencegah klik ganda
       isFormSubmitting = true;
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.6';
+        submitBtn.style.cursor = 'not-allowed';
+      }
 
       const officerInputs = document.querySelectorAll('.officer-input');
       const officersList = Array.from(officerInputs).map(i => i.value.trim()).filter(v => v !== '');
