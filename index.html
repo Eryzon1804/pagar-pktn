@@ -89,6 +89,16 @@
  </head>
  <body>
   
+  <!-- MODAL NOTIFIKASI KUSTOM MENARIK & BERWARNA -->
+  <div id="app-notify-modal" class="modal-backdrop">
+   <div class="modal-panel max-w-sm w-full text-center space-y-4 p-6 rounded-3xl shadow-2xl bg-white border border-slate-100">
+    <div id="notify-icon-box" class="w-16 h-16 mx-auto rounded-full flex items-center justify-center text-white shadow-lg text-2xl font-black"></div>
+    <h3 id="notify-title" class="text-lg font-black text-slate-900 tracking-tight"></h3>
+    <p id="notify-desc" class="text-sm text-slate-600 font-medium leading-relaxed"></p>
+    <button type="button" class="primary-btn w-full py-3.5 text-sm font-bold shadow-md" onclick="closeNotifyModal()">Mengerti & Lanjutkan</button>
+   </div>
+  </div>
+
   <!-- LOGIN & REGISTRASI MODAL -->
   <div id="login-modal" class="login-backdrop open">
    <div class="modal-panel max-w-sm w-full space-y-5">
@@ -364,7 +374,7 @@
            <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Resmi BSN
           </div>
           <h4 class="font-black text-base tracking-tight">Verifikasi Validitas Nomor SNI</h4>
-          <p class="text-xs text-blue-100 leading-relaxed font-medium">Gunakan Portal Bang Beni untuk mengecek keaslian nomor pendaftaran.</p>
+          <p class="text-xs text-blue-100 leading-relaxed font-medium">Gunakan Portal Bang Beni untuk mengecek keaslian nomor pendaftaran (Dapat dilewati jika offline).</p>
          </div>
          <a href="https://bangbeni.bsn.go.id" target="_blank" class="shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white text-blue-700 hover:bg-blue-50 font-black text-xs shadow-md transition-transform active:scale-95">
           <i data-lucide="external-link" class="w-4 h-4 text-blue-600"></i> Buka Portal Bang Beni
@@ -372,7 +382,7 @@
         </div>
 
         <div>
-         <label class="field-label">Kesimpulan Status Validasi <span class="text-rose-600">*</span></label>
+         <label class="field-label">Kesimpulan Status Validasi (Dapat diubah nanti jika Offline) <span class="text-rose-600">*</span></label>
          <select id="sni-status" class="field-control">
           <option value="Terdaftar dan Sesuai (Legal)">Terdaftar dan Sesuai (Legal)</option>
           <option value="Tidak Terdaftar (Temuan)">Tidak Terdaftar (Temuan)</option>
@@ -769,7 +779,7 @@
      </div>
     </section>
 
-    <!-- 8. PANDUAN SOP (DIKERJAKAN LEBIH LENGKAP & KOMPREHENSIF) -->
+    <!-- 8. PANDUAN SOP -->
     <section id="page-guide" class="page">
      <div class="mb-5">
       <p class="text-xs font-bold uppercase text-blue-600">Standar Operasional Prosedur (SOP)</p>
@@ -782,7 +792,7 @@
         <i data-lucide="book-open" class="w-5 h-5"></i> BAB I: Pendahuluan & Dasar Hukum Pengawasan
        </div>
        <p class="text-slate-600 leading-relaxed font-medium">
-        Sistem **PAGAR PKTN** adalah instrumen digital Pejabat Pengawas Perdagangan untuk melakukan pengawasan <i>post-market</i> terhadap barang beredar wajib SNI. Pengawasan ini berlandaskan pada Undang-Undang Nomor 8 Tahun 1999 tentang Perlindungan Konsumen, UU Nomor 7 Tahun 2014 tentang Perdagangan, UU Nomor 20 Tahun 2014 tentang Standardisasi dan Penilaian Kesesuaian, serta Permendag Nomor 69 Tahun 2018 tentang Pengawasan Barang Beredar dan/atau Jasa.
+        Sistem **PAGAR PKTN** adalah instrumen digital Pejabat Pengawas Perdagangan untuk melaksanakan pengawasan <i>post-market</i> terhadap barang beredar wajib SNI. Pengawasan ini berlandaskan pada Undang-Undang Nomor 8 Tahun 1999 tentang Perlindungan Konsumen, UU Nomor 7 Tahun 2014 tentang Perdagangan, UU Nomor 20 Tahun 2014 tentang Standardisasi dan Penilaian Kesesuaian, serta Permendag Nomor 69 Tahun 2018 tentang Pengawasan Barang Beredar dan/atau Jasa.
        </p>
       </div>
 
@@ -802,7 +812,7 @@
        <ul class="list-disc pl-5 space-y-2 text-slate-600 leading-relaxed font-medium">
         <li><b>Persiapan & Koordinasi:</b> Menyiapkan surat tugas, instrumen aplikasi PAGAR PKTN, dan memastikan perangkat seluler memiliki daya serta konektivitas memadai (mode <i>Offline-First</i> aktif).</li>
         <li><b>Pemeriksaan Toko & Pengecer:</b> Mendatangi lokasi sasaran, mendata identitas pemilik/penanggung jawab, mencatat nomor telepon, serta merekam titik koordinat GPS lokasi secara akurat.</li>
-        <li><b>Pengujian Kasat Mata Komoditas:</b> Memilih jenis produk (Pompa Air, Setrika, Baja Lembaran Lapis Seng, Baja Tulangan Beton, atau Kabel Listrik), memeriksa tanda SNI, LSpro, NPB, kelengkapan label berbahasa Indonesia, petunjuk penggunaan, dan kartu garansi purna jual.</li>
+        <li><b>Pengujian Kasat Mata Komoditas:</b> Memilih jenis produk (Pompa Air, Setrika, Baja Lembaran Lapis Seng, Baja Tulangan Beton, atau Kabel Listrik), memeriksa tanda SNI, LSpro, NPB, kelengkapan label berbahasa Indonesia, petunjuk penggunaan, dan kartu garansi purna jual. Jika perangkat offline, status validasi dapat dilewati sementara dan diverifikasi ulang setelah mendapatkan jaringan internet.</li>
        </ul>
       </div>
 
@@ -811,7 +821,7 @@
         <i data-lucide="table" class="w-5 h-5"></i> BAB IV: Pratinjau Tabel & Sinkronisasi Cloud
        </div>
        <p class="text-slate-600 leading-relaxed font-medium">
-        Hasil pengawasan dapat diverifikasi melalui menu **Riwayat &rarr; Detail &rarr; Pratinjau Tabel Laporan Kasat Mata** yang formatnya telah disesuaikan persis dengan dokumen resmi Google Docs. Data offline dapat disinkronkan ke server pusat secara optimal menggunakan tombol sinkronisasi dengan mekanisme percobaan ulang otomatis (*auto-retry*).
+        Hasil pengawasan dapat diverifikasi melalui menu **Riwayat &rarr; Detail &rarr; Pratinjau Tabel Laporan Kasat Mata** yang formatnya telah disesuaikan persis dengan dokumen resmi Google Docs. Data offline yang tersimpan sementara dapat langsung disinkronkan ke server pusat secara optimal menggunakan tombol sinkronisasi begitu jaringan internet tersedia.
        </p>
       </div>
      </div>
@@ -938,6 +948,35 @@
   </div>
 
   <script>
+    // --- NOTIFIKASI KUSTOM MENARIK & BERWARNA ---
+    function showAppNotify(title, desc, type = 'success') {
+      const modal = document.getElementById('app-notify-modal');
+      const iconBox = document.getElementById('notify-icon-box');
+      const tEl = document.getElementById('notify-title');
+      const dEl = document.getElementById('notify-desc');
+
+      tEl.textContent = title;
+      dEl.textContent = desc;
+
+      if (type === 'success') {
+        iconBox.className = 'w-16 h-16 mx-auto rounded-full flex items-center justify-center text-white shadow-lg text-2xl font-black bg-gradient-to-br from-emerald-400 to-emerald-600';
+        iconBox.innerHTML = '✨';
+      } else if (type === 'warning') {
+        iconBox.className = 'w-16 h-16 mx-auto rounded-full flex items-center justify-center text-white shadow-lg text-2xl font-black bg-gradient-to-br from-amber-400 to-amber-600';
+        iconBox.innerHTML = '⏳';
+      } else {
+        iconBox.className = 'w-16 h-16 mx-auto rounded-full flex items-center justify-center text-white shadow-lg text-2xl font-black bg-gradient-to-br from-blue-400 to-blue-600';
+        iconBox.innerHTML = '🛡️';
+      }
+
+      modal.classList.add('open');
+      lucide.createIcons();
+    }
+
+    function closeNotifyModal() {
+      document.getElementById('app-notify-modal').classList.remove('open');
+    }
+
     // --- PWA REGISTRATION & MANIFEST INJECTION ---
     if ('serviceWorker' in navigator) {
       const swCode = `
@@ -996,6 +1035,7 @@
     let reports = []; 
     const DB_NAME = 'PagarPKTNDB'; 
     const STORE_NAME = 'reports';
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzHukzDIJ_SL4MQ1fxtWjfKNRMpnBQCPIDgzrPh6496TZQ_QJSGRlawP5btJNVqyfnL/exec";
 
     function initDB() {
       return new Promise((resolve, reject) => {
@@ -1154,7 +1194,7 @@
           }
 
           updateSessionUI();
-          alert("Foto profil berhasil diperbarui!");
+          showAppNotify("Foto Diperbarui!", "Foto profil Anda berhasil disimpan secara permanen di perangkat.", "success");
         };
         reader.readAsDataURL(input.files[0]);
       }
@@ -1174,7 +1214,7 @@
         }
 
         updateSessionUI();
-        alert("Foto profil berhasil dihapus.");
+        showAppNotify("Foto Dihapus", "Foto profil telah dihapus dari sistem.", "info");
       }
     };
 
@@ -1207,7 +1247,7 @@
       const nipInput = prompt("Masukkan NIP / ID Petugas Anda yang terdaftar untuk memulihkan akun:");
       if (!nipInput) return;
       if (nipInput === ADMIN_CREDENTIALS.nip) {
-        alert(`AKUN ADMIN DITEMUKAN!\n\nEmail: ${ADMIN_CREDENTIALS.email}\nKata Sandi: ${ADMIN_CREDENTIALS.pass}`);
+        showAppNotify("Akun Admin Ditemukan", `Email: ${ADMIN_CREDENTIALS.email}\nKata Sandi: ${ADMIN_CREDENTIALS.pass}`, "info");
         document.getElementById('login-email').value = ADMIN_CREDENTIALS.email;
         document.getElementById('login-password').value = ADMIN_CREDENTIALS.pass;
         return;
@@ -1215,11 +1255,11 @@
       let users = JSON.parse(localStorage.getItem('pagar_pktn_users') || '[]');
       let found = users.find(u => u.nip === nipInput);
       if (found) {
-        alert(`AKUN DITEMUKAN!\n\nEmail (Username): ${found.email}\nKata Sandi: ${found.pass}\n\nSilakan gunakan kredensial tersebut untuk masuk.`);
+        showAppNotify("Akun Ditemukan", `Email (Username): ${found.email}\nKata Sandi: ${found.pass}`, "info");
         document.getElementById('login-email').value = found.email;
         document.getElementById('login-password').value = found.pass;
       } else {
-        alert("NIP tidak ditemukan dalam database lokal perangkat. Silakan daftar akun baru atau hubungi Admin.");
+        showAppNotify("Tidak Ditemukan", "NIP tidak terdaftar dalam database lokal perangkat.", "warning");
       }
     };
 
@@ -1232,15 +1272,18 @@
       const pass = document.getElementById('reg-pass').value;
 
       if (email.toLowerCase() === ADMIN_CREDENTIALS.email.toLowerCase()) {
-        alert("AKSES DITOLAK:\nEmail tersebut merupakan akun Administrator Pusat dan tidak dapat didaftarkan melalui formulir publik.");
+        showAppNotify("Akses Ditolak", "Email tersebut merupakan akun Administrator Pusat dan tidak dapat didaftarkan melalui formulir publik.", "warning");
         return;
       }
 
       let users = JSON.parse(localStorage.getItem('pagar_pktn_users') || '[]');
-      if (users.some(u => u.email.toLowerCase() === email.toLowerCase())) { alert("Email tersebut sudah terdaftar!"); return; }
+      if (users.some(u => u.email.toLowerCase() === email.toLowerCase())) { 
+        showAppNotify("Peringatan", "Email tersebut sudah terdaftar!", "warning"); 
+        return; 
+      }
       users.push({ name, email, nip, pass, status: 'pending', avatar: '' });
       localStorage.setItem('pagar_pktn_users', JSON.stringify(users));
-      alert("Registrasi berhasil! Menunggu persetujuan Administrator.");
+      showAppNotify("Registrasi Berhasil!", "Akun Anda berhasil didaftarkan dan sedang menunggu persetujuan Administrator.", "success");
       switchAuthTab('login');
       document.getElementById('register-form').reset();
     });
@@ -1263,7 +1306,7 @@
           localStorage.removeItem('pagar_pktn_remember');
         }
         updateSessionUI();
-        alert("Berhasil masuk sebagai Administrator Pusat.");
+        showAppNotify("✨ Berhasil Masuk!", "Selamat datang kembali, Administrator Pusat. Sistem pengawasan siap digunakan.", "success");
         return;
       }
 
@@ -1271,7 +1314,10 @@
       let found = users.find(u => u.email === email && u.pass === pass);
 
       if (found) {
-        if (found.status === 'pending') { alert("Akun Anda belum diverifikasi oleh Administrator."); return; }
+        if (found.status === 'pending') { 
+          showAppNotify("Menunggu Verifikasi", "Akun Anda belum disetujui oleh Administrator.", "warning"); 
+          return; 
+        }
         currentInspector = { ...found, avatar: found.avatar || savedAvatar };
         localStorage.setItem('pagar_pktn_user', JSON.stringify(currentInspector));
         if (remember) {
@@ -1280,18 +1326,20 @@
           localStorage.removeItem('pagar_pktn_remember');
         }
         updateSessionUI();
-        alert(`Selamat datang kembali, ${currentInspector.name}!`);
+        showAppNotify("✨ Berhasil Masuk!", `Selamat datang kembali, ${currentInspector.name}! Siap melaksanakan pengawasan SNI.`, "success");
       } else {
-        alert("Email atau Kata Sandi salah / belum terdaftar.");
+        showAppNotify("Login Gagal", "Email atau Kata Sandi salah / belum terdaftar.", "warning");
       }
     });
 
     // UCAPAN TERIMA KASIH SAAT KELUAR (LOGOUT)
     document.getElementById('btn-logout').addEventListener('click', () => {
-      alert("Terima kasih telah melaksanakan tugas pengawasan dengan baik!");
+      showAppNotify("🌟 Tugas Selesai!", "Terima kasih telah melaksanakan tugas pengawasan dengan baik!", "success");
       localStorage.removeItem('pagar_pktn_user');
       currentInspector = null;
-      document.getElementById('login-modal').classList.add('open');
+      setTimeout(() => {
+        document.getElementById('login-modal').classList.add('open');
+      }, 500);
     });
 
     function renderAdminPendingList() {
@@ -1314,7 +1362,7 @@
       let users = JSON.parse(localStorage.getItem('pagar_pktn_users') || '[]');
       users = users.map(u => { if(u.email === email) u.status = 'approved'; return u; });
       localStorage.setItem('pagar_pktn_users', JSON.stringify(users));
-      alert("Akun berhasil disetujui!");
+      showAppNotify("Disetujui", "Akun petugas berhasil disetujui!", "success");
       renderAdminPendingList();
     };
 
@@ -1322,7 +1370,7 @@
       let users = JSON.parse(localStorage.getItem('pagar_pktn_users') || '[]');
       users = users.filter(u => u.email !== email);
       localStorage.setItem('pagar_pktn_users', JSON.stringify(users));
-      alert("Akun ditolak.");
+      showAppNotify("Ditolak", "Permohonan akun telah ditolak.", "info");
       renderAdminPendingList();
     };
 
@@ -1574,7 +1622,7 @@
       });
     }
 
-    // --- SUBMIT FORM DENGAN VALIDASI NOMOR RESMI & PETUGAS GANDA ---
+    // --- SUBMIT FORM DENGAN PENGIRIMAN LANGSUNG ONLINE / OFFLINE ---
     document.getElementById('inspection-form').addEventListener('submit', async e => {
       e.preventDefault();
       const form = e.target;
@@ -1582,7 +1630,7 @@
       const phone = document.getElementById('phone').value.trim();
       const phoneClean = phone.replace(/[^0-9]/g, '');
       if (phoneClean.length < 10 || phoneClean.length > 15) {
-        alert("PENGISIAN NOMOR SALAH:\nNomor Telepon/WhatsApp harus berupa angka dan minimal 10 digit.");
+        showAppNotify("Peringatan", "Nomor Telepon/WhatsApp harus berupa angka dan minimal 10 digit.", "warning");
         currentStep = 1; updateWizard();
         document.getElementById('phone').focus();
         return;
@@ -1591,27 +1639,9 @@
       const sniBrgOpt = document.getElementById('sni-barang-opt').value;
       const sniBrgNum = document.getElementById('sni-barang-num').value.trim();
       if (sniBrgOpt.includes('Ada') && sniBrgNum === '') {
-        alert("VALIDASI GAGAL:\nAnda memilih 'Ada' untuk SNI pada Barang, namun Nomor SNI belum diisi.");
+        showAppNotify("Validasi Gagal", "Anda memilih 'Ada' untuk SNI pada Barang, namun Nomor SNI belum diisi.", "warning");
         currentStep = 2; updateWizard();
         document.getElementById('sni-barang-num').focus();
-        return;
-      }
-
-      const lsproBrgOpt = document.getElementById('lspro-barang-opt').value;
-      const lsproBrgNum = document.getElementById('lspro-barang-num').value.trim();
-      if (lsproBrgOpt.includes('Ada') && lsproBrgNum === '') {
-        alert("VALIDASI GAGAL:\nNomor LSpro pada Barang wajib diisi jika statusnya 'Ada'.");
-        currentStep = 2; updateWizard();
-        document.getElementById('lspro-barang-num').focus();
-        return;
-      }
-
-      const npbBrgOpt = document.getElementById('npb-barang-opt').value;
-      const npbBrgNum = document.getElementById('npb-barang-num').value.trim();
-      if (npbBrgOpt.includes('Ada') && npbBrgNum === '') {
-        alert("VALIDASI GAGAL:\nNomor NPB pada Barang wajib diisi jika statusnya 'Ada'.");
-        currentStep = 2; updateWizard();
-        document.getElementById('npb-barang-num').focus();
         return;
       }
 
@@ -1653,7 +1683,7 @@
         importerAddr: document.getElementById('dyn-importer-addr')?.value || '',
       };
 
-      const data = {
+      const reportData = {
         id: 'INS-' + Date.now().toString(36).toUpperCase(),
         timestamp: new Date().toISOString(),
         agency: form.agency.value,
@@ -1673,12 +1703,12 @@
           sniBarangNum: sniBrgNum,
           sniKemasanOpt: document.getElementById('sni-kemasan-opt').value,
           sniKemasanNum: document.getElementById('sni-kemasan-num')?.value || '',
-          lsproBarangOpt: lsproBrgOpt,
-          lsproBarangNum: lsproBrgNum,
+          lsproBarangOpt: document.getElementById('lspro-barang-opt').value,
+          lsproBarangNum: document.getElementById('lspro-barang-num')?.value || '',
           lsproKemasanOpt: document.getElementById('lspro-kemasan-opt')?.value || '',
           lsproKemasanNum: document.getElementById('lspro-kemasan-num')?.value || '',
-          npbBarangOpt: npbBrgOpt,
-          npbBarangNum: npbBrgNum,
+          npbBarangOpt: document.getElementById('npb-barang-opt').value,
+          npbBarangNum: document.getElementById('npb-barang-num')?.value || '',
           npbKemasanOpt: document.getElementById('npb-kemasan-opt')?.value || '',
           npbKemasanNum: document.getElementById('npb-kemasan-num')?.value || '',
         },
@@ -1713,15 +1743,32 @@
         docUrl: '', folderUrl: ''
       };
 
-      await saveReportToDB(data);
+      // Jika online, kirim langsung ke cloud
+      if (navigator.onLine) {
+        try {
+          await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(reportData)
+          });
+          reportData.synced = true;
+          await saveReportToDB(reportData);
+          form.reset(); currentStep = 1; updateWizard();
+          switchPage('page-history');
+          showAppNotify("🚀 Laporan Berhasil Dikirim!", "Data pengawasan telah sukses diproses dan dikirim secara online ke Spreadsheet, Drive, dan Google Docs pusat.", "success");
+          return;
+        } catch (err) {
+          console.log("Kirim langsung gagal, fallback ke offline:", err);
+        }
+      }
+
+      // Mode Offline
+      reportData.synced = false;
+      await saveReportToDB(reportData);
       form.reset(); currentStep = 1; updateWizard();
       switchPage('page-history');
-
-      if (navigator.onLine) {
-        alert("🚀 SELAMAT! DATA BERHASIL DIKIRIM\n\nLaporan pengawasan telah sukses diproses dan dikirim secara online ke server pusat.");
-      } else {
-        alert("⏳ PERHATIAN: DATA DISIMPAN SEMENTARA (OFFLINE)\n\nPerangkat Anda sedang offline. Data disimpan secara lokal di perangkat.\n\nSaran Tindakan:\n1. Segera lakukan pengecekan validitas nomor ke Portal Bang Beni setelah terhubung internet.\n2. Buka menu 'Sinkronisasi & Backup' untuk segera mengirimkan data ke Cloud begitu online.");
-      }
+      showAppNotify("⏳ Disimpan Sementara (Offline)", "Perangkat sedang offline. Data disimpan aman di memori lokal. Status validasi dapat diedit kapan saja sebelum disinkronkan.", "warning");
     });
 
     // --- RENDER RIWAYAT ---
@@ -1740,7 +1787,7 @@
       list.innerHTML = reports.length === 0 ? `<div class="section-card text-center text-sm font-semibold text-slate-500">Belum ada laporan tersimpan.</div>` : reports.map(r => `
         <div class="history-card ${getStatusClass(r.sniStatus)} flex justify-between items-center">
           <div>
-            <span class="text-xs font-bold text-blue-600">Sampel: ${r.sampleCode} | ${r.synced ? '✅ Tersinkron' : '⏳ Pending'}</span>
+            <span class="text-xs font-bold text-blue-600">Sampel: ${r.sampleCode} | ${r.synced ? '✅ Tersinkron' : '⏳ Pending (Offline)'}</span>
             <h4 class="font-extrabold text-base mt-0.5">${r.businessName}</h4>
             <p class="text-xs text-slate-600 font-medium mt-0.5">${r.productType} (${r.brand}) — Status: <b>${r.sniStatus}</b></p>
           </div>
@@ -1809,7 +1856,7 @@
       lucide.createIcons();
     }
 
-    // --- DETAIL & EDIT & PRATINJAU TABEL KASAT MATA (PERSIS FILE GOOGLE DOCS) ---
+    // --- DETAIL & EDIT OFFLINE & AKSES GOOGLE DOCS ---
     window.openDetail = function(id) {
       const r = reports.find(item => item.id === id);
       if (!r) return;
@@ -1818,12 +1865,21 @@
         <p class="text-sm font-medium"><b>Toko:</b> ${r.businessName} (${r.retailerAddress})</p>
         <p class="text-sm font-medium"><b>Barang:</b> ${r.productType} - ${r.brand}</p>
         <p class="text-sm font-medium"><b>Status Validasi:</b> <span class="font-bold text-blue-600">${r.sniStatus}</span></p>
-        <div class="pt-3 flex flex-col gap-2.5">
-          <button class="primary-btn text-xs font-bold py-3 bg-blue-600 hover:bg-blue-700" onclick="openTablePreview('${r.id}')"><i data-lucide="table" class="w-4 h-4"></i> Pratinjau Tabel Laporan Kasat Mata</button>
-          <button class="secondary-btn text-xs font-bold py-3" onclick="openEditReport('${r.id}')">Edit / Verifikasi SNI</button>
-          ${r.docUrl ? `<a href="${r.docUrl}" target="_blank" class="primary-btn text-xs font-bold text-center py-3">Buka File Google Docs</a>` : ''}
-          ${r.folderUrl ? `<a href="${r.folderUrl}" target="_blank" class="secondary-btn text-xs font-bold text-center py-3">Buka Folder Google Drive</a>` : ''}
-          <button class="danger-btn text-xs font-bold py-3" onclick="deleteReportItem('${r.id}'); document.getElementById('detail-modal').classList.remove('open');">Hapus Laporan</button>
+        <p class="text-xs text-slate-500">Status Sinkron: <b>${r.synced ? 'Tersinkron ke Cloud' : 'Belum disinkron (Offline/Pending)'}</b></p>
+        
+        <div class="pt-2 space-y-2.5">
+          <button class="primary-btn text-xs font-bold py-3 bg-blue-600 hover:bg-blue-700 w-full" onclick="openTablePreview('${r.id}')"><i data-lucide="table" class="w-4 h-4"></i> Pratinjau Tabel Laporan Kasat Mata</button>
+          <button class="secondary-btn text-xs font-bold py-3 w-full" onclick="openEditReport('${r.id}')"><i data-lucide="edit-3" class="w-4 h-4"></i> Edit / Verifikasi Status Validasi</button>
+          
+          ${r.docUrl ? `
+            <div class="p-3 bg-blue-50 border border-blue-200 rounded-xl space-y-2">
+              <p class="text-xs font-bold text-blue-900">Dokumen Google Docs:</p>
+              <a href="${r.docUrl}" target="_blank" class="primary-btn text-xs font-bold py-2.5 w-full justify-center"><i data-lucide="external-link" class="w-4 h-4"></i> Buka Google Docs</a>
+              <p class="text-[11px] text-slate-600 leading-relaxed">Anda dapat mengedit langsung atau unduh dalam format Word (<b>File > Download > Microsoft Word .docx</b>) untuk dicetak.</p>
+            </div>
+          ` : `<p class="text-xs text-amber-600 font-semibold bg-amber-50 p-2.5 rounded-lg border border-amber-200">⚠️ Dokumen Google Docs otomatis tergenerate saat data disinkronkan ke Cloud.</p>`}
+
+          <button class="danger-btn text-xs font-bold py-3 w-full" onclick="deleteReportItem('${r.id}'); document.getElementById('detail-modal').classList.remove('open');">Hapus Laporan</button>
         </div>
       `;
       document.getElementById('detail-modal').classList.add('open');
@@ -1982,8 +2038,19 @@
 
       modalContent.innerHTML = `
         <form id="edit-report-form" class="space-y-4 text-sm">
+          <!-- TOMBOL AKSES PORTAL BANG BENI DI MENU EDIT -->
+          <div class="p-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl text-white flex items-center justify-between gap-3 shadow-md">
+            <div>
+              <p class="font-black text-xs uppercase tracking-wider">Verifikasi Online</p>
+              <p class="text-[11px] text-blue-100 mt-0.5">Cek nomor SNI di Portal Resmi BSN.</p>
+            </div>
+            <a href="https://bangbeni.bsn.go.id" target="_blank" class="px-4 py-2.5 rounded-lg bg-white text-blue-700 font-bold text-xs shrink-0 shadow hover:bg-blue-50 transition-transform active:scale-95 flex items-center gap-1.5">
+              <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Buka Bang Beni
+            </a>
+          </div>
+
           <div>
-            <label class="field-label text-xs">Status Validasi SNI</label>
+            <label class="field-label text-xs">Status Validasi / Verifikasi SNI (Dapat Diubah Kapan Saja)</label>
             <select id="edit-status" class="field-control text-sm">
               <option value="Terdaftar dan Sesuai (Legal)" ${r.sniStatus.includes('Legal') ? 'selected' : ''}>Terdaftar dan Sesuai (Legal)</option>
               <option value="Tidak Terdaftar (Temuan)" ${r.sniStatus.includes('Temuan') ? 'selected' : ''}>Tidak Terdaftar (Temuan)</option>
@@ -1999,6 +2066,7 @@
           </button>
         </form>
       `;
+      lucide.createIcons();
     };
 
     window.saveEditedReport = async function(id) {
@@ -2006,11 +2074,11 @@
       if (!r) return;
       r.sniStatus = document.getElementById('edit-status').value;
       r.bagianA.sniBarangNum = document.getElementById('edit-sni-num').value;
-      r.synced = false;
+      r.synced = false; // Set menjadi pending agar dapat disinkronkan ulang dengan status terbaru
       await saveReportToDB(r);
       document.getElementById('detail-modal').classList.remove('open');
       renderHistory();
-      alert("Perubahan verifikasi berhasil disimpan!");
+      showAppNotify("Perubahan Disimpan", "Verifikasi status berhasil diperbarui. Laporan ditandai untuk disinkronkan ulang ke Cloud.", "success");
     };
 
     window.deleteReportItem = async function(id) {
@@ -2031,7 +2099,7 @@
 
     // --- EKSPOR CSV ---
     document.getElementById('export-csv').addEventListener('click', () => {
-      if (reports.length === 0) { alert("Belum ada data untuk diekspor."); return; }
+      if (reports.length === 0) { showAppNotify("Pemberitahuan", "Belum ada data untuk diekspor.", "info"); return; }
       let csv = "ID,Waktu,Sampel,Toko,Alamat,Merek,Barang,Status\n";
       reports.forEach(r => {
         csv += `"${r.id}","${r.timestamp}","${r.sampleCode}","${r.businessName}","${r.retailerAddress}","${r.brand}","${r.productType}","${r.sniStatus}"\n`;
@@ -2045,15 +2113,14 @@
 
     // --- SINKRONISASI CLOUD ---
     document.getElementById('btn-sync-now').addEventListener('click', async () => {
-      const url = "https://script.google.com/macros/s/AKfycbzHukzDIJ_SL4MQ1fxtWjfKNRMpnBQCPIDgzrPh6496TZQ_QJSGRlawP5btJNVqyfnL/exec";
       const unsynced = reports.filter(r => !r.synced);
       if (unsynced.length === 0) { 
-        alert("✅ Seluruh laporan sudah tersinkronisasi ke Cloud. Tidak ada antrean pending."); 
+        showAppNotify("Sinkronisasi Selesai", "✅ Seluruh laporan sudah tersinkronisasi sempurna ke Cloud.", "success"); 
         return; 
       }
 
       if (!navigator.onLine) {
-        alert("⚠️ Perangkat Anda sedang offline. Sambungkan ke internet terlebih dahulu sebelum melakukan sinkronisasi cloud.");
+        showAppNotify("Perangkat Offline", "⚠️ Sambungkan ke internet terlebih dahulu sebelum melakukan sinkronisasi cloud.", "warning");
         return;
       }
 
@@ -2069,7 +2136,7 @@
         let sent = false;
         while (retries > 0 && !sent) {
           try {
-            await fetch(url, { 
+            await fetch(APPS_SCRIPT_URL, { 
               method: 'POST', 
               mode: 'no-cors', 
               headers: { 'Content-Type': 'application/json' }, 
@@ -2095,11 +2162,12 @@
       lucide.createIcons();
       renderHistory();
 
-      alert(`📊 LAPORAN SINKRONISASI CLOUD:\n\n- Berhasil dikirim: ${successCount} sampel\n- Gagal/Tertunda: ${failCount} sampel\n\n${failCount === 0 ? "Seluruh antrean berhasil diamankan ke Google Drive & Sheets pusat!" : "Beberapa data gagal dikirim, silakan coba sinkron kembali saat sinyal stabil."}`);
+      showAppNotify("📊 Laporan Sinkronisasi Cloud", `Berhasil dikirim: ${successCount} sampel\nGagal/Tertunda: ${failCount} sampel`, failCount === 0 ? "success" : "warning");
     });
 
-    // --- PETA LEAFLET ---
+    // --- PETA LEAFLET DENGAN PENANDA WARNA (HIJAU = LEGAL, MERAH/KUNING = BERMASALAH) ---
     let leafletMap = null;
+    let leafletMarkers = [];
     function renderMapsList() {
       setTimeout(() => {
         if (!leafletMap) {
@@ -2107,6 +2175,9 @@
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(leafletMap);
         }
         leafletMap.invalidateSize();
+
+        leafletMarkers.forEach(m => leafletMap.removeLayer(m));
+        leafletMarkers = [];
 
         const mapListContainer = document.getElementById('map-locations-list');
         const validReports = reports.filter(r => r.coordinates && r.coordinates.includes(','));
@@ -2121,11 +2192,34 @@
             <div>
               <p class="font-extrabold text-slate-900">${r.businessName} (Sampel: ${r.sampleCode})</p>
               <p class="text-xs text-slate-600 font-medium">${r.retailerAddress}</p>
-              <p class="text-xs font-bold text-blue-600 mt-1">GPS: ${r.coordinates}</p>
+              <p class="text-xs font-bold text-blue-600 mt-1">GPS: ${r.coordinates} | Status: <b>${r.sniStatus}</b></p>
             </div>
             <a href="https://www.google.com/maps/search/?api=1&query=${r.coordinates}" target="_blank" class="secondary-btn text-xs py-2 px-3.5 shrink-0 font-bold">Buka Maps</a>
           </div>
         `).join('');
+
+        validReports.forEach(r => {
+          const parts = r.coordinates.split(',');
+          const lat = parseFloat(parts[0]);
+          const lng = parseFloat(parts[1]);
+          if (!isNaN(lat) && !isNaN(lng)) {
+            let markerColor = '#0f9d58'; // Hijau (Legal)
+            if (r.sniStatus.includes('Temuan')) markerColor = '#d93025'; // Merah
+            else if (r.sniStatus.includes('Spesifikasi')) markerColor = '#fbbc05'; // Kuning/Amber
+
+            const customIcon = L.divIcon({
+              className: 'custom-map-marker',
+              html: `<div style="background-color: ${markerColor}; width: 18px; height: 18px; border-radius: 50%; border: 2.5px solid white; box-shadow: 0 0 6px rgba(0,0,0,0.5);"></div>`,
+              iconSize: [18, 18],
+              iconAnchor: [9, 9]
+            });
+
+            const marker = L.marker([lat, lng], { icon: customIcon }).addTo(leafletMap)
+              .bindPopup(`<b>${r.businessName}</b><br>Produk: ${r.productType} (${r.brand})<br>Status: <b>${r.sniStatus}</b>`);
+            
+            leafletMarkers.push(marker);
+          }
+        });
 
       }, 200);
     }
